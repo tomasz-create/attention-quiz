@@ -1,0 +1,835 @@
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+#atq-team, #atq-team * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+#atq-team {
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 16px;
+  color: #2A2A2A;
+  background: #FFFFFF;
+  width: 100%;
+  line-height: 1.6;
+  --gold:   #F5C162;
+  --blue:   #1E4897;
+  --brown:  #671B0A;
+  --red:    #BD2724;
+  --border: #E2E8F0;
+  --muted:  #718096;
+  --lightbg:#F7F9FC;
+}
+
+/* ── Header ── */
+#atq-team .atm-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 28px 28px 24px;
+  margin-bottom: 28px;
+}
+#atq-team .atm-header-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+#atq-team .atm-header-title {
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+#atq-team .atm-header-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 300;
+}
+
+/* ── Section labels ── */
+#atq-team .atm-section-bar {
+  background: var(--gold);
+  padding: 9px 22px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+  margin-bottom: 20px;
+}
+
+/* ── Instructions ── */
+#atq-team .atm-instructions {
+  padding: 0 22px 20px;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.7;
+}
+#atq-team .atm-instructions strong { color: #2A2A2A; font-weight: 700; }
+
+/* ── Person input cards ── */
+#atq-team .atm-people {
+  padding: 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+#atq-team .atm-person {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  padding: 18px 20px;
+  transition: border-color 0.15s;
+}
+#atq-team .atm-person.atm-active {
+  border-left-color: var(--gold);
+}
+
+#atq-team .atm-person-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+#atq-team .atm-person-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+#atq-team .atm-person-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+#atq-team .atm-person-optional {
+  font-size: 11px;
+  color: #CBD5E0;
+  margin-left: auto;
+  font-weight: 300;
+}
+
+#atq-team .atm-person-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  align-items: end;
+}
+
+#atq-team .atm-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+#atq-team .atm-field label span.atm-score-lbl {
+  color: var(--blue);
+}
+#atq-team .atm-field label span.atm-range {
+  font-weight: 300;
+  color: #CBD5E0;
+  font-size: 9px;
+  margin-left: 3px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+#atq-team .atm-field input[type="text"],
+#atq-team .atm-field input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  color: #2A2A2A;
+  outline: none;
+  transition: border-color 0.15s;
+  background: #fff;
+}
+#atq-team .atm-field input:focus {
+  border-color: var(--blue);
+}
+#atq-team .atm-field input[type="number"] {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* ── Error ── */
+#atq-team .atm-error {
+  margin: 0 22px 16px;
+  background: #FFF0EE;
+  border: 1px solid #F4B8B0;
+  color: var(--red);
+  padding: 11px 18px;
+  font-size: 13px;
+  display: none;
+}
+
+/* ── Buttons ── */
+#atq-team .atm-btn-row {
+  padding: 8px 22px 28px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#atq-team .atm-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 15px 40px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+#atq-team .atm-btn:hover { background: var(--brown); transform: translateY(-1px); }
+#atq-team .atm-btn-reset {
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  padding: 14px 28px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+#atq-team .atm-btn-reset:hover { border-color: var(--muted); color: #2A2A2A; }
+
+/* ── Results ── */
+#atq-team .atm-results {
+  display: none;
+  animation: atmFadeUp 0.45s ease both;
+}
+#atq-team .atm-results.atm-show { display: block; }
+
+@keyframes atmFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Graph */
+#atq-team .atm-graph-wrap {
+  background: var(--lightbg);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 20px 20px;
+  text-align: center;
+  margin-bottom: 0;
+}
+#atq-team .atm-graph-title {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+#atq-team canvas#atm-canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+}
+
+/* Legend */
+#atq-team .atm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  padding: 16px 22px 8px;
+  background: var(--lightbg);
+  border-bottom: 1px solid var(--border);
+}
+#atq-team .atm-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 300;
+}
+#atq-team .atm-legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+#atq-team .atm-legend-name { font-weight: 700; color: #2A2A2A; }
+#atq-team .atm-legend-scores { color: var(--muted); font-size: 12px; }
+
+/* Flexibility section */
+#atq-team .atm-flex-section {
+  padding: 24px 22px 8px;
+  border-bottom: 1px solid var(--border);
+}
+#atq-team .atm-flex-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+#atq-team .atm-flex-card {
+  border-left: 4px solid var(--gold);
+  background: #FFFBF0;
+  border-top: 1px solid #F5E0A0;
+  border-right: 1px solid #F5E0A0;
+  border-bottom: 1px solid #F5E0A0;
+  padding: 14px 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+#atq-team .atm-flex-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2A2A2A;
+  min-width: 100px;
+}
+#atq-team .atm-flex-card-gap {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  min-width: 50px;
+}
+#atq-team .atm-flex-card-level {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+#atq-team .atm-flex-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  flex: 1;
+  min-width: 160px;
+  line-height: 1.6;
+}
+
+/* PDF button */
+#atq-team .atm-pdf-wrap {
+  text-align: center;
+  padding: 28px 22px 16px;
+  border-top: 1px solid var(--border);
+}
+#atq-team .atm-pdf-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+#atq-team .atm-pdf-btn:hover { background: var(--brown); transform: translateY(-1px); }
+#atq-team .atm-pdf-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  font-weight: 300;
+}
+
+/* Print styles */
+#atq-team .atm-print-header { display: none; }
+
+@media print {
+  #atq-team .atm-print-header {
+    display: block !important;
+    text-align: center;
+    padding: 0 0 20px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #F5C162;
+  }
+  #atq-team .atm-print-header-title {
+    font-size: 26px;
+    font-weight: 300;
+    color: #1E4897;
+    margin-bottom: 4px;
+  }
+  #atq-team .atm-print-header-author {
+    font-size: 12px;
+    color: #F5C162;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  #atq-team .atm-header,
+  #atq-team .atm-people,
+  #atq-team .atm-section-bar,
+  #atq-team .atm-instructions,
+  #atq-team .atm-error,
+  #atq-team .atm-btn-row,
+  #atq-team .atm-pdf-wrap { display: none !important; }
+  #atq-team .atm-results { display: block !important; }
+  #atq-team .atm-graph-wrap { background: #F7F9FC !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq-team .atm-flex-card  { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (max-width: 580px) {
+  #atq-team .atm-person-fields { grid-template-columns: 1fr 1fr; }
+  #atq-team .atm-field:first-child { grid-column: 1 / -1; }
+  #atq-team .atm-btn-row { flex-direction: column; }
+  #atq-team .atm-btn, #atq-team .atm-btn-reset { width: 100%; }
+}
+</style>
+
+<div id="atq-team">
+
+  <!-- Print-only header -->
+  <div class="atm-print-header">
+    <p class="atm-print-header-title">Team Attention Profile</p>
+    <p class="atm-print-header-author">Dr. Tomasz Kopec &nbsp;·&nbsp; Flexible Attention Trainer &nbsp;·&nbsp; NHS GP</p>
+  </div>
+
+  <!-- Header -->
+  <div class="atm-header">
+    <p class="atm-header-tag">Four Attention Styles &nbsp;·&nbsp; Dr. Tomasz Kopec</p>
+    <p class="atm-header-title">Team Attention Profile</p>
+    <p class="atm-header-sub">Enter up to four people's scores to see your team's attention map</p>
+  </div>
+
+  <!-- Instructions -->
+  <div class="atm-section-bar">Enter your scores</div>
+  <div class="atm-instructions">
+    Enter each person's name and their four scores from the assessment (0–28 each).
+    <strong>At least one person is required.</strong> The rest are optional.
+  </div>
+
+  <!-- People inputs -->
+  <div class="atm-people" id="atm-people"></div>
+
+  <!-- Error -->
+  <div class="atm-error" id="atm-error"></div>
+
+  <!-- Buttons -->
+  <div class="atm-btn-row">
+    <button class="atm-btn" onclick="atmPlot()">Show team profile</button>
+    <button class="atm-btn-reset" onclick="atmReset()">Reset</button>
+  </div>
+
+  <!-- Results -->
+  <div class="atm-results" id="atm-results">
+
+    <div class="atm-section-bar">Team attention map</div>
+
+    <div class="atm-graph-wrap">
+      <p class="atm-graph-title">All profiles plotted on the same axes — compare shapes to see how attention balances across the team</p>
+      <canvas id="atm-canvas" width="500" height="500"></canvas>
+    </div>
+
+    <!-- Legend -->
+    <div class="atm-legend" id="atm-legend"></div>
+
+    <!-- Flexibility -->
+    <div class="atm-flex-section">
+      <div class="atm-section-bar" style="margin: 0 -22px 16px;">Flexibility scores</div>
+      <div class="atm-flex-row" id="atm-flex-row"></div>
+    </div>
+
+    <!-- PDF -->
+    <div class="atm-pdf-wrap">
+      <button class="atm-pdf-btn" onclick="atmPrint()">Save as PDF</button>
+      <p class="atm-pdf-note">Opens print dialogue — choose "Save as PDF" as destination</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+// ── Colours for up to 4 people ──
+var PERSON_COLORS = ['#1E4897', '#BD2724', '#2E8B57', '#8B6432'];
+var PERSON_COLORS_FILL = ['rgba(30,72,151,0.15)', 'rgba(189,39,36,0.15)', 'rgba(46,139,87,0.15)', 'rgba(139,100,50,0.15)'];
+
+// ── Flex levels ──
+var FLEX = [
+  { max: 5,  level: "Highly flexible",    desc: "Moves naturally between all four styles." },
+  { max: 10, level: "Good range",          desc: "Clear strengths with genuine access to multiple styles." },
+  { max: 16, level: "Moderate dominance",  desc: "One or two styles lead; others require more effort." },
+  { max: 28, level: "Strong dominance",    desc: "One style is very pronounced, with significant blind spots." }
+];
+
+// ── Style labels ──
+var STYLE_NAMES = {
+  O: 'Organiser', P: 'Performer', S: 'Strategist', C: 'Connector'
+};
+
+// ── Build input cards ──
+function buildInputs() {
+  var wrap = document.getElementById('atm-people');
+  wrap.innerHTML = '';
+  var labels = ['Person 1', 'Person 2', 'Person 3', 'Person 4'];
+  var optional = [false, true, true, true];
+  var placeholders = ['e.g. Thomas', 'e.g. Andrea', 'e.g. Maria', 'e.g. James'];
+
+  labels.forEach(function(lbl, i) {
+    var card = document.createElement('div');
+    card.className = 'atm-person';
+    card.id = 'atm-person-' + i;
+
+    var dot = '<span class="atm-person-dot" style="background:' + PERSON_COLORS[i] + '"></span>';
+    var optTag = optional[i] ? '<span class="atm-person-optional">optional</span>' : '';
+
+    card.innerHTML = '<div class="atm-person-header">'
+      + dot
+      + '<span class="atm-person-label">' + lbl + '</span>'
+      + optTag
+      + '</div>'
+      + '<div class="atm-person-fields">'
+        + '<div class="atm-field"><label>Name</label>'
+          + '<input type="text" id="atm-name-' + i + '" placeholder="' + placeholders[i] + '" oninput="atmActivate(' + i + ')"></div>'
+        + '<div class="atm-field"><label><span class="atm-score-lbl">Organiser</span><span class="atm-range">0–28</span></label>'
+          + '<input type="number" id="atm-o-' + i + '" min="0" max="28" placeholder="0" oninput="atmActivate(' + i + ')"></div>'
+        + '<div class="atm-field"><label><span class="atm-score-lbl">Performer</span><span class="atm-range">0–28</span></label>'
+          + '<input type="number" id="atm-p-' + i + '" min="0" max="28" placeholder="0" oninput="atmActivate(' + i + ')"></div>'
+        + '<div class="atm-field"><label><span class="atm-score-lbl">Strategist</span><span class="atm-range">0–28</span></label>'
+          + '<input type="number" id="atm-s-' + i + '" min="0" max="28" placeholder="0" oninput="atmActivate(' + i + ')"></div>'
+        + '<div class="atm-field"><label><span class="atm-score-lbl">Connector</span><span class="atm-range">0–28</span></label>'
+          + '<input type="number" id="atm-c-' + i + '" min="0" max="28" placeholder="0" oninput="atmActivate(' + i + ')"></div>'
+      + '</div>';
+
+    wrap.appendChild(card);
+  });
+}
+
+function atmActivate(i) {
+  var card = document.getElementById('atm-person-' + i);
+  var name = document.getElementById('atm-name-' + i).value.trim();
+  var o = document.getElementById('atm-o-' + i).value;
+  if (name || o) {
+    card.classList.add('atm-active');
+    card.style.borderLeftColor = PERSON_COLORS[i];
+  } else {
+    card.classList.remove('atm-active');
+    card.style.borderLeftColor = '';
+  }
+}
+
+// ── Read and validate inputs ──
+function readPeople() {
+  var people = [];
+  for (var i = 0; i < 4; i++) {
+    var name = (document.getElementById('atm-name-' + i).value || '').trim();
+    var o = parseInt(document.getElementById('atm-o-' + i).value) || 0;
+    var p = parseInt(document.getElementById('atm-p-' + i).value) || 0;
+    var s = parseInt(document.getElementById('atm-s-' + i).value) || 0;
+    var c = parseInt(document.getElementById('atm-c-' + i).value) || 0;
+    // Include if name is given OR any score is non-zero
+    if (name || o || p || s || c) {
+      people.push({
+        name: name || ('Person ' + (i + 1)),
+        scores: { O: o, P: p, S: s, C: c },
+        color: PERSON_COLORS[i],
+        fill: PERSON_COLORS_FILL[i],
+        index: i
+      });
+    }
+  }
+  return people;
+}
+
+// ── Plot ──
+function atmPlot() {
+  var people = readPeople();
+  var errEl = document.getElementById('atm-error');
+
+  if (people.length === 0) {
+    errEl.textContent = 'Please enter at least one person\'s name and scores.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Validate score ranges
+  var invalid = false;
+  people.forEach(function(p) {
+    Object.values(p.scores).forEach(function(v) {
+      if (v < 0 || v > 28) invalid = true;
+    });
+  });
+  if (invalid) {
+    errEl.textContent = 'All scores must be between 0 and 28.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  errEl.style.display = 'none';
+
+  // Show results
+  var resultsEl = document.getElementById('atm-results');
+  resultsEl.classList.add('atm-show');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Build legend
+  buildLegend(people);
+
+  // Build flex cards
+  buildFlex(people);
+
+  // Draw graph
+  requestAnimationFrame(function() {
+    setTimeout(function() { drawGraph(people); }, 80);
+  });
+}
+
+// ── Legend ──
+function buildLegend(people) {
+  var wrap = document.getElementById('atm-legend');
+  wrap.innerHTML = '';
+  people.forEach(function(p) {
+    var item = document.createElement('div');
+    item.className = 'atm-legend-item';
+    item.innerHTML = '<span class="atm-legend-dot" style="background:' + p.color + '"></span>'
+      + '<span class="atm-legend-name">' + p.name + '</span>'
+      + '<span class="atm-legend-scores">O:' + p.scores.O + ' P:' + p.scores.P + ' S:' + p.scores.S + ' C:' + p.scores.C + '</span>';
+    wrap.appendChild(item);
+  });
+}
+
+// ── Flex cards ──
+function buildFlex(people) {
+  var wrap = document.getElementById('atm-flex-row');
+  wrap.innerHTML = '';
+  people.forEach(function(p) {
+    var vals = Object.values(p.scores);
+    var gap = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+    var level = FLEX.find(function(f) { return gap <= f.max; });
+    var card = document.createElement('div');
+    card.className = 'atm-flex-card';
+    card.style.borderLeftColor = p.color;
+    card.innerHTML = '<span class="atm-flex-card-name">' + p.name + '</span>'
+      + '<span class="atm-flex-card-gap" style="color:' + p.color + '">Gap: ' + gap + '</span>'
+      + '<span class="atm-flex-card-level">' + level.level + '</span>'
+      + '<span class="atm-flex-card-desc">' + level.desc + '</span>';
+    wrap.appendChild(card);
+  });
+}
+
+// ── Draw graph ──
+function drawGraph(people) {
+  var canvas = document.getElementById('atm-canvas');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var cx = W / 2, cy = H / 2;
+  var MAX_R = W * 0.36;
+  var D = 0.7071; // 1/√2
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Diagonal axes: NW=O, NE=P, SW=S, SE=C
+  var AXES = {
+    O: { dx: -D, dy: -D, lx: cx - MAX_R - 10, ly: cy - MAX_R - 10, ta: 'right',  bl: 'bottom' },
+    P: { dx:  D, dy: -D, lx: cx + MAX_R + 10, ly: cy - MAX_R - 10, ta: 'left',   bl: 'bottom' },
+    S: { dx: -D, dy:  D, lx: cx - MAX_R - 10, ly: cy + MAX_R + 10, ta: 'right',  bl: 'top'    },
+    C: { dx:  D, dy:  D, lx: cx + MAX_R + 10, ly: cy + MAX_R + 10, ta: 'left',   bl: 'top'    }
+  };
+  var ORDER = ['O', 'P', 'C', 'S']; // clockwise: NW NE SE SW
+
+  // Quadrant fills
+  var qFills = [
+    { pts: [[cx,cy],[cx-MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c: '#EEF4FB' },
+    { pts: [[cx,cy],[cx-MAX_R,cy-MAX_R],[cx-MAX_R,cy]], c: '#EEF4FB' },
+    { pts: [[cx,cy],[cx+MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c: '#E8F0FA' },
+    { pts: [[cx,cy],[cx+MAX_R,cy-MAX_R],[cx+MAX_R,cy]], c: '#E8F0FA' },
+    { pts: [[cx,cy],[cx-MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c: '#E8F0FA' },
+    { pts: [[cx,cy],[cx-MAX_R,cy+MAX_R],[cx-MAX_R,cy]], c: '#E8F0FA' },
+    { pts: [[cx,cy],[cx+MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c: '#EEF4FB' },
+    { pts: [[cx,cy],[cx+MAX_R,cy+MAX_R],[cx+MAX_R,cy]], c: '#EEF4FB' }
+  ];
+  qFills.forEach(function(q) {
+    ctx.beginPath();
+    ctx.moveTo(q.pts[0][0], q.pts[0][1]);
+    q.pts.slice(1).forEach(function(p) { ctx.lineTo(p[0], p[1]); });
+    ctx.closePath();
+    ctx.fillStyle = q.c;
+    ctx.fill();
+  });
+
+  // Diamond rings at 7, 14, 21, 28
+  [7, 14, 21, 28].forEach(function(s, ri) {
+    var r = (s / 28) * MAX_R;
+    ctx.beginPath();
+    ctx.moveTo(cx,     cy - r);
+    ctx.lineTo(cx + r, cy    );
+    ctx.lineTo(cx,     cy + r);
+    ctx.lineTo(cx - r, cy    );
+    ctx.closePath();
+    ctx.strokeStyle = ri === 3 ? '#1E489744' : '#C5D5E8AA';
+    ctx.lineWidth   = ri === 3 ? 1.5 : 0.8;
+    ctx.setLineDash(ri === 3 ? [] : [4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    if (ri < 3) {
+      ctx.font = '10px Lato, Arial, sans-serif';
+      ctx.fillStyle = '#AABBCC';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(s), cx + r + 4, cy);
+    }
+  });
+
+  // Centre glow
+  var grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 48);
+  grd.addColorStop(0,   'rgba(245,193,98,0.35)');
+  grd.addColorStop(0.5, 'rgba(245,193,98,0.12)');
+  grd.addColorStop(1,   'rgba(245,193,98,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  // Axes
+  ctx.setLineDash([4, 3]);
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#1E489733';
+  ['O','P','S','C'].forEach(function(k) {
+    var a = AXES[k];
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + a.dx * MAX_R, cy + a.dy * MAX_R);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Tick dots on axes
+  [7, 14, 21, 28].forEach(function(s) {
+    var r = (s / 28) * MAX_R;
+    ['O','P','S','C'].forEach(function(k) {
+      var a = AXES[k];
+      ctx.beginPath();
+      ctx.arc(cx + a.dx * r, cy + a.dy * r, s === 28 ? 3 : 2, 0, Math.PI * 2);
+      ctx.fillStyle = s === 28 ? '#1E489766' : '#1E489733';
+      ctx.fill();
+    });
+  });
+
+  // ── Draw each person's shape (back to front so person 1 is on top) ──
+  var reversed = people.slice().reverse();
+  reversed.forEach(function(person) {
+    var pts = ORDER.map(function(k) {
+      var a = AXES[k];
+      var r = (person.scores[k] / 28) * MAX_R;
+      return [cx + a.dx * r, cy + a.dy * r];
+    });
+
+    // Fill
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    pts.slice(1).forEach(function(p) { ctx.lineTo(p[0], p[1]); });
+    ctx.closePath();
+    ctx.fillStyle = person.fill;
+    ctx.fill();
+
+    // Stroke
+    ctx.strokeStyle = person.color;
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Corner dots
+    pts.forEach(function(pt, pi) {
+      ctx.beginPath();
+      ctx.arc(pt[0], pt[1], 6, 0, Math.PI * 2);
+      ctx.fillStyle = person.color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(pt[0], pt[1], 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+    });
+  });
+
+  // ── Axis labels ──
+  ['O','P','S','C'].forEach(function(k) {
+    var a = AXES[k];
+    ctx.font = '13px Lato, Arial, sans-serif';
+    ctx.fillStyle = '#2A2A2A';
+    ctx.textAlign = a.ta;
+    ctx.textBaseline = a.bl;
+    ctx.fillText(STYLE_NAMES[k], a.lx, a.ly);
+  });
+
+  // Centre label
+  ctx.font = 'italic 10px Lato, Arial, sans-serif';
+  ctx.fillStyle = '#A07020';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('flexible attention', cx, cy);
+}
+
+// ── Reset ──
+function atmReset() {
+  for (var i = 0; i < 4; i++) {
+    document.getElementById('atm-name-' + i).value = '';
+    document.getElementById('atm-o-' + i).value = '';
+    document.getElementById('atm-p-' + i).value = '';
+    document.getElementById('atm-s-' + i).value = '';
+    document.getElementById('atm-c-' + i).value = '';
+    var card = document.getElementById('atm-person-' + i);
+    card.classList.remove('atm-active');
+    card.style.borderLeftColor = '';
+  }
+  var resultsEl = document.getElementById('atm-results');
+  resultsEl.classList.remove('atm-show');
+  document.getElementById('atm-error').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+// ── Print / PDF ──
+window.atmPrint = function() {
+  var el = document.getElementById('atq-team');
+  var toHide = [];
+  var current = el;
+  while (current && current !== document.body) {
+    var parent = current.parentNode;
+    if (parent) {
+      Array.prototype.forEach.call(parent.children, function(child) {
+        if (child !== current && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+          toHide.push({ el: child, prev: child.style.cssText });
+          child.style.setProperty('display', 'none', 'important');
+        }
+      });
+    }
+    current = parent;
+  }
+  setTimeout(function() {
+    window.print();
+    setTimeout(function() {
+      toHide.forEach(function(item) { item.el.style.cssText = item.prev; });
+    }, 600);
+  }, 80);
+};
+
+// Expose globals
+window.atmPlot    = atmPlot;
+window.atmReset   = atmReset;
+window.atmActivate = atmActivate;
+
+// Init
+buildInputs();
+
+})();
+</script>
