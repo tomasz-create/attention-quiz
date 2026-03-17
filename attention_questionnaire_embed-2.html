@@ -972,6 +972,17 @@ renderQuestions();
 // Expose submit globally so onclick works
 window.atqSubmit = atqSubmit;
 
+  // Auto-resize: tell parent iframe to match our height
+  function notifyHeight() {
+    var el = document.getElementById('atq');
+    if (el) {
+      window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+    }
+  }
+  // Notify on load and every 500ms (catches results appearing)
+  notifyHeight();
+  setInterval(notifyHeight, 500);
+
   window.atqPrint = function() {
     var el = document.getElementById('atq');
     var toHide = [];
