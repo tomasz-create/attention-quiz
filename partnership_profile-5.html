@@ -1,0 +1,994 @@
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+#atp, #atp * { box-sizing: border-box; margin: 0; padding: 0; }
+#atp {
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 16px;
+  color: #2A2A2A;
+  background: #FFFFFF;
+  width: 100%;
+  line-height: 1.6;
+  --gold:   #F5C162;
+  --blue:   #1E4897;
+  --brown:  #671B0A;
+  --red:    #BD2724;
+  --green:  #2E8B57;
+  --border: #E2E8F0;
+  --muted:  #718096;
+  --light:  #F7F9FC;
+  --text:   #2A2A2A;
+}
+
+/* ── Input section ── */
+#atp .atp-intro {
+  background: var(--blue);
+  color: #fff;
+  padding: 28px 28px 24px;
+  margin-bottom: 24px;
+}
+#atp .atp-intro-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+#atp .atp-intro-title {
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: 6px;
+}
+#atp .atp-intro-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 300;
+}
+
+#atp .atp-person-card {
+  border: 1px solid var(--border);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+#atp .atp-person-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+#atp .atp-person-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+#atp .atp-person-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+#atp .atp-fields {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  align-items: end;
+}
+#atp .atp-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+#atp .atp-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  background: #fff;
+}
+#atp .atp-field input[type="number"] {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue);
+}
+#atp .atp-field input:focus { border-color: var(--blue); }
+
+#atp .atp-error {
+  background: #FFF0EE;
+  border: 1px solid #F4B8B0;
+  color: var(--red);
+  padding: 11px 18px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: none;
+}
+#atp .atp-btn-row { padding: 8px 0 24px; }
+#atp .atp-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+#atp .atp-btn:hover { background: var(--brown); transform: translateY(-1px); }
+
+/* ── Results ── */
+#atp .atp-results { display: none; animation: atpFade 0.45s ease both; }
+#atp .atp-results.atp-show { display: block; }
+@keyframes atpFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Result header */
+#atp .atp-result-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 28px 26px 22px;
+  margin-bottom: 0;
+}
+#atp .atp-result-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+#atp .atp-result-title {
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: 4px;
+}
+#atp .atp-result-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 300;
+}
+
+/* Graph */
+#atp .atp-graph-wrap {
+  background: var(--light);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 20px 20px;
+  text-align: center;
+}
+#atp .atp-graph-title {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+#atp canvas#atp-canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 480px;
+  width: 100%;
+  height: auto;
+}
+
+/* Legend */
+#atp .atp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 14px 22px;
+  background: var(--light);
+  border-bottom: 1px solid var(--border);
+}
+#atp .atp-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+#atp .atp-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+#atp .atp-legend-name { font-weight: 700; }
+#atp .atp-legend-scores { color: var(--muted); font-size: 12px; }
+
+/* Gravity box */
+#atp .atp-gravity-box {
+  border-left: 4px solid var(--gold);
+  background: #FFFBF0;
+  border-top: 1px solid #F5E0A0;
+  border-right: 1px solid #F5E0A0;
+  border-bottom: 1px solid #F5E0A0;
+  padding: 20px 24px;
+}
+#atp .atp-gravity-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 6px;
+}
+#atp .atp-gravity-verdict {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+#atp .atp-gravity-explain {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #777;
+  font-weight: 300;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #F5E0A0;
+}
+#atp .atp-gravity-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+#atp .atp-gravity-explain {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+  border-top: 1px solid #F5E0A0;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+/* Section bar */
+#atp .atp-section-bar {
+  background: var(--gold);
+  padding: 9px 24px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+
+/* Profile cards */
+#atp .atp-profiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+#atp .atp-profile {
+  padding: 22px 22px 18px;
+  border-right: 1px solid var(--border);
+}
+#atp .atp-profile:last-child { border-right: none; }
+#atp .atp-profile-name-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+#atp .atp-profile-dot { width: 10px; height: 10px; border-radius: 50%; }
+#atp .atp-profile-person { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+#atp .atp-profile-style { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+#atp .atp-profile-axis { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+#atp .atp-sublabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 5px;
+  margin-top: 12px;
+}
+#atp .atp-sublabel:first-of-type { margin-top: 0; }
+#atp .atp-profile-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+
+/* Flex scores */
+#atp .atp-flex-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+#atp .atp-flex-card {
+  padding: 18px 22px;
+  border-right: 1px solid var(--border);
+}
+#atp .atp-flex-card:last-child { border-right: none; }
+#atp .atp-flex-card-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+}
+#atp .atp-flex-card-num {
+  font-size: 32px; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 3px;
+}
+#atp .atp-flex-card-level { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+#atp .atp-flex-card-desc { font-size: 13px; color: #555; font-weight: 300; line-height: 1.65; }
+
+/* What works / What to watch */
+#atp .atp-dynamic { padding: 22px 22px 8px; border-bottom: 1px solid var(--border); }
+#atp .atp-dynamic-text {
+  font-size: 15px; line-height: 1.8; color: #3A3A3A; font-weight: 300; margin-bottom: 14px;
+}
+#atp .atp-dynamic-text strong { color: var(--text); font-weight: 700; }
+
+/* Growth / complement */
+#atp .atp-shared-box {
+  border-left: 4px solid var(--blue);
+  background: #EEF4FB;
+  border-top: 1px solid #AABBD6;
+  border-right: 1px solid #AABBD6;
+  border-bottom: 1px solid #AABBD6;
+  padding: 20px 24px;
+  margin-bottom: 0;
+}
+#atp .atp-shared-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--blue); margin-bottom: 8px;
+}
+#atp .atp-shared-text { font-size: 14px; line-height: 1.75; color: #3A3A3A; font-weight: 300; }
+
+/* PDF */
+#atp .atp-pdf-wrap {
+  text-align: center; padding: 24px 22px 16px;
+  border-top: 1px solid var(--border);
+}
+#atp .atp-pdf-btn {
+  background: var(--blue); color: #fff; border: none;
+  padding: 14px 40px; font-family: 'Lato', Arial, sans-serif;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+#atp .atp-pdf-btn:hover { background: var(--brown); transform: translateY(-1px); }
+#atp .atp-pdf-note { font-size: 12px; color: var(--muted); margin-top: 8px; font-weight: 300; }
+
+/* Print */
+#atp .atp-print-header { display: none; }
+@media print {
+  #atp .atp-intro, #atp .atp-person-card, #atp .atp-error,
+  #atp .atp-btn-row, #atp .atp-pdf-wrap { display: none !important; }
+  #atp .atp-results { display: block !important; }
+  #atp .atp-print-header {
+    display: block !important; text-align: center;
+    padding: 0 0 18px; margin-bottom: 18px;
+    border-bottom: 3px solid #F5C162;
+  }
+  #atp .atp-print-title { font-size: 24px; font-weight: 300; color: #1E4897; margin-bottom: 4px; }
+  #atp .atp-print-author { font-size: 12px; color: #F5C162; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  #atp .atp-graph-wrap, #atp .atp-gravity-box, #atp .atp-shared-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (max-width: 560px) {
+  #atp .atp-fields { grid-template-columns: 1fr 1fr; }
+  #atp .atp-field:first-child { grid-column: 1 / -1; }
+  #atp .atp-profiles { grid-template-columns: 1fr; }
+  #atp .atp-profile { border-right: none; border-bottom: 1px solid var(--border); }
+  #atp .atp-flex-row { grid-template-columns: 1fr; }
+  #atp .atp-flex-card { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
+#atp .atp-terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: var(--light);
+  border: 1px solid var(--border);
+}
+#atp .atp-terms-row input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--blue);
+}
+#atp .atp-terms-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+  cursor: pointer;
+}
+#atp .atp-terms-label a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: rgba(30,72,151,0.3);
+}
+#atp .atp-terms-label a:hover { text-decoration-color: var(--blue); }
+
+</style>
+
+<div id="atp">
+
+  <div class="atp-print-header">
+    <p class="atp-print-title">Partnership Attention Profile</p>
+    <p class="atp-print-author">Dr. Tomasz Kopec &nbsp;·&nbsp; Flexible Attention Trainer &nbsp;·&nbsp; NHS GP</p>
+  </div>
+
+  <div class="atp-intro">
+    <p class="atp-intro-tag">Four Attention Styles &nbsp;·&nbsp; Dr. Tomasz Kopec</p>
+    <p class="atp-intro-title">Partnership Attention Profile</p>
+    <p class="atp-intro-sub">Enter both partners' scores from the individual assessment to see your shared attention map</p>
+  </div>
+
+  <div style="padding: 0 0 8px;">
+
+    <!-- Person A -->
+    <div class="atp-person-card">
+      <div class="atp-person-header">
+        <span class="atp-person-dot" style="background:#1E4897"></span>
+        <span class="atp-person-label">Person A</span>
+      </div>
+      <div class="atp-fields">
+        <div class="atp-field">
+          <label>Name</label>
+          <input type="text" id="atp-a-name" placeholder="e.g. Sarah" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Organiser</label>
+          <input type="number" id="atp-a-o" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Performer</label>
+          <input type="number" id="atp-a-p" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Strategist</label>
+          <input type="number" id="atp-a-s" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Connector</label>
+          <input type="number" id="atp-a-c" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Person B -->
+    <div class="atp-person-card">
+      <div class="atp-person-header">
+        <span class="atp-person-dot" style="background:#BD2724"></span>
+        <span class="atp-person-label">Person B</span>
+      </div>
+      <div class="atp-fields">
+        <div class="atp-field">
+          <label>Name</label>
+          <input type="text" id="atp-b-name" placeholder="e.g. James" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Organiser</label>
+          <input type="number" id="atp-b-o" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Performer</label>
+          <input type="number" id="atp-b-p" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Strategist</label>
+          <input type="number" id="atp-b-s" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+        <div class="atp-field">
+          <label>Connector</label>
+          <input type="number" id="atp-b-c" min="0" max="28" placeholder="0" oninput="atpActivate()">
+        </div>
+      </div>
+    </div>
+
+    <div class="atp-error" id="atp-error"></div>
+
+    <div class="atp-terms-row">
+      <input type="checkbox" id="atp-terms-check">
+      <label class="atp-terms-label" for="atp-terms-check">
+        I have read and agree to the
+        <a href="https://www.openfocusattentiontraining.com/terms-and-conditions/" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>.
+        I understand this assessment is for informational purposes only and does not constitute a clinical or psychological diagnosis.
+      </label>
+    </div>
+    <div class="atp-error" id="atp-terms-error" style="display:none">Please tick the Terms and Conditions box before submitting.</div>
+    <div class="atp-btn-row">
+      <button class="atp-btn" onclick="atpSubmit()">Show partnership profile</button>
+    </div>
+
+  </div>
+
+  <!-- Results -->
+  <div class="atp-results" id="atp-results">
+
+    <div class="atp-result-header">
+      <p class="atp-result-tag">Partnership Attention Profile</p>
+      <p class="atp-result-title" id="atp-r-title"></p>
+      <p class="atp-result-sub" id="atp-r-sub"></p>
+    </div>
+
+    <div class="atp-graph-wrap">
+      <p class="atp-graph-title">Your shared attention map</p>
+      <canvas id="atp-canvas" width="480" height="480"></canvas>
+    </div>
+
+    <div class="atp-legend" id="atp-legend"></div>
+
+    <div class="atp-gravity-box">
+      <p class="atp-gravity-tag">Partnership centre of gravity</p>
+      <p class="atp-gravity-verdict" id="atp-r-verdict"></p>
+      <p class="atp-gravity-desc" id="atp-r-gravity-desc"></p>
+      <p class="atp-gravity-explain" id="atp-r-gravity-explain"></p>
+    </div>
+
+    <div class="atp-section-bar">Flexibility scores</div>
+    <div class="atp-flex-row" id="atp-flex-row"></div>
+
+    <div class="atp-section-bar">Individual profiles</div>
+    <div class="atp-profiles" id="atp-profiles"></div>
+
+    <div class="atp-section-bar">What this partnership covers</div>
+    <div class="atp-dynamic">
+      <p class="atp-dynamic-text" id="atp-r-what-works"></p>
+    </div>
+
+    <div class="atp-section-bar">When this partnership is at its best</div>
+    <div class="atp-dynamic">
+      <p class="atp-dynamic-text" id="atp-r-at-best"></p>
+    </div>
+
+    <div class="atp-section-bar">Where the gap shows up in real life</div>
+    <div class="atp-dynamic">
+      <p class="atp-dynamic-text" id="atp-r-gap-desc"></p>
+    </div>
+
+    <div class="atp-shared-box">
+      <p class="atp-shared-tag">What to do with this</p>
+      <p class="atp-shared-text" id="atp-r-advice"></p>
+    </div>
+
+    <div class="atp-pdf-wrap">
+      <button class="atp-pdf-btn" onclick="atpPrint()">Save as PDF</button>
+      <p class="atp-pdf-note">Opens print dialogue — choose "Save as PDF" as destination</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function() {
+
+var COLORS = { A: '#1E4897', B: '#BD2724' };
+var COLORS_FILL = { A: 'rgba(30,72,151,0.15)', B: 'rgba(189,39,36,0.15)' };
+
+var STYLE_NAMES = { O: 'Organiser', P: 'Performer', S: 'Strategist', C: 'Connector' };
+var STYLE_AXIS  = { O: 'Narrow, Objective', P: 'Narrow, Immersed', S: 'Diffused, Objective', C: 'Diffused, Immersed' };
+
+var FLEX_LEVELS = [
+  { max: 5,  level: 'Highly flexible',    desc: 'Moves naturally between all four styles. Genuinely adaptable across different situations.' },
+  { max: 10, level: 'Good range',          desc: 'Clear strengths with genuine access to multiple styles. Some situations still stretch them.' },
+  { max: 16, level: 'Moderate dominance',  desc: 'One or two styles lead clearly. Others require deliberate effort to reach.' },
+  { max: 28, level: 'Strong dominance',    desc: 'One style is very pronounced. Extraordinary strengths in it, and significant blind spots outside it.' }
+];
+
+var PROFILES = {
+  O: {
+    name: 'The Organiser',
+    mech: 'Attention works like a spotlight, landing completely on one thing before moving to the next. Clarity, structure, and the ability to identify what kind of problem something is before others have finished reading it.',
+    best: 'Planning, analysis, spotting errors others missed, remaining calm under pressure. Reliable in a rare way: if they say they will do something, it gets done on time, in the form described.',
+    challenge: 'Ambiguity is genuinely difficult. Rest is hard too — their attention finds the nearest available problem rather than switching off. People inside systems can get lost behind the system itself.'
+  },
+  P: {
+    name: 'The Performer',
+    mech: 'Attention does not just focus — it enters. They inhabit what they are doing rather than observing it. When something catches them, time stops behaving normally. Their channel is single-threaded: when full, it is full.',
+    best: 'Extraordinary depth when engaged. They remember the particular when everyone else retains only the general. Total presence in the things that matter to them.',
+    challenge: 'The wider picture can disappear entirely. Ordinary life — the unremarkable stretches between what genuinely interests them — can feel like a waiting state rather than living.'
+  },
+  S: {
+    name: 'The Strategist',
+    mech: 'Attention spreads across many things simultaneously, noticing patterns between things that do not appear connected. Holds what it sees at a useful distance — the perspective of someone watching a system rather than being inside it.',
+    best: 'Sees what is coming before it arrives. Connects threads from different conversations into a single coherent picture. Asks the questions that expose the real problem underneath the presented one.',
+    challenge: 'Finishing things is genuinely difficult. Once the shape of something is clear, the getting-there feels like administration. Their own feelings can also be elusive — processed through analysis rather than felt directly.'
+  },
+  C: {
+    name: 'The Connector',
+    mech: 'Attention opens wide, taking in the whole of a situation at once — the room, the people, the mood between people, the thing being said and the thing beneath it. The overall impression arrives as a felt sense before it arrives as a thought.',
+    best: 'The most genuinely present people in any room. People feel heard at a level that precedes language. They tell Connectors things they had not planned to tell anyone.',
+    challenge: 'Boundaries in the daily sense — absorbing the emotional state of surroundings more than they realise. Sharp decisions feel like loss. Making a choice that closes off other possibilities can take longer than the situation wants.'
+  }
+};
+
+var PARTNERSHIP_ANALYSIS = {
+  balanced: {
+    verdict: 'A well-balanced partnership',
+    gravDesc: 'Your centre of gravity sits close to the middle of the map. Together you have access to all four modes of attention. Where one of you is thin, the other is strong. What one naturally misses, the other naturally brings.',
+    gravExplain: 'The amber dot on the graph shows where your partnership\'s collective attention sits across the two fundamental dimensions. When it falls near the centre, your combined attention is balanced between Narrow and Diffused, and between Objective and Immersed. This means that as a partnership, no single dimension dominates. You can focus tightly when the situation requires it, and open wide when it does not. You can analyse from a distance and connect from close up. The closer the dot is to the centre, the more complete the partnership is as an attentional unit.',
+    whatWorks: 'This partnership covers the full range of what a situation can demand. One of you reads the structure of a problem while the other reads the people inside it. One goes deep when depth is needed; the other holds the wider picture. The combination is genuinely rare and genuinely powerful.',
+    atBest: 'This partnership is at its best in complex, multi-dimensional situations — the kind that require both analytical precision and human sensitivity, both vision and execution. A difficult conversation that also needs a clear decision. A creative project that also needs a deadline. A relationship challenge that also needs a practical solution. In these moments, neither of you has to stretch uncomfortably because the other is already there. You can move through the full range of what the situation needs without either person having to operate far outside their natural mode.',
+    advice: 'The most important thing a balanced partnership can do is understand its own balance — to recognise that your differences are not friction but coverage. When you disagree about how to approach something, it is often because you are each seeing a different dimension of the same situation, both correctly. The practice is to ask: what is the other person seeing that I am not?'
+  },
+  objectiveDom: {
+    verdict: 'A partnership of structure and analysis',
+    gravDesc: 'Your centre of gravity sits toward the Objective side of the map. Together you are excellent at understanding problems, building systems, and making analytically sound decisions. The Immersed dimension — warmth, emotional attunement, felt sense — is less naturally available to you as a partnership.',
+    gravExplain: 'The amber dot sitting toward the Objective side tells you something specific: as a partnership, your combined attention tends to hold what it encounters at a certain distance. You observe, analyse, and structure rather than merge and feel. This gives you clarity and reliability. It also means that situations calling for warmth, emotional presence, or the reading of atmosphere require more deliberate effort from both of you — you are both reaching for a mode that neither finds entirely natural.',
+    whatWorks: 'You will build reliable systems together. You will make clear-headed decisions. You will be honest with each other in a way that many partnerships avoid. Problems that have a right answer are your natural terrain. Under pressure, you are likely to stay functional and clear-headed where other partnerships might become emotional or lose direction.',
+    atBest: 'This partnership is at its best when the task is clear, the problem is solvable, and the situation rewards precision over feeling. Complex analytical challenges, organisational problems, building something that needs to work reliably and consistently — these are the conditions where your combined attention produces its strongest results. You are also at your best when you are honest with each other, which comes naturally to Objective styles. You are unlikely to avoid difficult conversations for the sake of harmony.',
+    advice: 'The gap this partnership shares is the human and emotional dimension. Not feeling is not a flaw — but it means you may need to deliberately create space for the relational and emotional aspects of your shared life or work. A trusted friend, colleague, or advisor who carries strong Connector or Performer qualities can provide what the partnership does not naturally generate itself.'
+  },
+  immersedDom: {
+    verdict: 'A partnership of warmth and deep engagement',
+    gravDesc: 'Your centre of gravity sits toward the Immersed side of the map. Together you create an environment of genuine connection, warmth, and depth. The Objective dimension — analytical distance, structural clarity, firm decisions — is less naturally available to you as a partnership.',
+    gravExplain: 'The amber dot sitting toward the Immersed side tells you something specific: as a partnership, your combined attention tends to move toward what it encounters rather than stepping back from it. You feel situations rather than analyse them from a distance. This gives the partnership extraordinary warmth and genuine human depth. It also means that situations calling for clear-headed analytical distance — a decision that needs to be made logically, a system that needs to be built precisely — require more deliberate effort from both of you.',
+    whatWorks: 'You will understand each other at a level that many partnerships never reach. You will be genuinely present with each other. When someone in your shared life or work needs to feel truly seen and understood, this partnership will provide that in a way that is rare. The quality of connection you create together is your greatest strength.',
+    atBest: 'This partnership is at its best in human situations — the ones where what is needed above all else is genuine presence, warmth, and the ability to feel what is happening rather than just analyse it. Difficult personal conversations, situations involving grief or vulnerability, creative work that requires full emotional engagement, and any context where connection is the primary task. In these moments, both of you are operating in your natural mode simultaneously, and the result is something that few partnerships can match.',
+    advice: 'The gap this partnership shares is structure and analytical clarity. Decisions that require closing off options can be difficult when both people feel the cost of what is lost. Deliberately building in moments of analytical review — separate from the emotional processing of situations — can help. A trusted person with strong Organiser or Strategist qualities can provide the structural grounding the partnership does not naturally generate.'
+  },
+  narrowDom: {
+    verdict: 'A focused, precise partnership',
+    gravDesc: 'Your centre of gravity sits toward the Narrow side of the map. Together you are capable of great focus and precision. The Diffused dimension — wide-field awareness, pattern recognition, reading the atmosphere of a situation — is less naturally available to you as a partnership.',
+    gravExplain: 'The amber dot sitting toward the Narrow side tells you something specific: as a partnership, your combined attention tends to zoom in rather than spread out. You are both naturally drawn to the specific, the particular, the one thing that needs full attention right now. This gives the partnership impressive depth and focus. It also means that stepping back to see the wider pattern, or reading the broader atmosphere of a situation, requires more deliberate effort from both of you.',
+    whatWorks: 'You will go deep together. When something matters, you will both go all the way into it. The partnership is capable of sustained focus and genuine mastery in the areas that engage you. You will not be distracted by peripheral things when the central task demands your attention.',
+    atBest: 'This partnership is at its best when the task requires sustained, concentrated attention — a complex project that needs to be followed all the way through, a difficult problem that rewards going deeper rather than wider, a shared passion that both of you can inhabit completely. In these conditions, the partnership produces work and results that purely diffused partnerships — always looking at everything at once — rarely achieve.',
+    advice: 'The gap this partnership shares is the wide view. You may find it useful to deliberately schedule time to step back from what you are inside and ask: what is the broader pattern here, and where is this heading? A Strategist or Connector perspective from outside the partnership can provide the wide-field awareness that neither of you naturally reaches for.'
+  },
+  diffusedDom: {
+    verdict: 'A wide-seeing, pattern-rich partnership',
+    gravDesc: 'Your centre of gravity sits toward the Diffused side of the map. Together you see the wide picture, connect patterns across different sources, and hold a great deal simultaneously. The Narrow dimension — going deep into one thing, completing what is started — is less naturally available to you as a partnership.',
+    gravExplain: 'The amber dot sitting toward the Diffused side tells you something specific: as a partnership, your combined attention tends to spread wide rather than narrow to a point. You both naturally take in the whole field — the pattern, the atmosphere, the connections between things. This gives the partnership excellent situational awareness and creative range. It also means that the specific, the precise, and the deeply followed-through require more deliberate effort from both of you.',
+    whatWorks: 'You will generate ideas, possibilities, and perspectives with ease. You will both read situations quickly and see where things are heading. The partnership is naturally curious, wide-ranging, and good at holding complexity without reducing it prematurely.',
+    atBest: 'This partnership is at its best in the early stages of things — exploring possibilities, reading complex situations, generating creative approaches, sensing where things are heading before others have seen it. You are also at your best in human environments where reading the atmosphere and connecting threads matters more than going deep into any single one. Strategy, innovation, and facilitation are natural terrains for this partnership.',
+    advice: 'The gap this partnership shares is depth and completion. When something needs to be followed all the way through — past the point where it stops feeling interesting and into the part that is just work — you may both find yourselves reaching for the next new thing instead. Deliberately committing to seeing one thing through to completion, and building in accountability for that, is the most useful practice for this partnership.'
+  }
+};
+
+function getDominant(s) {
+  return Object.keys(s).sort(function(a,b){ return s[b]-s[a]; })[0];
+}
+
+function getFlexLevel(gap) {
+  return FLEX_LEVELS.find(function(f){ return gap <= f.max; });
+}
+
+function getPartnershipType(sA, sB) {
+  var combined = { O: sA.O+sB.O, P: sA.P+sB.P, S: sA.S+sB.S, C: sA.C+sB.C };
+  var total = combined.O + combined.P + combined.S + combined.C;
+  var immersion  = (combined.P + combined.C) / total;
+  var objectivity = (combined.O + combined.S) / total;
+  var diffusion  = (combined.S + combined.C) / total;
+  var narrowing  = (combined.O + combined.P) / total;
+
+  var immBal  = Math.abs(immersion - 0.5);
+  var diffBal = Math.abs(diffusion - 0.5);
+
+  if (immBal < 0.12 && diffBal < 0.12) return 'balanced';
+  if (immBal >= diffBal) {
+    return objectivity > immersion ? 'objectiveDom' : 'immersedDom';
+  } else {
+    return narrowing > diffusion ? 'narrowDom' : 'diffusedDom';
+  }
+}
+
+function atpActivate() {}
+
+function atpSubmit() {
+  var nameA = document.getElementById('atp-a-name').value.trim() || 'Person A';
+  var nameB = document.getElementById('atp-b-name').value.trim() || 'Person B';
+  var sA = {
+    O: parseInt(document.getElementById('atp-a-o').value) || 0,
+    P: parseInt(document.getElementById('atp-a-p').value) || 0,
+    S: parseInt(document.getElementById('atp-a-s').value) || 0,
+    C: parseInt(document.getElementById('atp-a-c').value) || 0
+  };
+  var sB = {
+    O: parseInt(document.getElementById('atp-b-o').value) || 0,
+    P: parseInt(document.getElementById('atp-b-p').value) || 0,
+    S: parseInt(document.getElementById('atp-b-s').value) || 0,
+    C: parseInt(document.getElementById('atp-b-c').value) || 0
+  };
+
+  // Terms check
+  var termsCheck = document.getElementById('atp-terms-check');
+  var termsErr   = document.getElementById('atp-terms-error');
+  if (!termsCheck.checked) {
+    termsErr.style.display = 'block';
+    termsCheck.closest('.atp-terms-row').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  termsErr.style.display = 'none';
+
+  var errEl = document.getElementById('atp-error');
+  var totalA = sA.O+sA.P+sA.S+sA.C;
+  var totalB = sB.O+sB.P+sB.S+sB.C;
+  if (totalA === 0 || totalB === 0) {
+    errEl.textContent = 'Please enter scores for both partners.';
+    errEl.style.display = 'block'; return;
+  }
+  var invalid = false;
+  [sA,sB].forEach(function(s){ Object.values(s).forEach(function(v){ if(v<0||v>28) invalid=true; }); });
+  if (invalid) { errEl.textContent = 'All scores must be between 0 and 28.'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+
+  var domA = getDominant(sA), domB = getDominant(sB);
+  var gapA = Math.max(sA.O,sA.P,sA.S,sA.C) - Math.min(sA.O,sA.P,sA.S,sA.C);
+  var gapB = Math.max(sB.O,sB.P,sB.S,sB.C) - Math.min(sB.O,sB.P,sB.S,sB.C);
+  var flexA = getFlexLevel(gapA), flexB = getFlexLevel(gapB);
+  var pType = getPartnershipType(sA, sB);
+  var pData = PARTNERSHIP_ANALYSIS[pType];
+
+  // Header
+  document.getElementById('atp-r-title').textContent = nameA + ' and ' + nameB;
+  document.getElementById('atp-r-sub').textContent = PROFILES[domA].name + ' and ' + PROFILES[domB].name;
+
+  // Gravity
+  document.getElementById('atp-r-verdict').textContent = pData.verdict;
+  document.getElementById('atp-r-gravity-desc').textContent = pData.gravDesc;
+  document.getElementById('atp-r-gravity-explain').textContent = pData.gravExplain;
+
+  // Legend
+  var leg = document.getElementById('atp-legend');
+  leg.innerHTML = '';
+  [{name:nameA, sc:sA, key:'A'},{name:nameB, sc:sB, key:'B'}].forEach(function(p){
+    var item = document.createElement('div');
+    item.className = 'atp-legend-item';
+    item.innerHTML = '<span class="atp-legend-dot" style="background:'+COLORS[p.key]+'"></span>'
+      + '<span class="atp-legend-name">'+p.name+'</span>'
+      + '<span class="atp-legend-scores">O:'+p.sc.O+' P:'+p.sc.P+' S:'+p.sc.S+' C:'+p.sc.C+'</span>';
+    leg.appendChild(item);
+  });
+
+  // Flex row
+  var flexRow = document.getElementById('atp-flex-row');
+  flexRow.innerHTML = '';
+  [{name:nameA, gap:gapA, flex:flexA, key:'A'},{name:nameB, gap:gapB, flex:flexB, key:'B'}].forEach(function(p){
+    var card = document.createElement('div');
+    card.className = 'atp-flex-card';
+    card.innerHTML = '<p class="atp-flex-card-tag">'+p.name+'</p>'
+      + '<p class="atp-flex-card-num" style="color:'+COLORS[p.key]+'">'+p.gap+'</p>'
+      + '<p class="atp-flex-card-level">'+p.flex.level+'</p>'
+      + '<p class="atp-flex-card-desc">'+p.flex.desc+'</p>';
+    flexRow.appendChild(card);
+  });
+
+  // Profiles
+  var profiles = document.getElementById('atp-profiles');
+  profiles.innerHTML = '';
+  [{name:nameA, sc:sA, dom:domA, key:'A'},{name:nameB, sc:sB, dom:domB, key:'B'}].forEach(function(p){
+    var prof = PROFILES[p.dom];
+    var card = document.createElement('div');
+    card.className = 'atp-profile';
+    card.innerHTML = '<div class="atp-profile-name-tag">'
+      + '<span class="atp-profile-dot" style="background:'+COLORS[p.key]+'"></span>'
+      + '<span class="atp-profile-person">'+p.name+'</span></div>'
+      + '<p class="atp-profile-style">'+prof.name+'</p>'
+      + '<p class="atp-profile-axis">'+STYLE_AXIS[p.dom]+'</p>'
+      + '<p class="atp-sublabel">How their attention works</p>'
+      + '<p class="atp-profile-text">'+prof.mech+'</p>'
+      + '<p class="atp-sublabel">At their best</p>'
+      + '<p class="atp-profile-text">'+prof.best+'</p>'
+      + '<p class="atp-sublabel">Their characteristic challenge</p>'
+      + '<p class="atp-profile-text">'+prof.challenge+'</p>';
+    profiles.appendChild(card);
+  });
+
+  // Dynamic analysis
+  document.getElementById('atp-r-what-works').innerHTML = pData.whatWorks;
+  document.getElementById('atp-r-at-best').innerHTML = pData.atBest;
+  document.getElementById('atp-r-gravity-explain').textContent = pData.gravExplain || '';
+  document.getElementById('atp-r-gap-desc').innerHTML = buildGapDesc(sA, sB, nameA, nameB, domA, domB);
+  document.getElementById('atp-r-advice').textContent = pData.advice;
+
+  // Show
+  var resultsEl = document.getElementById('atp-results');
+  resultsEl.classList.add('atp-show');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Draw graph
+  requestAnimationFrame(function(){
+    setTimeout(function(){ drawGraph(sA, sB, nameA, nameB, domA, domB); }, 80);
+  });
+}
+
+function buildGapDesc(sA, sB, nameA, nameB, domA, domB) {
+  var styles = ['O','P','S','C'];
+  var combined = {};
+  styles.forEach(function(k){ combined[k] = sA[k]+sB[k]; });
+  var sorted = styles.slice().sort(function(a,b){ return combined[a]-combined[b]; });
+  var weakest = sorted[0];
+  var second  = sorted[1];
+  var weakNames = [STYLE_NAMES[weakest], STYLE_NAMES[second]];
+  return 'As a partnership, the combined scores are thinnest in <strong>' + weakNames[0]
+    + '</strong> and <strong>' + weakNames[1] + '</strong>. These are the modes '
+    + 'neither of you reaches for most naturally — the corners of the map where your shared attention is least present. '
+    + 'Situations that call specifically for these modes will require more deliberate effort from both of you, '
+    + 'and are the most likely source of friction or blind spots in your partnership.';
+}
+
+function drawGraph(sA, sB, nameA, nameB, domA, domB) {
+  var canvas = document.getElementById('atp-canvas');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var cx = W/2, cy = H/2;
+  var MAX_R = W * 0.34;
+  var D = 0.7071;
+
+  ctx.clearRect(0,0,W,H);
+
+  var AXES = {
+    O: { dx:-D, dy:-D, lx:cx-MAX_R-10, ly:cy-MAX_R-10, ta:'right',  bl:'bottom' },
+    P: { dx: D, dy:-D, lx:cx+MAX_R+10, ly:cy-MAX_R-10, ta:'left',   bl:'bottom' },
+    S: { dx:-D, dy: D, lx:cx-MAX_R-10, ly:cy+MAX_R+10, ta:'right',  bl:'top'    },
+    C: { dx: D, dy: D, lx:cx+MAX_R+10, ly:cy+MAX_R+10, ta:'left',   bl:'top'    }
+  };
+  var ORDER = ['O','P','C','S'];
+
+  // Quadrant fills
+  var qFills = [
+    {pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#EEF4FB'},
+    {pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx-MAX_R,cy]], c:'#EEF4FB'},
+    {pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#E8F0FA'},
+    {pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx+MAX_R,cy]], c:'#E8F0FA'},
+    {pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#E8F0FA'},
+    {pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx-MAX_R,cy]], c:'#E8F0FA'},
+    {pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#FAEEDA'},
+    {pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx+MAX_R,cy]], c:'#FAEEDA'}
+  ];
+  qFills.forEach(function(q){
+    ctx.beginPath(); ctx.moveTo(q.pts[0][0],q.pts[0][1]);
+    q.pts.slice(1).forEach(function(p){ ctx.lineTo(p[0],p[1]); });
+    ctx.closePath(); ctx.fillStyle=q.c; ctx.fill();
+  });
+
+  // Diamond rings
+  [7,14,21,28].forEach(function(s,ri){
+    var r=(s/28)*MAX_R;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy-r); ctx.lineTo(cx+r,cy); ctx.lineTo(cx,cy+r); ctx.lineTo(cx-r,cy);
+    ctx.closePath();
+    ctx.strokeStyle=ri===3?'#1E489744':'#C5D5E8AA';
+    ctx.lineWidth=ri===3?1.5:0.8;
+    ctx.setLineDash(ri===3?[]:[4,3]);
+    ctx.stroke(); ctx.setLineDash([]);
+    if(ri<3){
+      ctx.font='10px Lato,Arial,sans-serif'; ctx.fillStyle='#AAB';
+      ctx.textAlign='left'; ctx.textBaseline='middle';
+      ctx.fillText(String(s),cx+r+4,cy);
+    }
+  });
+
+  // Dimension cross
+  ctx.setLineDash([5,4]);
+  ctx.strokeStyle='rgba(150,150,150,0.35)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(cx-MAX_R*0.82,cy); ctx.lineTo(cx+MAX_R*0.82,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy-MAX_R*0.82); ctx.lineTo(cx,cy+MAX_R*0.82); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Centre glow
+  var grd=ctx.createRadialGradient(cx,cy,0,cx,cy,42);
+  grd.addColorStop(0,'rgba(245,193,98,0.3)'); grd.addColorStop(1,'rgba(245,193,98,0)');
+  ctx.beginPath(); ctx.arc(cx,cy,42,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+
+  // Axes
+  ctx.setLineDash([4,3]); ctx.strokeStyle='#1E489733'; ctx.lineWidth=1;
+  ['O','P','S','C'].forEach(function(k){
+    var a=AXES[k];
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+a.dx*MAX_R,cy+a.dy*MAX_R); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Tick dots
+  [7,14,21,28].forEach(function(s){
+    var r=(s/28)*MAX_R;
+    ['O','P','S','C'].forEach(function(k){
+      var a=AXES[k];
+      ctx.beginPath(); ctx.arc(cx+a.dx*r,cy+a.dy*r,s===28?3:2,0,Math.PI*2);
+      ctx.fillStyle=s===28?'#1E489766':'#1E489733'; ctx.fill();
+    });
+  });
+
+  // Draw shapes (B behind A)
+  [{sc:sB,color:COLORS.B,fill:COLORS_FILL.B},{sc:sA,color:COLORS.A,fill:COLORS_FILL.A}].forEach(function(p){
+    var pts=ORDER.map(function(k){
+      var a=AXES[k]; var r=(p.sc[k]/28)*MAX_R;
+      return [cx+a.dx*r, cy+a.dy*r];
+    });
+    ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]);
+    pts.slice(1).forEach(function(pt){ ctx.lineTo(pt[0],pt[1]); });
+    ctx.closePath(); ctx.fillStyle=p.fill; ctx.fill();
+    ctx.strokeStyle=p.color; ctx.lineWidth=2.5; ctx.stroke();
+    pts.forEach(function(pt){
+      ctx.beginPath(); ctx.arc(pt[0],pt[1],6,0,Math.PI*2); ctx.fillStyle=p.color; ctx.fill();
+      ctx.beginPath(); ctx.arc(pt[0],pt[1],3,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+    });
+  });
+
+  // Centre of gravity
+  var totalA=sA.O+sA.P+sA.S+sA.C, totalB=sB.O+sB.P+sB.S+sB.C;
+  var grand=totalA+totalB||1;
+  var immersion=(sA.P+sA.C+sB.P+sB.C), objectivity=(sA.O+sA.S+sB.O+sB.S);
+  var diffusion=(sA.S+sA.C+sB.S+sB.C), narrowing=(sA.O+sA.P+sB.O+sB.P);
+  var netImm=(immersion-objectivity)/grand;
+  var netDiff=(diffusion-narrowing)/grand;
+  var scale=MAX_R*0.72;
+  var dotX=cx+netImm*scale, dotY=cy+netDiff*scale;
+
+  // Glow
+  var grdD=ctx.createRadialGradient(dotX,dotY,0,dotX,dotY,20);
+  grdD.addColorStop(0,'rgba(245,193,98,0.35)'); grdD.addColorStop(1,'rgba(245,193,98,0)');
+  ctx.beginPath(); ctx.arc(dotX,dotY,20,0,Math.PI*2); ctx.fillStyle=grdD; ctx.fill();
+  // Dot
+  ctx.beginPath(); ctx.arc(dotX,dotY,8,0,Math.PI*2); ctx.fillStyle='#F5C162'; ctx.fill();
+  ctx.beginPath(); ctx.arc(dotX,dotY,4,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+  // Dashed line from centre
+  ctx.setLineDash([4,3]); ctx.strokeStyle='rgba(245,193,98,0.6)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(dotX,dotY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Corner labels
+  ctx.font='13px Lato,Arial,sans-serif';
+  ['O','P','S','C'].forEach(function(k){
+    var a=AXES[k];
+    ctx.fillStyle='#2A2A2A'; ctx.textAlign=a.ta; ctx.textBaseline=a.bl;
+    ctx.fillText(STYLE_NAMES[k],a.lx,a.ly);
+  });
+
+  // Centre label
+  ctx.font='italic 10px Lato,Arial,sans-serif'; ctx.fillStyle='#A07020';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('flexible attention',cx,cy);
+}
+
+// Print
+window.atpPrint = function() {
+  var el = document.getElementById('atp');
+  var toHide = [];
+  var current = el;
+  while (current && current !== document.body) {
+    var parent = current.parentNode;
+    if (parent) {
+      Array.prototype.forEach.call(parent.children, function(child) {
+        if (child !== current && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+          toHide.push({ el: child, prev: child.style.cssText });
+          child.style.setProperty('display', 'none', 'important');
+        }
+      });
+    }
+    current = parent;
+  }
+  setTimeout(function() {
+    window.print();
+    setTimeout(function() {
+      toHide.forEach(function(item) { item.el.style.cssText = item.prev; });
+    }, 600);
+  }, 80);
+};
+
+window.atpSubmit = atpSubmit;
+window.atpActivate = atpActivate;
+
+function notifyHeight() {
+  var el = document.getElementById('atp');
+  if (el) window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+}
+notifyHeight();
+setInterval(notifyHeight, 500);
+
+})();
+</script>
