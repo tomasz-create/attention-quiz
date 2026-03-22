@@ -1,0 +1,1462 @@
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: #fff; }
+/* ── Scoped to #atq to prevent any bleed into host page ── */
+#atq, #atq * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#atq {
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 16px;
+  color: #2A2A2A;
+  background: #FFFFFF;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── CSS variables ── */
+#atq {
+  --gold:    #F5C162;
+  --blue:    #1E4897;
+  --brown:   #671B0A;
+  --red:     #BD2724;
+  --bg:      #FFFFFF;
+  --border:  #E2E8F0;
+  --muted:   #718096;
+  --text:    #2A2A2A;
+  --lightbg: #F7F9FC;
+}
+
+/* ── Progress bar ── */
+#atq .atq-progress-wrap {
+  background: #EEF2F7;
+  height: 4px;
+  width: 100%;
+  margin-bottom: 32px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+#atq .atq-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+#atq .atq-progress-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Scale legend ── */
+#atq .atq-scale-bar {
+  background: var(--blue);
+  color: #fff;
+  padding: 10px 18px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+#atq .atq-scale-bar span { opacity: 0.85; }
+#atq .atq-scale-bar strong { opacity: 1; color: var(--gold); }
+
+/* ── Question block ── */
+#atq .atq-q {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  transition: border-color 0.15s;
+}
+#atq .atq-q:hover { border-left-color: var(--gold); }
+#atq .atq-q.atq-answered { border-left-color: var(--blue); }
+
+#atq .atq-q-num {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+#atq .atq-q-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+/* ── Scale options ── */
+#atq .atq-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+#atq .atq-opt input[type="radio"] { display: none; }
+
+#atq .atq-opt label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.12s;
+  background: #FFFFFF;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  min-height: 58px;
+  line-height: 1.3;
+}
+#atq .atq-opt label .atq-n {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+#atq .atq-opt label:hover {
+  border-color: var(--gold);
+  background: #FFFBF0;
+}
+#atq .atq-opt input:checked + label {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+#atq .atq-opt input:checked + label .atq-n {
+  color: var(--gold);
+}
+
+/* ── Submit area ── */
+#atq .atq-submit-area {
+  padding: 28px 0 8px;
+  text-align: center;
+}
+#atq .atq-error {
+  background: #FFF0EE;
+  border: 1px solid #F4B8B0;
+  color: var(--red);
+  padding: 11px 18px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  display: none;
+}
+#atq .atq-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 16px 48px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+#atq .atq-btn:hover { background: var(--brown); transform: translateY(-1px); }
+
+/* ── Results section ── */
+#atq .atq-results {
+  display: none;
+  animation: atqFadeUp 0.5s ease both;
+  padding-top: 8px;
+}
+#atq .atq-results.atq-show { display: block; }
+
+@keyframes atqFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Results header */
+#atq .atq-result-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 32px 28px;
+  margin-bottom: 0;
+}
+#atq .atq-result-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+#atq .atq-result-name {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 300;
+  line-height: 1.0;
+  color: #fff;
+  margin-bottom: 6px;
+}
+#atq .atq-result-axis {
+  font-size: 16px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.08em;
+}
+
+/* Score cards */
+#atq .atq-scores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 0;
+}
+#atq .atq-score-card {
+  padding: 16px 10px;
+  text-align: center;
+  background: var(--lightbg);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+#atq .atq-score-card:last-child { border-right: none; }
+#atq .atq-score-card.atq-dom {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+#atq .atq-score-card-lbl {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-lbl { color: rgba(255,255,255,0.6); }
+#atq .atq-score-card-val {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-val { color: var(--gold); }
+#atq .atq-score-card-max {
+  font-size: 10px;
+  color: #AAB;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-max { color: rgba(255,255,255,0.35); }
+
+/* ── GRAPH ── */
+#atq .atq-graph-wrap {
+  background: var(--lightbg);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 20px;
+  text-align: center;
+}
+#atq .atq-graph-title {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+#atq canvas#atq-canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 560px;
+  width: 100%;
+  height: auto;
+}
+
+/* ── FLEX GAP ── */
+#atq .atq-flex-wrap {
+  border-left: 4px solid var(--gold);
+  background: #FFFBF0;
+  border-top: 1px solid #F5E0A0;
+  border-bottom: 1px solid #F5E0A0;
+  border-right: 1px solid #F5E0A0;
+  padding: 24px 26px;
+  margin-bottom: 0;
+}
+#atq .atq-flex-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 6px;
+}
+#atq .atq-flex-gap-num {
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+#atq .atq-flex-level {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#atq .atq-flex-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* ── Profile sections ── */
+#atq .atq-section-bar {
+  background: var(--gold);
+  padding: 9px 22px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+#atq .atq-section-body {
+  padding: 22px 22px 8px;
+  border-bottom: 1px solid var(--border);
+}
+#atq .atq-section-sublabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 7px;
+  margin-top: 16px;
+}
+#atq .atq-section-sublabel:first-child { margin-top: 0; }
+#atq .atq-section-text {
+  font-size: 15px;
+  line-height: 1.78;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+/* Growth edge */
+#atq .atq-growth {
+  background: #FFFBF0;
+  border-left: 4px solid var(--gold);
+  border: 1px solid #F5E0A0;
+  border-left: 4px solid var(--gold);
+  padding: 20px 22px;
+  margin: 16px 22px 0;
+}
+#atq .atq-growth-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 8px;
+}
+#atq .atq-growth-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* Complement */
+#atq .atq-complement {
+  background: #EEF4FB;
+  border: 1px solid #AABBD6;
+  border-left: 4px solid var(--blue);
+  padding: 20px 22px;
+  margin: 12px 22px 24px;
+}
+#atq .atq-complement-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+#atq .atq-complement-name {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#atq .atq-complement-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 580px) {
+  #atq .atq-scores { grid-template-columns: repeat(2, 1fr); }
+  #atq .atq-scale { gap: 4px; }
+  #atq .atq-opt label { padding: 8px 2px; min-height: 52px; font-size: 10px; }
+  #atq .atq-opt label .atq-n { font-size: 17px; }
+  #atq .atq-q { padding: 16px 14px; }
+  #atq .atq-result-header { padding: 24px 18px; }
+  #atq .atq-growth, #atq .atq-complement { margin-left: 0; margin-right: 0; }
+}
+
+/* ── Print / Save as PDF ── */
+@media print {
+  #atq .atq-progress-wrap,
+  #atq .atq-progress-label,
+  #atq .atq-scale-bar,
+  #atq #atq-questions,
+  #atq .atq-submit-area,
+  #atq .atq-pdf-btn-wrap { display: none !important; }
+
+  #atq .atq-results { display: block !important; }
+
+  #atq .atq-result-header { background: #1E4897 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-score-card.atq-dom { background: #1E4897 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-section-bar { background: #F5C162 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-flex-wrap { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-growth { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-complement { background: #EEF4FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  #atq .atq-graph-wrap { page-break-inside: avoid; }
+  #atq .atq-flex-wrap  { page-break-inside: avoid; }
+  #atq .atq-growth     { page-break-inside: avoid; }
+  #atq .atq-complement { page-break-inside: avoid; }
+}
+
+/* ── PDF button ── */
+#atq .atq-pdf-btn-wrap {
+  text-align: center;
+  padding: 32px 0 16px;
+  border-top: 1px solid #E2E8F0;
+  margin-top: 8px;
+}
+#atq .atq-pdf-btn {
+  background: #1E4897;
+  color: #fff;
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+#atq .atq-pdf-btn:hover { background: #671B0A; transform: translateY(-1px); }
+#atq .atq-pdf-note {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 10px;
+  font-weight: 300;
+}
+
+
+/* ── Print-only title header ── */
+#atq .atq-print-header {
+  display: none;
+}
+@media print {
+  #atq .atq-print-header {
+    display: block !important;
+    text-align: center;
+    padding: 0 0 24px 0;
+    margin-bottom: 24px;
+    border-bottom: 3px solid #F5C162;
+  }
+  #atq .atq-print-header-title {
+    font-size: 28px;
+    font-weight: 300;
+    color: #1E4897;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  #atq .atq-print-header-sub {
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 2px;
+    font-weight: 300;
+  }
+  #atq .atq-print-header-author {
+    font-size: 13px;
+    color: #F5C162;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+
+/* ── Attention indices box ── */
+#atq .atq-indices-wrap {
+  background: #EEF4FB;
+  border-left: 4px solid var(--blue);
+  border-top: 1px solid #AABBD6;
+  border-bottom: 1px solid #AABBD6;
+  border-right: 1px solid #AABBD6;
+  padding: 24px 26px;
+  margin-bottom: 0;
+}
+#atq .atq-indices-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+#atq .atq-indices-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+#atq .atq-index-block { }
+#atq .atq-index-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+#atq .atq-index-num {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+#atq .atq-index-bar-wrap {
+  height: 6px;
+  background: #D0DFF0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+#atq .atq-index-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+#atq .atq-index-desc {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.6;
+}
+#atq .atq-indices-sentence {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #3A3A3A;
+  font-weight: 300;
+  border-top: 1px solid #AABBD6;
+  padding-top: 14px;
+  margin-top: 4px;
+}
+@media (max-width: 480px) {
+  #atq .atq-indices-row { grid-template-columns: 1fr; }
+}
+
+
+/* ── Dimension explanation block ── */
+#atq .atq-dim-explain {
+  background: #FFFFFF;
+  border-top: 1px solid var(--border);
+  padding: 22px 26px 18px;
+}
+#atq .atq-dim-explain-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-body strong {
+  color: var(--text);
+  font-weight: 700;
+}
+#atq .atq-dim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+#atq .atq-dim-card {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--blue);
+  padding: 14px 16px;
+}
+#atq .atq-dim-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+#atq .atq-dim-card-body {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #555;
+  font-weight: 300;
+}
+@media (max-width: 480px) {
+  #atq .atq-dim-grid { grid-template-columns: 1fr; }
+}
+
+
+#atq .atq-terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: var(--light);
+  border: 1px solid var(--border);
+}
+#atq .atq-terms-row input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--blue);
+}
+#atq .atq-terms-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+  cursor: pointer;
+}
+#atq .atq-terms-label a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: rgba(30,72,151,0.3);
+}
+#atq .atq-terms-label a:hover { text-decoration-color: var(--blue); }
+#atq .atq-terms-full {
+  display: none;
+  background: var(--light);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 300;
+}
+#atq .atq-terms-full p { margin-bottom: 8px; }
+#atq .atq-terms-full p:last-child { margin-bottom: 0; }
+#atq .atq-terms-title {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="atq">
+
+  <!-- Progress -->
+  <div class="atq-progress-label" id="atq-prog-lbl">0 / 28 answered</div>
+  <div class="atq-progress-wrap">
+    <div class="atq-progress-fill" id="atq-prog-fill"></div>
+  </div>
+
+
+
+  <!-- Questions rendered by JS -->
+  <div id="atq-questions"></div>
+
+  <!-- Submit -->
+  <div class="atq-submit-area">
+    <div class="atq-error" id="atq-error">Please answer all 28 questions before submitting.</div>
+    <div class="atq-terms-row">
+      <input type="checkbox" id="atq-terms-check">
+      <label class="atq-terms-label" for="atq-terms-check">
+        I have read and agree to the
+        <a href="https://www.openfocusattentiontraining.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>.
+        I understand this assessment is for informational purposes only and does not constitute a clinical or psychological diagnosis.
+      </label>
+    </div>
+
+    <div class="atq-error" id="atq-terms-error" style="display:none">Please tick the Terms and Conditions box before submitting.</div>
+    <button class="atq-btn" onclick="atqSubmit()">See my results</button>
+  </div>
+
+  <!-- ── RESULTS (hidden until submit) ── -->
+  <div class="atq-results" id="atq-results">
+
+    <!-- Print-only title (hidden on screen, visible in PDF) -->
+    <div class="atq-print-header">
+      <p class="atq-print-header-title">How Do You Pay Attention?</p>
+      <p class="atq-print-header-sub">Four Attention Styles Assessment</p>
+      <p class="atq-print-header-author">Dr. Tomasz Kopec &nbsp;·&nbsp; Flexible Attention Trainer &nbsp;·&nbsp; NHS GP</p>
+    </div>
+
+    <!-- Header: dominant style name -->
+    <div class="atq-result-header">
+      <p class="atq-result-tag">Your dominant attention style</p>
+      <p class="atq-result-name" id="atq-r-name"></p>
+      <p class="atq-result-axis" id="atq-r-axis"></p>
+    </div>
+
+    <!-- Score cards -->
+    <div class="atq-scores" id="atq-r-scores"></div>
+
+    <!-- Graph -->
+    <div class="atq-graph-wrap">
+      <p class="atq-graph-title">Your attention profile</p>
+      <canvas id="atq-canvas" width="560" height="560"></canvas>
+    </div>
+
+    <!-- Flexibility gap -->
+    <div class="atq-flex-wrap">
+      <p class="atq-flex-tag">Your flexibility score</p>
+      <p class="atq-flex-gap-num" id="atq-r-gap"></p>
+      <p class="atq-flex-level"   id="atq-r-level"></p>
+      <p class="atq-flex-desc"    id="atq-r-flexdesc"></p>
+    </div>
+
+
+    <!-- Attention indices -->
+    <div class="atq-indices-wrap">
+      <p class="atq-indices-tag">Your attention dimensions</p>
+      <p class="atq-indices-note" id="atq-r-dot-note" style="font-size:13px; color:#3A3A3A; font-weight:300; line-height:1.7; margin-bottom:14px;"></p>
+      <div class="atq-indices-row">
+        <div class="atq-index-block">
+          <p class="atq-index-label">Immersion</p>
+          <p class="atq-index-num" id="atq-r-immersion-pct"></p>
+          <div class="atq-index-bar-wrap">
+            <div class="atq-index-bar-fill" id="atq-r-immersion-bar" style="width:0%"></div>
+          </div>
+          <p class="atq-index-desc" id="atq-r-immersion-desc"></p>
+        </div>
+        <div class="atq-index-block">
+          <p class="atq-index-label">Diffusion</p>
+          <p class="atq-index-num" id="atq-r-diffusion-pct"></p>
+          <div class="atq-index-bar-wrap">
+            <div class="atq-index-bar-fill" id="atq-r-diffusion-bar" style="width:0%"></div>
+          </div>
+          <p class="atq-index-desc" id="atq-r-diffusion-desc"></p>
+        </div>
+      </div>
+      <p class="atq-indices-sentence" id="atq-r-indices-sentence"></p>
+    </div>
+
+    <!-- Profile detail -->
+    <div class="atq-section-bar">Your profile</div>
+    <div class="atq-section-body">
+      <p class="atq-section-sublabel">How your attention works</p>
+      <p class="atq-section-text" id="atq-r-mech"></p>
+      <p class="atq-section-sublabel">At your best</p>
+      <p class="atq-section-text" id="atq-r-best"></p>
+      <p class="atq-section-sublabel">Your characteristic challenge</p>
+      <p class="atq-section-text" id="atq-r-challenge"></p>
+      <p class="atq-section-sublabel">What this means for how you live</p>
+      <p class="atq-section-text" id="atq-r-life"></p>
+      <p class="atq-section-sublabel">Your two attention dimensions</p>
+      <p class="atq-section-text" id="atq-r-dimensions"></p>
+    </div>
+
+    <div class="atq-growth">
+      <p class="atq-growth-lbl">◈ Your growth edge</p>
+      <p class="atq-growth-text" id="atq-r-growth"></p>
+    </div>
+
+    <div class="atq-complement">
+      <p class="atq-complement-lbl">⟷ Your natural complement</p>
+      <p class="atq-complement-name" id="atq-r-comp-name"></p>
+      <p class="atq-complement-text" id="atq-r-comp-why"></p>
+    </div>
+
+
+    <!-- Save as PDF -->
+    <div class="atq-pdf-btn-wrap">
+      <button class="atq-pdf-btn" onclick="atqPrint()">Save results as PDF</button>
+      <p class="atq-pdf-note">Opens your browser's print dialogue. Choose "Save as PDF" as the destination.</p>
+    </div>
+
+  </div><!-- /results -->
+
+</div><!-- /atq -->
+
+<script>
+(function() {
+
+// ════════════════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════════════════
+
+const Q = [
+  ["You're at a dinner party when a friend mentions they're going through a difficult time. Before anyone has said much, you've already sensed the weight they're carrying, and found yourself drawn toward them, rather than toward the conversation everyone else is having.", "C"],
+  ["When a plan changes at the last minute, your instinct is to figure out exactly what needs to be reorganised, in what order, and by when.", "O"],
+  ["When you're working on something that genuinely interests you, the time disappears and hours feel like minutes. You are surprised how quickly the time goes.", "P"],
+  ["In a meeting, when important information has just been shared, you immediately start seeing how the different pieces connect, and where the conversation is probably heading.", "S"],
+  ["You've had the experience of leaving a social event and realising you feel significantly different from when you arrived, not because anything bad happened, but because you absorbed the emotional atmosphere of the room.", "C"],
+  ["You have a system for most areas of your life. When someone disrupts that system, it registers as a genuine inconvenience, not just a minor irritation.", "O"],
+  ["There's a noticeable difference between you when you're engaged in something meaningful and you when you're not. People close to you would recognise it immediately.", "P"],
+  ["In complicated situations, you instinctively step back before stepping in. Acting before you have the full picture feels premature, even when others are already moving.", "S"],
+  ["People tell you things they hadn't planned to tell anyone. Something about talking to you makes things come out.", "C"],
+  ["You notice errors and inconsistencies that other people walk past.", "O"],
+  ["You remember certain things with striking precision, exactly how something sounded, looked, or felt, and can be completely blank about other things that happened at the same time.", "P"],
+  ["You see how a situation is going to unfold before it gets there.", "S"],
+  ["Making a firm decision, one that closes off other options, takes you longer than it probably should. Choosing one option means letting the others go.", "C"],
+  ["Doing truly nothing, with no task in mind and no clear purpose, is harder for you than it seems to be for most people.", "O"],
+  ["You find it almost impossible to give something half your attention. You're either in, properly in, or you're barely present at all.", "P"],
+  ["You generate ideas easily. You have more unfinished projects than you'd like to admit.", "S"],
+  ["When you're in a tense or emotionally charged situation, you often know what's really going on beneath the surface.", "C"],
+  ["When someone explains a problem to you, you're already mentally breaking it into components before they've finished talking.", "O"],
+  ["Routine or repetitive work drains you even when it is easy. Hard work that genuinely engages you does not drain you at all.", "P"],
+  ["You tend to be better at understanding why something is not working than at fixing it step by step.", "S"],
+  ["You sometimes put other people's needs so far in front of your own that by the time you get to yourself, you've forgotten what you actually wanted.", "C"],
+  ["You feel most like yourself when your environment is ordered, your priorities are clear, and you know what needs to happen next.", "O"],
+  ["When you're genuinely interested in something, you don't just engage with it, you go all the way in.", "P"],
+  ["You connect things others haven't linked, ideas from different conversations, patterns from different situations.", "S"],
+  ["Your first understanding of a situation usually arrives as a feeling rather than a thought. You sense that something is wrong, or right, before being able to explain it.", "C"],
+  ["When you take on a task, you naturally think through the steps involved and feel more settled once you can see the order of things clearly.", "O"],
+  ["When something doesn't engage you, you don't just find it boring, you find it almost impossible to stay present. Your attention goes somewhere else entirely, and you have to actively drag it back.", "P"],
+  ["You can understand a situation thoroughly and still feel emotionally removed from it. Knowing what's happening and actually being emotionally engaged are sometimes two different things.", "S"]
+];
+
+const PROFILES = {
+  O: {
+    name: "The Organiser", axis: "Narrow, Objective",
+    mech: "Organiser attention operates like a spotlight. When it lands on something, it lands completely, one thing, examined fully, before moving to the next. This gives Organisers an almost startling degree of clarity in situations that have a right answer. They see the structure of a problem before other people have finished reading it. The spotlight has edges, though. What falls outside it tends to fall completely. The Organiser can be so deep inside a system that they lose sight of the people in it. They can solve the problem efficiently and miss entirely that the person with the problem needed something other than a solution.",
+    best: "At their best, Organisers are the person you want when something is broken and needs to be understood before it can be fixed. They are reliable in a way that is rare: if they say they will do something, it will be done by the time they said it would, in the form they described, possibly with a brief summary of how it went. They plan well. They analyse accurately. They spot what everyone else walked past. In chaotic situations, they quietly identify what kind of problem it is, which turns out to be enormously useful, because most people in a crisis are already trying to solve the wrong thing.",
+    challenge: "Ambiguity is genuinely difficult. When a situation cannot be resolved into a clear structure, the Organiser experiences a specific internal friction, and manages it by gathering more information until the structure appears. This is usually the right response. Occasionally it delays necessary action. Rest is also difficult, in a way that surprises the people around them. Their attention, when not pointed at something specific, tends to find the nearest available problem and point itself there. Doing nothing does not feel like rest. It feels like a system running without a task, a low-grade discomfort that has no name but is always present.",
+    life: "If this is your dominant style, a great deal of your behaviour is driven by the need to understand and order the world around you. You feel most yourself when things are clear, when tasks have structure, when effort leads to visible results. You are not driven by a desire for control in the anxious sense, you are driven by a genuinely compelling need to comprehend.",
+    dimensions: "Your attention is primarily Narrow and Objective. Narrow means it focuses tightly on one thing at a time, examining it fully before moving on. Objective means it holds what it observes at a certain distance, analytically and clearly, without merging into it. This gives you precision and reliability. The cost is that you can be so inside a system that you lose sight of the people in it, and so focused on the specific that the wider picture disappears.",
+    growth: "Your growth edge is the Connector, the style diagonally opposite on the map. Your attention is powerful and precise, but it tends to arrive at people after it has arrived at the problem. The practice is to let people precede the problem: to ask how someone is before asking what is wrong, to sit with another person's experience before reaching for a solution. The Connector's world, felt, wide, unhurried, is the territory your attention least naturally visits. That is exactly why it is worth going there.",
+    compName: "The Connector (Diffused, Immersed)",
+    compWhy: "You bring precision, structure, and the ability to make sense of complexity. The Connector brings warmth, wide-field sensing, and the human reading of a situation that your spotlight can miss. Together, you cover the full range, the what and the who, the system and the people inside it. The Connector softens what you might otherwise solve too quickly. You give shape to what the Connector might otherwise feel without ever acting on."
+  },
+  P: {
+    name: "The Performer", axis: "Narrow, Immersed",
+    mech: "Performer attention doesn't just focus, it enters. The Performer doesn't observe the thing they're doing; they inhabit it. A piece of music is not listened to by the Performer; it is moved through, texture by texture, the way you move through a building you are exploring for the first time. When their attention locks, time stops behaving normally. Hours pass like minutes. The outside world becomes quieter. Their channel is single-threaded: it cannot hold two things at once, and when it is full, it is full. Asking a Performer to half-attend is like asking a musician to play two instruments simultaneously, theoretically possible, not how it works in practice.",
+    best: "At their best, Performers are capable of extraordinary depth. Their engagement, when it arrives, is total. They remember the particular when everyone else has retained only the general. They hear what is wrong before they know why. They are the person who, three weeks later, says: 'But you didn't give her a name.' And they're right. And nobody can explain how they held that except that it caught them at the time, and things that catch them stay.",
+    challenge: "The wider picture is genuinely difficult. Performers can follow a thread so deep that the context around it disappears entirely. They can solve the specific problem while the general situation has moved on without them. Ordinary life, the maintenance tasks, the unremarkable stretches between what is interesting, can feel like a waiting state. Not quite living. Just duration. The Performer's attention requires something to engage, and when nothing engages it, they are not content. They are simply waiting.",
+    life: "If this is your dominant style, you are likely to have noticed that your relationship with things is all or nothing. When you care, you care completely. When you don't, you can barely be present. Your best work happens in conditions of genuine engagement, and the gap between your performance in those conditions and in uninspiring ones is probably wider than it is for most people around you.",
+    dimensions: "Your attention is primarily Narrow and Immersed. Narrow means it focuses tightly, going deep into one thing rather than spreading across many. Immersed means it merges with what it encounters. You do not observe the thing you are doing. You inhabit it. This gives you extraordinary depth and total engagement when something catches you. The cost is that the wider picture can disappear entirely, and ordinary life, the stretches between what genuinely engages you, can feel like waiting.",
+    growth: "Your growth edge is the Strategist, the style diagonally opposite on the map. You go deep. The Strategist goes wide. The practice for you is to raise your eyes from the detail you're inside, long enough to see the room you're in. Not because the detail isn't important, it is, but because the wider picture determines whether the detail even matters. Learning to hold context alongside immersion is the most significant thing a Performer can develop.",
+    compName: "The Strategist (Diffused, Objective)",
+    compWhy: "You bring depth, passion, and the ability to fully inhabit what you're doing. The Strategist brings the wide view, the pattern across things, the sense of where it's all heading. When you're deep inside something, the Strategist can see whether the direction still makes sense. They stop you solving the specific problem while the general situation has moved on. You stop them generating ideas without ever going far enough into any of them to find out what they're really made of."
+  },
+  S: {
+    name: "The Strategist", axis: "Diffused, Objective",
+    mech: "Strategist attention spreads. Where the Organiser narrows to a point and the Performer narrows to a depth, the Strategist goes across, collecting information from different sources simultaneously, noticing patterns between things that don't appear connected, building a picture from fragments nobody else thought to gather. They hold what they see at a useful distance, not coldly, but with the perspective of someone watching a system rather than being inside it. This is what lets them see the pattern. It is also what occasionally makes them look like they are analysing a situation when other people feel they should be in it.",
+    best: "At their best, Strategists see what is coming before it arrives. They understand the structure of complicated situations quickly, often before the people inside them have finished explaining. They connect threads from five different conversations into a single coherent picture. They ask the questions that expose the real problem underneath the presented one. People find it easy to talk to Strategists, not because they probe or extract, but because their attention is wide and receptive and somehow creates the conditions in which things come out.",
+    challenge: "Finishing things. Strategists begin excellently, they see the whole shape of something from early on. But once they can see how it ends, the getting-there starts to feel like administration. They have a graveyard of excellent half-finished things and manage the mild guilt of it by starting new excellent things. Their own feelings can also be elusive. Strategists are outstanding interpreters of other people's interior lives, but somewhat less reliable narrators of their own. They process emotion through frameworks and analysis, which means there is sometimes a lag, a moment several days later when they understand what they were feeling at the time. The delay is not visible from the outside. Inside, it is distinctly present.",
+    life: "If this is your dominant style, you are very good at the beginning of things, at seeing potential, generating approaches, understanding situations. The place where this style asks something of you is in the middle: the patient, unsexy, not-yet-obvious phase of seeing something through.",
+    dimensions: "Your attention is primarily Diffused and Objective. Diffused means it spreads wide, collecting information from multiple sources simultaneously, noticing patterns between things that don't appear connected. Objective means it holds what it sees at a useful distance, analytical rather than absorbed. This gives you pattern recognition and strategic clarity. The cost is that finishing things is hard, and your own emotional experience can be elusive because you process feeling through analysis rather than through feeling itself.",
+    growth: "Your growth edge is the Performer, the style diagonally opposite on the map. You see the whole shape of things early and easily. The Performer teaches what it means to go all the way in. Your practice is to choose one thing and follow it past the point where it stops feeling like strategy, into the part that is just work, just depth, just staying. That is where your ideas become real.",
+    compName: "The Performer (Narrow, Immersed)",
+    compWhy: "You bring the map. The Performer brings the engine. Your pattern recognition means you understand what needs doing and why. The Performer's absorption means that once they're in, they're fully in, they take your vision somewhere you would have moved on from. Together you're capable of both bold direction and genuine execution. You stop the Performer losing the forest for the trees. They stop you redesigning the forest without planting a single one."
+  },
+  C: {
+    name: "The Connector", axis: "Diffused, Immersed",
+    mech: "Connector attention is wide and received. It doesn't focus in a narrowing way; it opens, taking in the whole of a situation at once: the room, the people, the mood between the people, the thing being said and the thing sitting just underneath it. The overall impression of a situation arrives as a felt sense before it arrives as a thought. And the felt sense is usually right. Connectors know things they shouldn't be able to know yet. They can walk into a room and know whether the atmosphere is easy or tense before a single word has been exchanged. They understand what someone is feeling before that person has found the words for it.",
+    best: "At their best, Connectors are the most genuinely present people in any room. Not performing presence, actually there, actually with you, not half-attending while another part of them is somewhere else. In a world full of people who are technically in the conversation but actually elsewhere, this is enormously rare. People feel heard by Connectors in a way that is different from ordinary listening. They feel understood at a level that precedes language. They tell Connectors things they hadn't planned to tell anyone. And they often leave the conversation not entirely sure what happened, only that something shifted, quietly, while they were talking.",
+    challenge: "Boundaries, in the daily rather than dramatic sense. Connectors absorb the emotional state of their surroundings more than they always realise. A bad atmosphere affects them. A person in pain near them is something they feel rather than observe. They need time alone, and quiet, and the specific restoration of being somewhere without human weather for a while. Sharp decisions are also difficult. Connectors can feel the whole complexity of a situation so completely that arriving at a clean resolution can take longer than the situation wants. Making a choice, which necessarily closes off other possibilities, can feel less like a decision and more like a small loss.",
+    life: "If this is your dominant style, you experience the world at a frequency that most people don't have access to. You understand things through feeling first, which makes you deeply perceptive and, occasionally, difficult to explain. Not everything you sense arrives with a clear rationale attached.",
+    dimensions: "Your attention is primarily Diffused and Immersed. Diffused means it opens wide, taking in the whole of a situation at once, the room, the people, the mood, the thing beneath the thing being said. Immersed means it merges with what it encounters. You do not observe emotional atmosphere from a distance. You absorb it. This gives you genuine presence and extraordinary relational intelligence. The cost is that boundaries are difficult, sharp decisions feel like loss, and the emotional weather of your surroundings affects you more than you always realise.",
+    growth: "Your growth edge is the Organiser, the style diagonally opposite on the map. You are very good at understanding everyone. The practice is to include yourself in that understanding: your own direction, your own priorities, your own necessary edges. The Organiser's world, structured, sequenced, clear, is not the opposite of yours. It is the container that lets what you feel actually go somewhere.",
+    compName: "The Organiser (Narrow, Objective)",
+    compWhy: "You bring warmth, perceptiveness, and the ability to read what a situation really needs at a human level. The Organiser brings structure, clarity, and the ability to turn understanding into action. What you sense, they can build. What they build, you can make feel human. The Organiser gives your empathy somewhere to go. You give their systems a reason to exist."
+  }
+};
+
+const GROWTH = {
+  O: {
+    C: {
+      growth: "Your growth edge is the Connector, the style your attention least naturally reaches for. Your attention is powerful and precise, but it tends to arrive at people after it has arrived at the problem. The practice is to let people precede the problem: to ask how someone is before asking what is wrong, to sit with another person's experience before reaching for a solution.",
+      compName: "The Connector (Diffused, Immersed)",
+      compWhy: "You bring precision, structure, and the ability to make sense of complexity. The Connector brings warmth, wide-field sensing, and the human reading of a situation that your spotlight can miss. Together you cover the full range, the what and the who, the system and the people inside it."
+    },
+    P: {
+      growth: "Your growth edge is the Performer, the style your attention least naturally reaches for. You are excellent at analysing and ordering the world. The Performer teaches what it means to fully inhabit something rather than examine it. The practice is to occasionally put down the plan and simply be inside the experience.",
+      compName: "The Performer (Narrow, Immersed)",
+      compWhy: "You bring structure, reliability, and the ability to turn complexity into clarity. The Performer brings depth, total engagement, and the ability to go all the way into something rather than organise it from the outside. Together you cover both the map and the territory."
+    },
+    S: {
+      growth: "Your growth edge is the Strategist, the style your attention least naturally reaches for. You are very good at solving the problem in front of you. The Strategist teaches you to step back first and ask whether it is the right problem. The practice is to widen before you narrow.",
+      compName: "The Strategist (Diffused, Objective)",
+      compWhy: "You bring precision and execution. The Strategist brings the wide view, the pattern across things, and the ability to see what is coming before it arrives. You make sure things are done correctly. They make sure the right things are being done."
+    }
+  },
+  P: {
+    S: {
+      growth: "Your growth edge is the Strategist, the style your attention least naturally reaches for. You go deep. The Strategist goes wide. The practice is to raise your eyes from the detail you are inside, long enough to see the room you are in. Not because the detail is unimportant, but because the wider picture determines whether the detail even matters.",
+      compName: "The Strategist (Diffused, Objective)",
+      compWhy: "You bring depth, passion, and the ability to fully inhabit what you are doing. The Strategist brings the wide view, the pattern across things, the sense of where it is all heading. When you are deep inside something, the Strategist can see whether the direction still makes sense."
+    },
+    C: {
+      growth: "Your growth edge is the Connector, the style your attention least naturally reaches for. You are extraordinary when engaged, but you can lose the human dimension of a situation when absorbed in its details. The practice is to occasionally surface and read the room, not just the problem.",
+      compName: "The Connector (Diffused, Immersed)",
+      compWhy: "You bring extraordinary depth and total engagement. The Connector brings the wide human reading of a situation, the felt sense of what people need and what the atmosphere is carrying. You go all the way in. They make sure you have not lost sight of who is in the room with you."
+    },
+    O: {
+      growth: "Your growth edge is the Organiser, the style your attention least naturally reaches for. Your engagement is total when it arrives, but the stretches between what interests you can feel unmanageable. The Organiser teaches you to build structure that holds your attention even when engagement is not yet present.",
+      compName: "The Organiser (Narrow, Objective)",
+      compWhy: "You bring depth, absorption, and the ability to go further into something than anyone else. The Organiser brings the structure and sequencing that allows your depth to be applied reliably, not just when inspiration strikes. You bring the intensity. They bring the container for it."
+    }
+  },
+  S: {
+    P: {
+      growth: "Your growth edge is the Performer, the style your attention least naturally reaches for. You see the whole shape of things early and easily. The Performer teaches what it means to go all the way in. The practice is to choose one thing and follow it past the point where it stops feeling like strategy, into the part that is just work, just depth, just staying.",
+      compName: "The Performer (Narrow, Immersed)",
+      compWhy: "You bring the map. The Performer brings the engine. Your pattern recognition means you understand what needs doing and why. The Performer's absorption means that once they are in, they are fully in. Together you are capable of both bold direction and genuine execution."
+    },
+    C: {
+      growth: "Your growth edge is the Connector, the style your attention least naturally reaches for. You are an outstanding reader of other people's situations, but you process this analytically rather than feeling it. The Connector teaches you to move toward what you observe rather than remaining a thoughtful observer of it.",
+      compName: "The Connector (Diffused, Immersed)",
+      compWhy: "You both see the wide picture, but from different positions. You observe it; they feel it. Together you have both the analytical read of a situation and the human warmth to respond to it. You understand what is happening. They understand what it means to the people inside it."
+    },
+    O: {
+      growth: "Your growth edge is the Organiser, the style your attention least naturally reaches for. You are excellent at seeing what needs to happen. The Organiser teaches you to follow through on it, step by step, to completion. The practice is staying with something through the unremarkable middle, not just the beginning and the end.",
+      compName: "The Organiser (Narrow, Objective)",
+      compWhy: "You bring the vision and the ability to see the whole shape of a situation. The Organiser brings the execution, the reliable step-by-step follow-through that turns strategy into something real. You see what should be done. They make sure it gets done."
+    }
+  },
+  C: {
+    O: {
+      growth: "Your growth edge is the Organiser, the style your attention least naturally reaches for. You are very good at understanding everyone. The practice is to include yourself in that understanding: your own direction, your own priorities, your own necessary edges. Structure is not the opposite of what you feel. It is the container that lets what you feel actually go somewhere.",
+      compName: "The Organiser (Narrow, Objective)",
+      compWhy: "You bring warmth, perceptiveness, and the ability to read what a situation really needs at a human level. The Organiser brings structure, clarity, and the ability to turn understanding into action. What you sense, they can build. What they build, you can make feel human."
+    },
+    P: {
+      growth: "Your growth edge is the Performer, the style your attention least naturally reaches for. You are open to everyone and everything around you. The Performer teaches you to choose one thing and go all the way into it, to narrow your attention into depth rather than always holding everything at once.",
+      compName: "The Performer (Narrow, Immersed)",
+      compWhy: "You bring wide-field awareness and the ability to hold the whole human picture. The Performer brings the depth and total commitment that comes from narrowing to one thing completely. Your breadth and their depth together cover the full range of what attention can do."
+    },
+    S: {
+      growth: "Your growth edge is the Strategist, the style your attention least naturally reaches for. You feel situations completely and immediately. The Strategist teaches you to also step back from them, to see the pattern rather than only the atmosphere, to understand the structure of what you are feeling.",
+      compName: "The Strategist (Diffused, Objective)",
+      compWhy: "You both work with the wide picture, but you feel it while they analyse it. Together you have both the human warmth to understand what people are experiencing and the analytical distance to understand why it is happening and what to do about it."
+    }
+  }
+};
+
+const FLEX_LEVELS = [
+  { max: 5,  level: "Highly flexible",    desc: "You move naturally between all four styles. Your attention adapts to what each situation actually needs. This is the hallmark of genuine attentional range." },
+  { max: 10, level: "Good range",          desc: "You have clear strengths and genuine access to multiple styles. Some situations still stretch you, but you have more range than most." },
+  { max: 16, level: "Moderate dominance",  desc: "One or two styles lead clearly. Others are available but require deliberate effort. Your dominant style serves you well; the edges are where the growth lives." },
+  { max: 28, level: "Strong dominance",    desc: "Your dominant style is very pronounced. Your strengths in it are real and significant, and so are your blind spots. Awareness is the first step." }
+];
+
+const SCALE_LABELS = ["Never","Rarely","Depends","Often","Frequently"];
+
+// ════════════════════════════════════════════════════════════
+// RENDER QUESTIONS
+// ════════════════════════════════════════════════════════════
+function renderQuestions() {
+  const wrap = document.getElementById('atq-questions');
+  Q.forEach(function(q, i) {
+    const block = document.createElement('div');
+    block.className = 'atq-q';
+    block.id = 'atq-q-' + i;
+
+    const scaleHTML = [0,1,2,3,4].map(function(v) {
+      return '<div class="atq-opt">' +
+        '<input type="radio" name="atq_q' + i + '" id="atq_q' + i + '_' + v + '" value="' + v + '">' +
+        '<label for="atq_q' + i + '_' + v + '">' +
+          '<span class="atq-n">' + v + '</span>' +
+          SCALE_LABELS[v] +
+        '</label>' +
+      '</div>';
+    }).join('');
+
+    block.innerHTML =
+      '<span class="atq-q-num">Question ' + (i+1) + ' of 28</span>' +
+      '<p class="atq-q-text">' + q[0] + '</p>' +
+      '<div class="atq-scale">' + scaleHTML + '</div>';
+
+    wrap.appendChild(block);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// PROGRESS
+// ════════════════════════════════════════════════════════════
+document.addEventListener('change', function(e) {
+  if (!e.target || e.target.type !== 'radio' || e.target.name.indexOf('atq_q') !== 0) return;
+  var block = e.target.closest('.atq-q');
+  if (block) block.classList.add('atq-answered');
+  var answered = document.querySelectorAll('#atq .atq-q.atq-answered').length;
+  document.getElementById('atq-prog-fill').style.width = (answered / 28 * 100) + '%';
+  document.getElementById('atq-prog-lbl').textContent = answered + ' / 28 answered';
+});
+
+// ════════════════════════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════════════════════════
+function atqSubmit() {
+  // Terms check
+  var termsCheck = document.getElementById('atq-terms-check');
+  var termsErr   = document.getElementById('atq-terms-error');
+  if (!termsCheck.checked) {
+    termsErr.style.display = 'block';
+    termsCheck.closest('.atq-terms-row').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  termsErr.style.display = 'none';
+
+  // Validate
+  var missing = [];
+  Q.forEach(function(_, i) {
+    if (!document.querySelector('input[name="atq_q' + i + '"]:checked')) missing.push(i);
+  });
+  if (missing.length) {
+    document.getElementById('atq-error').style.display = 'block';
+    var el = document.getElementById('atq-q-' + missing[0]);
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.borderLeftColor = '#BD2724';
+    setTimeout(function() { el.style.borderLeftColor = ''; }, 2000);
+    return;
+  }
+  document.getElementById('atq-error').style.display = 'none';
+
+  // Score
+  var scores = { O: 0, P: 0, S: 0, C: 0 };
+  Q.forEach(function(q, i) {
+    var v = parseInt(document.querySelector('input[name="atq_q' + i + '"]:checked').value);
+    scores[q[1]] += v;
+  });
+
+  // Dominant and lowest
+  var sortedKeys = Object.keys(scores).sort(function(a,b){ return scores[b]-scores[a]; });
+  var dominant = sortedKeys[0];
+  var lowest   = sortedKeys[sortedKeys.length - 1];
+  var vals = Object.values(scores);
+  var gap = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+  var flex = FLEX_LEVELS.find(function(f){ return gap <= f.max; });
+  var prof = PROFILES[dominant];
+  var growthData = GROWTH[dominant][lowest];
+
+  // Fill results
+  document.getElementById('atq-r-name').textContent = prof.name;
+  document.getElementById('atq-r-axis').textContent = prof.axis;
+  document.getElementById('atq-r-gap').textContent = 'Your flexibility score: ' + gap;
+  document.getElementById('atq-r-level').textContent = flex.level;
+  document.getElementById('atq-r-flexdesc').textContent = flex.desc;
+
+  // ── Attention dimension indices ──────────────────────────────────
+  var immersion = scores.P + scores.C;
+  var diffusion = scores.S + scores.C;
+  var objectivity = scores.O + scores.S;
+  var narrowing = scores.O + scores.P;
+  var total = scores.O + scores.P + scores.S + scores.C;
+
+  var immPct  = Math.round((immersion  / total) * 100);
+  var diffPct = Math.round((diffusion  / total) * 100);
+  var objPct  = Math.round((objectivity / total) * 100);
+  var narPct  = Math.round((narrowing   / total) * 100);
+
+  // Immersion description
+  var immDesc = immPct >= 65
+    ? "You tend to merge with what you encounter — tasks, people, and situations pull you in."
+    : immPct >= 50
+    ? "You lean toward engagement and connection, with some analytical distance available."
+    : "You tend to observe and analyse rather than fully merge with what you encounter.";
+
+  // Diffusion description
+  var diffDesc = diffPct >= 65
+    ? "Your attention naturally spreads wide, taking in patterns, atmosphere, and the bigger picture."
+    : diffPct >= 50
+    ? "You lean toward the wider view, though you can also narrow your focus when needed."
+    : "Your attention naturally narrows to specifics — one thing examined fully before moving on.";
+
+  // Summary sentence
+  var immWord  = immPct >= 55 ? "immersed" : "objective";
+  var diffWord = diffPct >= 55 ? "diffused" : "narrow";
+  var immExtra = immPct >= 55
+    ? "you tend to experience the world rather than observe it from a distance"
+    : "you tend to observe and analyse rather than fully merge with experience";
+  var diffExtra = diffPct >= 55
+    ? "your attention spreads wide across the field rather than focusing on one thing"
+    : "your attention naturally zooms in on the specific rather than the wide picture";
+
+  // Direction toward flexibility
+  var immDir = immPct >= 55 ? "more Objective" : "more Immersed";
+  var diffDir = diffPct >= 55 ? "more Narrow" : "more Diffused";
+  var dirSentence;
+  if (Math.abs(immPct - 50) < 8 && Math.abs(diffPct - 50) < 8) {
+    dirSentence = "Your centre of gravity sits close to the centre of the map — your attention is already well balanced across both dimensions.";
+  } else {
+    dirSentence = "The amber dot on your graph shows where your centre of gravity sits. The closer it is to the centre of the map, the more balanced your attention is across both dimensions. To move toward greater flexibility, your attention benefits from developing in the direction of " + immDir + " and " + diffDir + " — which is the upper-left direction on the graph if you are Immersed and Diffused, or the lower-right if you are Objective and Narrow.";
+  }
+
+  var sentence = "You are " + immPct + "% immersed and " + diffPct + "% diffused — meaning " + immExtra + ", and " + diffExtra + ". " + dirSentence;
+
+  document.getElementById('atq-r-immersion-pct').textContent = immPct + '%';
+  document.getElementById('atq-r-diffusion-pct').textContent = diffPct + '%';
+  document.getElementById('atq-r-immersion-bar').style.width = immPct + '%';
+  document.getElementById('atq-r-diffusion-bar').style.width = diffPct + '%';
+  document.getElementById('atq-r-immersion-desc').textContent = immDesc;
+  document.getElementById('atq-r-diffusion-desc').textContent = diffDesc;
+  document.getElementById('atq-r-indices-sentence').textContent = sentence;
+  document.getElementById('atq-r-dot-note').textContent = "The amber dot on your graph shows your centre of gravity — where your attention fundamentally sits across the two dimensions. The further the dot sits from the centre of the graph, the more strongly your attention is pulled in one direction. The path toward greater flexibility is simple: the dot needs to move toward the centre. That means developing capacity in the styles that sit on the opposite side of the graph from where your dot currently lands.";
+  document.getElementById('atq-r-mech').textContent = prof.mech;
+  document.getElementById('atq-r-best').textContent = prof.best;
+  document.getElementById('atq-r-challenge').textContent = prof.challenge;
+  document.getElementById('atq-r-life').textContent = prof.life;
+  document.getElementById('atq-r-dimensions').textContent = prof.dimensions;
+  document.getElementById('atq-r-growth').textContent = growthData.growth;
+  document.getElementById('atq-r-comp-name').textContent = growthData.compName;
+  document.getElementById('atq-r-comp-why').textContent = growthData.compWhy;
+
+  // Score cards
+  var scoresDiv = document.getElementById('atq-r-scores');
+  scoresDiv.innerHTML = '';
+  var ORDER = [
+    {k:'O', label:'Organiser'},
+    {k:'P', label:'Performer'},
+    {k:'S', label:'Strategist'},
+    {k:'C', label:'Connector'}
+  ];
+  ORDER.forEach(function(s) {
+    var card = document.createElement('div');
+    card.className = 'atq-score-card' + (s.k === dominant ? ' atq-dom' : '');
+    card.innerHTML =
+      '<div class="atq-score-card-lbl">' + s.label + '</div>' +
+      '<div class="atq-score-card-val">' + scores[s.k] + '</div>' +
+      '<div class="atq-score-card-max">/ 28</div>';
+    scoresDiv.appendChild(card);
+  });
+
+  // Show results
+  var resultsEl = document.getElementById('atq-results');
+  resultsEl.classList.add('atq-show');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Draw graph after paint
+  requestAnimationFrame(function() {
+    setTimeout(function() { drawGraph(scores, dominant); }, 80);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// GRAPH
+// ════════════════════════════════════════════════════════════
+function drawGraph(scores, dominant) {
+  var canvas = document.getElementById('atq-canvas');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var cx = W / 2, cy = H / 2;
+  var MAX_R = W * 0.36; // leave room for corner labels
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Diagonal axes: NW=Organiser, NE=Performer, SW=Strategist, SE=Connector
+  // Each axis is at 45°, so unit vector component = 1/√2 ≈ 0.7071
+  var D = 0.7071;
+  var AXES = {
+    O: { dx: -D, dy: -D, lx: cx - MAX_R - 8,  ly: cy - MAX_R - 8,  ta: 'right',  bl: 'bottom' },
+    P: { dx:  D, dy: -D, lx: cx + MAX_R + 8,  ly: cy - MAX_R - 8,  ta: 'left',   bl: 'bottom' },
+    S: { dx: -D, dy:  D, lx: cx - MAX_R - 8,  ly: cy + MAX_R + 8,  ta: 'right',  bl: 'top'    },
+    C: { dx:  D, dy:  D, lx: cx + MAX_R + 8,  ly: cy + MAX_R + 8,  ta: 'left',   bl: 'top'    }
+  };
+  var ORDER = ['O','P','C','S']; // clockwise: NW→NE→SE→SW = proper diamond
+
+  // Quadrant background fills (four triangles, one per quadrant)
+  var quadFills = [
+    { pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx-MAX_R,cy]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx+MAX_R,cy]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx-MAX_R,cy]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx+MAX_R,cy]], c:'#EEF4FB' }
+  ];
+  quadFills.forEach(function(q) {
+    ctx.beginPath();
+    ctx.moveTo(q.pts[0][0], q.pts[0][1]);
+    q.pts.slice(1).forEach(function(p){ ctx.lineTo(p[0],p[1]); });
+    ctx.closePath();
+    ctx.fillStyle = q.c;
+    ctx.fill();
+  });
+
+  // Score rings, diamond shapes at 7, 14, 21, 28
+  // A diamond at radius r: top(cx,cy-r), right(cx+r,cy), bottom(cx,cy+r), left(cx-r,cy)
+  [7,14,21,28].forEach(function(s, ri) {
+    var r = (s/28) * MAX_R;
+    ctx.beginPath();
+    ctx.moveTo(cx,    cy - r);
+    ctx.lineTo(cx + r, cy    );
+    ctx.lineTo(cx,    cy + r);
+    ctx.lineTo(cx - r, cy    );
+    ctx.closePath();
+    ctx.strokeStyle = ri === 3 ? '#1E489755' : '#C5D5E8AA';
+    ctx.lineWidth   = ri === 3 ? 1.5 : 0.8;
+    ctx.setLineDash(ri === 3 ? [] : [4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Ring label at right tip
+    if (ri < 3) {
+      ctx.font = '10px Lato, Arial, sans-serif';
+      ctx.fillStyle = '#AAB';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(s), cx + r + 4, cy);
+    }
+  });
+
+  // Centre glow
+  var grd = ctx.createRadialGradient(cx,cy,0,cx,cy,52);
+  grd.addColorStop(0,   'rgba(245,193,98,0.4)');
+  grd.addColorStop(0.5, 'rgba(245,193,98,0.15)');
+  grd.addColorStop(1,   'rgba(245,193,98,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 52, 0, Math.PI*2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  // Diagonal axes
+  ctx.setLineDash([4, 3]);
+  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#1E489744';
+  ORDER.forEach(function(k) {
+    var a = AXES[k];
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + a.dx * MAX_R, cy + a.dy * MAX_R);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Tick dots along each diagonal axis at 7, 14, 21, 28
+  [7,14,21,28].forEach(function(s) {
+    var r = (s/28) * MAX_R;
+    ORDER.forEach(function(k) {
+      var a = AXES[k];
+      var px = cx + a.dx * r;
+      var py = cy + a.dy * r;
+      ctx.beginPath();
+      ctx.arc(px, py, s === 28 ? 3.5 : 2.5, 0, Math.PI*2);
+      ctx.fillStyle = s === 28 ? '#1E489799' : '#1E489744';
+      ctx.fill();
+    });
+  });
+
+  // ── Personal diamond shape ──
+  // Points lie along the four diagonal axes at each score's radius
+  var pts = ORDER.map(function(k) {
+    var a = AXES[k];
+    var r = (scores[k] / 28) * MAX_R;
+    return [ cx + a.dx * r, cy + a.dy * r ];
+  });
+
+  // Fill
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  pts.slice(1).forEach(function(p){ ctx.lineTo(p[0], p[1]); });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(245,193,98,0.2)';
+  ctx.fill();
+
+  // Stroke
+  ctx.strokeStyle = '#F5C162';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Score dots + numbers at each corner
+  pts.forEach(function(p, i) {
+    var k = ORDER[i];
+    var a = AXES[k];
+    // Outer dot
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 7, 0, Math.PI*2);
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#F5C162';
+    ctx.fill();
+    // Inner white
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 3.5, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    // Score number slightly beyond the dot along the axis
+    var offset = 18;
+    var nx = p[0] + a.dx * offset;
+    var ny = p[1] + a.dy * offset;
+    ctx.font = 'bold 12px Lato, Arial, sans-serif';
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#A07020';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(scores[k]), nx, ny);
+  });
+
+  // Style name labels at axis ends
+  ORDER.forEach(function(k) {
+    var a = AXES[k];
+    ctx.font = (k === dominant ? 'bold' : '400') + ' 13px Lato, Arial, sans-serif';
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#3A3A3A';
+    ctx.textAlign = a.ta;
+    ctx.textBaseline = a.bl;
+    ctx.fillText(PROFILES[k].name.replace('The ', ''), a.lx, a.ly);
+  });
+
+  // Centre label
+  ctx.font = 'italic 10px Lato, Arial, sans-serif';
+  ctx.fillStyle = '#A07020';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('flexible attention', cx, cy);
+
+  // ── Dimension axis labels ──────────────────────────────────────
+  // These sit along the four edges of the outer diamond
+  // Top edge (between NW and NE corners) = NARROW
+  // Bottom edge (between SW and SE corners) = DIFFUSED
+  // Left edge (between NW and SW corners) = OBJECTIVE
+  // Right edge (between NE and SE corners) = IMMERSED
+
+  ctx.font = '700 11px Lato, Arial, sans-serif';
+  ctx.letterSpacing = '0.08em';
+
+  // NARROW — top, centred between NW and NE corners
+  ctx.fillStyle = '#888888';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('NARROW', cx, cy - MAX_R - 4);
+
+  // DIFFUSED — bottom, centred between SW and SE corners
+  ctx.textBaseline = 'top';
+  ctx.fillText('DIFFUSED', cx, cy + MAX_R + 6);
+
+  // OBJECTIVE — left, midpoint of left edge
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('OBJECTIVE', cx - MAX_R - 6, cy);
+
+  // IMMERSED — right, midpoint of right edge
+  ctx.textAlign = 'left';
+  ctx.fillText('IMMERSED', cx + MAX_R + 6, cy);
+
+  // ── Centre of gravity dot ──────────────────────────────────────
+  // Horizontal: Immersion (P+C) vs Objectivity (O+S)
+  // Vertical:   Diffusion (S+C) vs Narrowing (O+P)
+  var total = scores.O + scores.P + scores.S + scores.C;
+  var netImmersion = ((scores.P + scores.C) - (scores.O + scores.S)) / total;
+  var netDiffusion = ((scores.S + scores.C) - (scores.O + scores.P)) / total;
+
+  // Cross arm length (from centre to edge labels) — slightly shorter than MAX_R
+  var crossR = MAX_R * 0.82;
+
+  // Draw faint dimension cross
+  ctx.setLineDash([5, 4]);
+  ctx.strokeStyle = 'rgba(150,150,150,0.45)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx - crossR, cy); ctx.lineTo(cx + crossR, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy - crossR); ctx.lineTo(cx, cy + crossR); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Dot position — net values range roughly -1 to +1, scale by crossR*0.7
+  var dotScale = crossR * 0.72;
+  var dotX = cx + netImmersion * dotScale;
+  var dotY = cy + netDiffusion * dotScale;
+
+  // Dashed line from centre to dot
+  ctx.setLineDash([4, 3]);
+  ctx.strokeStyle = 'rgba(232,160,32,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(dotX, dotY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Soft glow
+  var grdDot = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 18);
+  grdDot.addColorStop(0,   'rgba(232,160,32,0.3)');
+  grdDot.addColorStop(0.5, 'rgba(232,160,32,0.12)');
+  grdDot.addColorStop(1,   'rgba(232,160,32,0)');
+  ctx.beginPath(); ctx.arc(dotX, dotY, 18, 0, Math.PI*2);
+  ctx.fillStyle = grdDot; ctx.fill();
+
+  // Outer dot
+  ctx.beginPath(); ctx.arc(dotX, dotY, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#E8A020'; ctx.fill();
+  // Inner white
+  ctx.beginPath(); ctx.arc(dotX, dotY, 3.5, 0, Math.PI*2);
+  ctx.fillStyle = '#fff'; ctx.fill();
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+renderQuestions();
+
+// Expose submit globally so onclick works
+window.atqSubmit = atqSubmit;
+
+  // Auto-resize: tell parent iframe to match our height
+  function notifyHeight() {
+    var el = document.getElementById('atq');
+    if (el) {
+      window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+    }
+  }
+  // Notify on load and every 500ms (catches results appearing)
+  notifyHeight();
+  setInterval(notifyHeight, 500);
+
+  window.atqPrint = function() {
+    var el = document.getElementById('atq');
+    var toHide = [];
+    var current = el;
+    while (current && current !== document.body) {
+      var parent = current.parentNode;
+      if (parent) {
+        Array.prototype.forEach.call(parent.children, function(child) {
+          if (child !== current && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+            toHide.push({ el: child, prev: child.style.cssText });
+            child.style.setProperty('display', 'none', 'important');
+          }
+        });
+      }
+      current = parent;
+    }
+    setTimeout(function() {
+      window.print();
+      setTimeout(function() {
+        toHide.forEach(function(item) {
+          item.el.style.cssText = item.prev;
+        });
+      }, 600);
+    }, 80);
+  };
+
+})();
+</script>
