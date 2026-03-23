@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developing Your Attention — A Personal Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:    #1E4897;
+      --gold:    #F5C162;
+      --brown:   #671B0A;
+      --red:     #BD2724;
+      --text:    #2A2A2A;
+      --muted:   #718096;
+      --border:  #E2E8F0;
+      --bg:      #FFFFFF;
+      --lightbg: #F7F9FC;
+      --white:   #FFFFFF;
+      --radius:  0px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', Arial, sans-serif;
+      font-weight: 300;
+      background: #FFFFFF;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* ── SCREENS ── */
+    .screen { display: none; }
+    .screen.active {
+      display: block;
+      animation: fadeUp 0.45s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+    .header .eyebrow {
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .header h1 {
+      font-family: 'Lato', Arial, sans-serif;
+      font-weight: 300;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+    .header h1 em {
+      font-style: italic;
+      color: var(--blue);
+    }
+    .header .subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .header .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      margin: 28px auto 0;
+    }
+
+    /* ── INTRO TEXT ── */
+    .intro-block {
+      background: var(--lightbg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-bottom: 40px;
+    }
+    .intro-block p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+    .intro-block p + p { margin-top: 14px; }
+
+    /* ── PROGRESS ── */
+    .progress-bar-wrap {
+      margin-bottom: 44px;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .progress-track {
+      height: 4px;
+      background: #EEF2F7;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    /* ── QUESTION BLOCKS ── */
+    .q-block {
+      margin-bottom: 36px;
+    }
+    .q-block:last-of-type { margin-bottom: 0; }
+
+    .q-label {
+      font-family: 'Lato', Arial, sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    .q-label .q-num {
+      font-family: 'Lato', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 8px;
+    }
+    .q-hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── SELECT ── */
+    select {
+      width: 100%;
+      padding: 13px 16px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8EA8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    select:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    select.answered { border-color: var(--blue); }
+
+    /* ── TEXTAREA ── */
+    textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.65;
+      transition: border-color 0.2s;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+    textarea.answered { border-color: var(--blue); }
+
+    /* ── RADIO CARDS ── */
+    .radio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .radio-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .radio-grid.cols-1 { grid-template-columns: 1fr; }
+
+    .radio-card input[type="radio"] { display: none; }
+    .radio-card label {
+      display: block;
+      padding: 13px 16px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13.5px;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      line-height: 1.45;
+      text-align: left;
+    }
+    .radio-card label:hover {
+      border-color: var(--gold);
+      background: #FFFBF0;
+    }
+    .radio-card input:checked + label {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #FFFFFF;
+      font-weight: 400;
+    }
+    .radio-card label .card-title {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+    }
+    .radio-card label .card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+    }
+    .radio-card input:checked + label .card-sub {
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* ── SECTION DIVIDERS ── */
+    .section-title {
+      font-family: 'Lato', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 32px;
+      margin-top: 48px;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+
+    /* ── VALIDATION ── */
+    .field-error {
+      font-size: 12px;
+      color: var(--red);
+      margin-top: 6px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 52px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: var(--blue);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--brown); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+    .btn-row--left { justify-content: flex-start; margin-top: 0; }
+
+    /* ── THANK YOU SCREEN ── */
+    .thankyou-wrap {
+      text-align: center;
+      padding: 60px 0;
+    }
+    .thankyou-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--lightbg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 28px;
+      color: var(--blue);
+    }
+    .thankyou-wrap h2 {
+      font-family: 'Lato', Arial, sans-serif;
+      font-weight: 300;
+      font-size: clamp(26px, 4vw, 38px);
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+    .thankyou-wrap p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 460px;
+      margin: 0 auto 14px;
+    }
+    .summary-card {
+      background: var(--lightbg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin: 36px auto 0;
+      max-width: 480px;
+      text-align: left;
+    }
+    .summary-card .s-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .summary-card .s-row:last-child { border-bottom: none; }
+    .summary-card .s-row span:first-child { color: var(--muted); }
+    .summary-card .s-row span:last-child { font-weight: 700; }
+    .summary-card .s-row--block {
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-card .s-row--block:last-child { border-bottom: none; }
+    .summary-card .s-block-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .summary-card .s-block-value {
+      display: block;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 14px 0 6px;
+      border-bottom: 1px solid var(--border);
+      margin-top: 4px;
+    }
+
+    /* ── TEXT INPUTS ── */
+    .text-input {
+      width: 100%;
+      padding: 13px 16px;
+      font-family: 'Lato', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.15s;
+    }
+    .text-input:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    /* ── SCORE INPUTS ── */
+    .score-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .score-input-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: border-color 0.15s;
+    }
+    .score-input-wrap:focus-within { border-color: var(--blue); }
+    .score-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+    .score-axis {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .score-input {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: 'Lato', Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--blue);
+      background: var(--lightbg);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      text-align: center;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    .score-input::-webkit-outer-spin-button,
+    .score-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .score-input:focus { outline: none; border-color: var(--blue); }
+    .score-input.score-dominant {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+      font-weight: 700;
+    }
+
+    /* ── PROFILE PREVIEW ── */
+    .profile-preview {
+      display: none;
+      background: var(--lightbg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      padding: 20px 24px;
+      margin-top: 16px;
+      animation: fadeUp 0.3s ease both;
+    }
+    .profile-preview.visible { display: block; }
+    .profile-preview-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .profile-preview-row:last-of-type { border-bottom: none; }
+    .pp-label { color: var(--muted); }
+    .pp-value { font-weight: 700; color: var(--blue); }
+    .pp-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 12px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ── PRINT / SAVE AS PDF ── */
+    @media print {
+      .progress-bar-wrap,
+      .btn-row,
+      .pdf-btn-wrap { display: none !important; }
+      .screen { display: none !important; }
+      #screen-thankyou { display: block !important; }
+      .summary-card { background: #F7F9FC !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .print-header { display: block !important; }
+      .page-wrap { padding: 20px 24px !important; }
+    }
+    .print-header {
+      display: none;
+      text-align: center;
+      padding: 0 0 24px 0;
+      margin-bottom: 24px;
+      border-bottom: 3px solid #F5C162;
+    }
+    .print-header-title {
+      font-size: 26px;
+      font-weight: 300;
+      color: #1E4897;
+      margin-bottom: 4px;
+    }
+    .print-header-sub {
+      font-size: 13px;
+      color: #718096;
+      font-weight: 300;
+    }
+    .pdf-btn-wrap {
+      text-align: center;
+      padding: 32px 0 16px;
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+    .pdf-btn {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      padding: 15px 44px;
+      font-family: 'Lato', Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.12s;
+    }
+    .pdf-btn:hover { background: var(--brown); transform: translateY(-1px); }
+    .pdf-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 10px;
+      font-weight: 300;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .page-wrap { padding: 40px 16px 80px; }
+      .intro-block { padding: 24px 20px; }
+      .radio-grid { grid-template-columns: 1fr; }
+      .radio-grid.cols-3 { grid-template-columns: 1fr; }
+      .score-grid { grid-template-columns: 1fr 1fr; }
+      .btn-row { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- ════════════════════════════════════
+       SCREEN 1 — INTRO
+  ════════════════════════════════════ -->
+  <div class="screen active" id="screen-intro">
+
+    <div class="header">
+      <p class="eyebrow">Four Attention Styles · Development Profile</p>
+      <h1>Developing Your<br><em>Attention Flexibility</em></h1>
+      <p class="subtitle">A short profile to help us understand your situation — so we can give you a genuinely personalised development framework, not a generic one.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="intro-block">
+      <p>You have completed the Four Attention Styles questionnaire and know your dominant style. Now you're curious about developing access to a style that doesn't come as naturally.</p>
+      <p>The path to a new attention style depends entirely on where you're starting from, what you're trying to achieve, and what's already available to you. That's what these questions are designed to find out.</p>
+      <p>There are no right or wrong answers. Answer as you actually are — not as you'd like to be.</p>
+    </div>
+
+    <div class="btn-row btn-row--left">
+      <button class="btn btn-primary" onclick="goTo('screen-part1')">
+        Begin <span class="btn-arrow">→</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCREEN 2 — PART 1: YOUR PROFILE
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-part1">
+
+    <div class="progress-bar-wrap">
+      <div class="progress-meta">
+        <span>Part 1 of 3 — Your Attention Profile</span>
+        <span id="prog1-pct">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog1-fill" style="width:0%"></div></div>
+    </div>
+
+    <p class="section-title">Your questionnaire results</p>
+
+    <!-- SCORES: four number inputs -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 1</span>
+        Enter your four scores from the questionnaire
+      </div>
+      <p class="q-hint">Each score is out of 28. You'll find them in the scoring table at the end of the questionnaire.</p>
+
+      <div class="score-grid">
+        <div class="score-input-wrap">
+          <label class="score-label" for="score-O">The Organiser</label>
+          <span class="score-axis">Narrow · Objective</span>
+          <input type="number" id="score-O" class="score-input" min="0" max="28" placeholder="0–28" oninput="onScoreInput()">
+        </div>
+        <div class="score-input-wrap">
+          <label class="score-label" for="score-P">The Performer</label>
+          <span class="score-axis">Narrow · Immersed</span>
+          <input type="number" id="score-P" class="score-input" min="0" max="28" placeholder="0–28" oninput="onScoreInput()">
+        </div>
+        <div class="score-input-wrap">
+          <label class="score-label" for="score-S">The Strategist</label>
+          <span class="score-axis">Diffused · Objective</span>
+          <input type="number" id="score-S" class="score-input" min="0" max="28" placeholder="0–28" oninput="onScoreInput()">
+        </div>
+        <div class="score-input-wrap">
+          <label class="score-label" for="score-C">The Connector</label>
+          <span class="score-axis">Diffused · Immersed</span>
+          <input type="number" id="score-C" class="score-input" min="0" max="28" placeholder="0–28" oninput="onScoreInput()">
+        </div>
+      </div>
+      <div class="field-error" id="err-scores">Please enter all four scores (0–28 each).</div>
+
+      <!-- Live profile preview — hidden until all four scores entered -->
+      <div class="profile-preview" id="profile-preview">
+        <div class="profile-preview-row">
+          <span class="pp-label">Dominant style</span>
+          <span class="pp-value" id="pp-dominant">—</span>
+        </div>
+        <div class="profile-preview-row">
+          <span class="pp-label">Second style</span>
+          <span class="pp-value" id="pp-second">—</span>
+        </div>
+        <div class="profile-preview-row">
+          <span class="pp-label">Growth edge (lowest)</span>
+          <span class="pp-value" id="pp-growth">—</span>
+        </div>
+        <div class="profile-preview-row">
+          <span class="pp-label">Flexibility gap</span>
+          <span class="pp-value" id="pp-gap">—</span>
+        </div>
+        <div class="profile-preview-row">
+          <span class="pp-label">Total score</span>
+          <span class="pp-value" id="pp-total">—</span>
+        </div>
+        <p class="pp-note" id="pp-note"></p>
+      </div>
+    </div>
+
+    <!-- Q2: Style to develop -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 2</span>
+        Which attention style would you most like to develop?
+      </div>
+      <div class="radio-grid cols-1" id="q3-grid">
+        <div class="radio-card">
+          <input type="radio" name="q3" id="q3a" value="Organiser" onchange="onStyleChoice(this)">
+          <label for="q3a"><span class="card-title">The Organiser</span><span class="card-sub">More structure, clarity, and reliable follow-through</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q3" id="q3b" value="Performer" onchange="onStyleChoice(this)">
+          <label for="q3b"><span class="card-title">The Performer</span><span class="card-sub">Deeper engagement, sustained focus, real absorption</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q3" id="q3c" value="Strategist" onchange="onStyleChoice(this)">
+          <label for="q3c"><span class="card-title">The Strategist</span><span class="card-sub">Wider perspective, pattern recognition, strategic thinking</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q3" id="q3d" value="Connector" onchange="onStyleChoice(this)">
+          <label for="q3d"><span class="card-title">The Connector</span><span class="card-sub">Greater presence, emotional attunement, deeper relationships</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q3" id="q3e" value="Advise me" onchange="onStyleChoice(this)">
+          <label for="q3e"><span class="card-title">I'm not sure — please advise me</span><span class="card-sub">I have a specific goal and would like guidance on which style to develop</span></label>
+        </div>
+      </div>
+      <div class="field-error" id="err-q3">Please select an option.</div>
+
+      <!-- Conditional goal textarea — shown only when "Advise me" selected -->
+      <div id="goal-wrap" style="display:none; margin-top:14px;">
+        <p class="q-hint" style="margin-bottom:10px;">Describe your goal as specifically as you can — what do you want to be able to do, feel, or achieve? We will recommend the most relevant style and explain why.</p>
+        <textarea
+          id="q3-goal"
+          name="q3-goal"
+          placeholder="For example: I want to be a better listener in difficult conversations. / I want to stop starting projects I never finish. / I want to feel less overwhelmed when I have to make important decisions..."
+          oninput="onTextChange('q3-goal')"
+          rows="4"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goTo('screen-intro')">← Back</button>
+      <button class="btn btn-primary" onclick="nextFromPart1()">Continue <span class="btn-arrow">→</span></button>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCREEN 3 — PART 2: YOUR SITUATION
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-part2">
+
+    <div class="progress-bar-wrap">
+      <div class="progress-meta">
+        <span>Part 2 of 3 — Your Situation</span>
+        <span id="prog2-pct">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog2-fill" style="width:0%"></div></div>
+    </div>
+
+    <p class="section-title">About you</p>
+
+    <!-- Q4: Age / life stage -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 4</span>
+        Which life stage feels closest to where you are right now?
+      </div>
+      <div class="radio-grid" id="q4-grid">
+        <div class="radio-card">
+          <input type="radio" name="q4" id="q4a" value="Early career / finding direction (approx 18–28)" onchange="onRadioChange('q4','prog2')">
+          <label for="q4a">Early career / finding direction<span class="card-sub">Approx 18–28</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q4" id="q4b" value="Building / establishing (approx 28–40)" onchange="onRadioChange('q4','prog2')">
+          <label for="q4b">Building and establishing<span class="card-sub">Approx 28–40</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q4" id="q4c" value="Mid-life / deepening (approx 40–55)" onchange="onRadioChange('q4','prog2')">
+          <label for="q4c">Mid-life and deepening<span class="card-sub">Approx 40–55</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q4" id="q4d" value="Later stage / perspective (approx 55+)" onchange="onRadioChange('q4','prog2')">
+          <label for="q4d">Later stage and perspective<span class="card-sub">Approx 55+</span></label>
+        </div>
+      </div>
+      <div class="field-error" id="err-q4">Please select your life stage.</div>
+    </div>
+
+    <!-- Q5: Primary context -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 5</span>
+        Where do you most want to apply this development? Choose one primary context.
+      </div>
+      <div class="radio-grid" id="q5-grid">
+        <div class="radio-card">
+          <input type="radio" name="q5" id="q5a" value="Professional / career" onchange="onRadioChange('q5','prog2')">
+          <label for="q5a">Professional / career<span class="card-sub">Work performance, thinking, output</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q5" id="q5b" value="Leadership" onchange="onRadioChange('q5','prog2')">
+          <label for="q5b">Leadership<span class="card-sub">Managing, directing, inspiring others</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q5" id="q5c" value="Relationships" onchange="onRadioChange('q5','prog2')">
+          <label for="q5c">Relationships<span class="card-sub">Partner, family, close friendships</span></label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q5" id="q5d" value="Personal development" onchange="onRadioChange('q5','prog2')">
+          <label for="q5d">Personal development<span class="card-sub">Inner life, self-understanding, wellbeing</span></label>
+        </div>
+      </div>
+      <div class="field-error" id="err-q5">Please select a primary context.</div>
+    </div>
+
+    <!-- Q6: Motivation -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 6</span>
+        What is driving your interest in developing this style?
+      </div>
+      <p class="q-hint">Select the one that feels closest, even if it's not a perfect fit.</p>
+      <div class="radio-grid cols-1" id="q6-grid">
+        <div class="radio-card">
+          <input type="radio" name="q6" id="q6a" value="A recurring problem I keep running into" onchange="onRadioChange('q6','prog2')">
+          <label for="q6a">A recurring problem I keep running into</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q6" id="q6b" value="An important relationship or role that requires it" onchange="onRadioChange('q6','prog2')">
+          <label for="q6b">An important relationship or role that requires it</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q6" id="q6c" value="I want to become more rounded and effective generally" onchange="onRadioChange('q6','prog2')">
+          <label for="q6c">I want to become more rounded and effective generally</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q6" id="q6d" value="Something specific I am trying to achieve" onchange="onRadioChange('q6','prog2')">
+          <label for="q6d">Something specific I am trying to achieve</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q6" id="q6e" value="Curiosity — I want to understand myself better" onchange="onRadioChange('q6','prog2')">
+          <label for="q6e">Curiosity — I want to understand myself better</label>
+        </div>
+      </div>
+      <div class="field-error" id="err-q6">Please select your primary motivation.</div>
+    </div>
+
+    <!-- Q7: Familiarity with target style -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 7</span>
+        How familiar does the style you want to develop feel to you — even if it isn't natural?
+      </div>
+      <div class="radio-grid cols-1" id="q7-grid">
+        <div class="radio-card">
+          <input type="radio" name="q7" id="q7a" value="Completely foreign — I rarely if ever experience it" onchange="onRadioChange('q7','prog2')">
+          <label for="q7a">Completely foreign — I rarely if ever experience it</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q7" id="q7b" value="Occasional glimpses — I know what it feels like but cannot sustain it" onchange="onRadioChange('q7','prog2')">
+          <label for="q7b">Occasional glimpses — I know what it feels like but cannot sustain it</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q7" id="q7c" value="Available under certain conditions — but unreliable" onchange="onRadioChange('q7','prog2')">
+          <label for="q7c">Available under certain conditions — but unreliable</label>
+        </div>
+        <div class="radio-card">
+          <input type="radio" name="q7" id="q7d" value="Reasonably accessible — I just want it to be more consistent" onchange="onRadioChange('q7','prog2')">
+          <label for="q7d">Reasonably accessible — I just want it to be more consistent</label>
+        </div>
+      </div>
+      <div class="field-error" id="err-q7">Please select the option that fits best.</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goTo('screen-part1')">← Back</button>
+      <button class="btn btn-primary" onclick="nextFromPart2()">Continue <span class="btn-arrow">→</span></button>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCREEN 4 — PART 3: YOUR EXPERIENCE
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-part3">
+
+    <div class="progress-bar-wrap">
+      <div class="progress-meta">
+        <span>Part 3 of 3 — Your Experience</span>
+        <span>Almost done</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:80%"></div></div>
+    </div>
+
+    <p class="section-title">A little more about your experience</p>
+
+    <!-- Q8: Concrete situation -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 8</span>
+        Describe a specific situation where not having access to this style cost you something.
+      </div>
+      <p class="q-hint">This is optional, but the more specific you are, the more precise the framework we can offer you. A sentence or two is enough.</p>
+      <textarea
+        id="q8"
+        name="q8"
+        placeholder="For example: I keep missing the bigger picture in meetings and only understand what was really being discussed hours later..."
+        oninput="onTextChange('q8')"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <!-- Q9: What they've tried -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 9</span>
+        Have you already tried to develop this style? If so, what did you try — and how did it go?
+      </div>
+      <p class="q-hint">Optional. Helps us avoid prescribing what hasn't worked.</p>
+      <textarea
+        id="q9"
+        name="q9"
+        placeholder="For example: I've tried slowing down in conversations to listen more, but I always end up reverting to problem-solving mode..."
+        oninput="onTextChange('q9')"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <!-- Q10: Name (optional) -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 10</span>
+        Your name (optional)
+      </div>
+      <p class="q-hint">So we can address your framework personally.</p>
+      <input
+        type="text"
+        id="q10-name"
+        placeholder="First name and surname"
+        class="text-input"
+        oninput="onTextChange('q10-name')"
+      >
+    </div>
+
+    <!-- Q11: Email -->
+    <div class="q-block">
+      <div class="q-label">
+        <span class="q-num">Question 11</span>
+        Email address
+      </div>
+      <p class="q-hint">Required — so we can send you your personalised framework.</p>
+      <input
+        type="email"
+        id="q11"
+        placeholder="your@email.com"
+        class="text-input"
+        oninput="onTextChange('q11')"
+      >
+      <div class="field-error" id="err-q11">Please enter a valid email address.</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="goTo('screen-part2')">← Back</button>
+      <button class="btn btn-primary" onclick="submitForm()">Submit Profile <span class="btn-arrow">→</span></button>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════
+       SCREEN 5 — THANK YOU
+  ════════════════════════════════════ -->
+  <div class="screen" id="screen-thankyou">
+    <div class="thankyou-wrap">
+
+      <!-- Print-only header (hidden on screen) -->
+      <div class="print-header">
+        <p class="print-header-title">Developing Your Attention Flexibility</p>
+        <p class="print-header-sub">Four Attention Styles · Development Profile · Dr. Tomasz Kopec</p>
+      </div>
+
+      <div class="thankyou-icon">✓</div>
+      <h2>Profile received.</h2>
+      <p>Thank you for taking the time to answer thoughtfully. Your responses give us everything we need to build a development framework that is genuinely specific to you.</p>
+      <p>You will receive your personalised framework by email.</p>
+
+      <div class="summary-card" id="summary-card">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="pdf-btn-wrap">
+        <button class="pdf-btn" onclick="savePDF()">Save as PDF</button>
+        <p class="pdf-note">Opens your browser's print dialogue. Choose "Save as PDF" as the destination.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+  // ── STATE ──
+  const STATE = {
+    answers: {}
+  };
+
+  // ── NAVIGATION ──
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(notifyHeight, 50);
+    setTimeout(notifyHeight, 400);
+  }
+
+  // ── RADIO CHANGE ──
+  function onRadioChange(name, progressId) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    if (checked) {
+      STATE.answers[name] = checked.value;
+      // clear any error
+      const err = document.getElementById('err-' + name);
+      if (err) err.classList.remove('visible');
+    }
+    updateProgress(progressId);
+  }
+
+  // ── TEXT CHANGE ──
+  function onTextChange(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      STATE.answers[id] = el.value;
+      if (el.value.trim()) {
+        el.classList.add('answered');
+      } else {
+        el.classList.remove('answered');
+      }
+    }
+  }
+
+  // ── PROGRESS ──
+  const PART1_FIELDS = ['scores','q3'];
+  const PART2_FIELDS = ['q4','q5','q6','q7'];
+
+  function updateProgress(progressId) {
+    const fields = progressId === 'prog1' ? PART1_FIELDS : PART2_FIELDS;
+    const answered = fields.filter(f => STATE.answers[f]).length;
+    const pct = Math.round((answered / fields.length) * 100);
+    document.getElementById(progressId + '-fill').style.width = pct + '%';
+    document.getElementById(progressId + '-pct').textContent = pct + '%';
+  }
+
+  // ── VALIDATION ──
+  function validateFields(fields) {
+    let valid = true;
+    fields.forEach(f => {
+      const err = document.getElementById('err-' + f);
+      if (!STATE.answers[f]) {
+        if (err) err.classList.add('visible');
+        valid = false;
+      }
+    });
+    return valid;
+  }
+
+  // ── SCORE INPUTS ──
+  const STYLE_NAMES = { O: 'The Organiser', P: 'The Performer', S: 'The Strategist', C: 'The Connector' };
+
+  function onScoreInput() {
+    const keys = ['O','P','S','C'];
+    const vals = {};
+    let allValid = true;
+
+    keys.forEach(k => {
+      const el = document.getElementById('score-' + k);
+      const v = parseInt(el.value);
+      if (isNaN(v) || v < 0 || v > 28 || el.value === '') {
+        allValid = false;
+      } else {
+        vals[k] = v;
+      }
+      el.classList.remove('score-dominant');
+    });
+
+    if (!allValid) {
+      document.getElementById('profile-preview').classList.remove('visible');
+      STATE.answers['scores'] = null;
+      updateProgress('prog1');
+      return;
+    }
+
+    // Sort to find dominant, second, growth edge
+    const sorted = keys.slice().sort((a, b) => vals[b] - vals[a]);
+    const dominant = sorted[0];
+    const second = sorted[1];
+    const growth = sorted[3];
+    const gap = vals[dominant] - vals[growth];
+    const total = keys.reduce((s, k) => s + vals[k], 0);
+
+    // Highlight dominant score input
+    document.getElementById('score-' + dominant).classList.add('score-dominant');
+
+    // Flexibility note
+    let flexNote = '';
+    if (gap <= 5)       flexNote = 'Your scores are closely balanced — high attention flexibility. Development will come relatively readily.';
+    else if (gap <= 10) flexNote = 'You have a clear dominant style with good access to others. A solid foundation for development.';
+    else if (gap <= 16) flexNote = 'Your dominant style leads clearly. The development journey is real but very worthwhile.';
+    else                flexNote = 'Strong dominance. The target style will feel quite foreign at first — which is exactly where the most valuable development happens.';
+
+    // Dual profile note
+    const dualNote = (vals[dominant] - vals[second] <= 3)
+      ? ` You carry a dual profile (${STYLE_NAMES[dominant].replace('The ','')} / ${STYLE_NAMES[second].replace('The ','')}) — the two styles are very close.`
+      : '';
+
+    // Store computed values
+    STATE.answers['scores'] = vals;
+    STATE.answers['q1'] = STYLE_NAMES[dominant];
+    STATE.answers['q2'] = STYLE_NAMES[second];
+    STATE.answers['q-growth'] = STYLE_NAMES[growth];
+    STATE.answers['q-gap'] = gap;
+    STATE.answers['q-total'] = total;
+    STATE.answers['score-O'] = vals.O;
+    STATE.answers['score-P'] = vals.P;
+    STATE.answers['score-S'] = vals.S;
+    STATE.answers['score-C'] = vals.C;
+
+    // Update preview
+    document.getElementById('pp-dominant').textContent = STYLE_NAMES[dominant] + '  (' + vals[dominant] + ')';
+    document.getElementById('pp-second').textContent   = STYLE_NAMES[second]   + '  (' + vals[second]   + ')';
+    document.getElementById('pp-growth').textContent   = STYLE_NAMES[growth]   + '  (' + vals[growth]   + ')';
+    document.getElementById('pp-gap').textContent      = gap + ' points';
+    document.getElementById('pp-total').textContent    = total + ' / 112';
+    document.getElementById('pp-note').textContent     = flexNote + dualNote;
+    document.getElementById('profile-preview').classList.add('visible');
+
+    // Clear scores error
+    document.getElementById('err-scores').classList.remove('visible');
+    updateProgress('prog1');
+  }
+
+  // ── STYLE CHOICE (Q2 — with conditional goal field) ──
+  function onStyleChoice(radio) {
+    STATE.answers['q3'] = radio.value;
+    document.getElementById('err-q3').classList.remove('visible');
+    const goalWrap = document.getElementById('goal-wrap');
+    if (radio.value === 'Advise me') {
+      goalWrap.style.display = 'block';
+    } else {
+      goalWrap.style.display = 'none';
+      STATE.answers['q3-goal'] = '';
+    }
+    updateProgress('prog1');
+  }
+
+  function nextFromPart1() {
+    // Validate scores
+    if (!STATE.answers['scores']) {
+      document.getElementById('err-scores').classList.add('visible');
+      return;
+    }
+    // Validate target style
+    if (!STATE.answers['q3']) {
+      document.getElementById('err-q3').classList.add('visible');
+      return;
+    }
+    goTo('screen-part2');
+  }
+
+  function nextFromPart2() {
+    if (!validateFields(PART2_FIELDS)) return;
+    goTo('screen-part3');
+  }
+
+  function submitForm() {
+    // Validate email
+    const emailEl = document.getElementById('q11');
+    const email = emailEl ? emailEl.value.trim() : '';
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const errEmail = document.getElementById('err-q11');
+    if (!emailValid) {
+      if (errEmail) errEmail.classList.add('visible');
+      emailEl.focus();
+      return;
+    }
+    if (errEmail) errEmail.classList.remove('visible');
+
+    STATE.answers['q11'] = email;
+    STATE.answers['q10-name'] = document.getElementById('q10-name').value;
+    STATE.answers['q3-goal'] = document.getElementById('q3-goal') ? document.getElementById('q3-goal').value : '';
+    STATE.answers['q8'] = document.getElementById('q8').value;
+    STATE.answers['q9'] = document.getElementById('q9').value;
+
+    // Build summary
+    buildSummary();
+
+    // Here you would post STATE.answers to your backend / form service
+    // e.g. fetch('/api/intake', { method:'POST', body: JSON.stringify(STATE.answers) })
+    // For now, we log and show the thank you screen
+    console.log('Form submitted:', STATE.answers);
+
+    goTo('screen-thankyou');
+  }
+
+  function buildSummary() {
+    const card = document.getElementById('summary-card');
+    const a = STATE.answers;
+    const nameStr = a['q10-name'] || 'Not provided';
+
+    const rows = [
+      { label: 'Name',              value: nameStr },
+      { label: 'Email',             value: a['q11'] || '—' },
+      { label: '— Scores —',        value: '' },
+      { label: 'Organiser',         value: a['score-O'] !== undefined ? a['score-O'] + ' / 28' : '—' },
+      { label: 'Performer',         value: a['score-P'] !== undefined ? a['score-P'] + ' / 28' : '—' },
+      { label: 'Strategist',        value: a['score-S'] !== undefined ? a['score-S'] + ' / 28' : '—' },
+      { label: 'Connector',         value: a['score-C'] !== undefined ? a['score-C'] + ' / 28' : '—' },
+      { label: '— Profile —',       value: '' },
+      { label: 'Dominant style',    value: a['q1'] || '—' },
+      { label: 'Second style',      value: a['q2'] || '—' },
+      { label: 'Growth edge',       value: a['q-growth'] || '—' },
+      { label: 'Flexibility gap',   value: a['q-gap'] !== undefined ? a['q-gap'] + ' points' : '—' },
+      { label: 'Total score',       value: a['q-total'] !== undefined ? a['q-total'] + ' / 112' : '—' },
+      { label: '— Development —',   value: '' },
+      { label: 'Style to develop',  value: a['q3'] || '—' },
+      { label: 'Life stage',        value: a['q4'] || '—' },
+      { label: 'Primary context',   value: a['q5'] || '—' },
+      { label: 'Motivation',        value: a['q6'] || '—' },
+      { label: 'Familiarity',       value: a['q7'] || '—' },
+      { label: '— Open answers —',  value: '' },
+      { label: 'Goal (if advise requested)', value: a['q3-goal'] || '—', long: true },
+      { label: 'Situation where this style was missing', value: a['q8'] || '—', long: true },
+      { label: 'What has already been tried', value: a['q9'] || '—', long: true },
+    ];
+
+    card.innerHTML = rows.map(r => {
+      if (r.label.startsWith('—')) {
+        return `<div class="s-section">${r.label.replace(/—/g,'').trim()}</div>`;
+      }
+      if (r.long) {
+        return `<div class="s-row s-row--block"><span class="s-block-label">${r.label}</span><span class="s-block-value">${r.value}</span></div>`;
+      }
+      return `<div class="s-row"><span>${r.label}</span><span>${r.value}</span></div>`;
+    }).join('');
+  }
+
+  // ── IFRAME AUTO-RESIZE ──
+  function notifyHeight() {
+    const el = document.querySelector('.page-wrap');
+    if (el) {
+      window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+    }
+  }
+  notifyHeight();
+  setInterval(notifyHeight, 300);
+
+  // ── IFRAME HEIGHT NOTIFICATION ──
+  function notifyHeight() {
+    var el = document.querySelector('.page-wrap');
+    if (el) {
+      window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+    }
+  }
+  notifyHeight();
+  setInterval(notifyHeight, 300);
+
+  // ── SAVE AS PDF ──
+  function savePDF() {
+    const toHide = [];
+    const el = document.getElementById('screen-thankyou');
+    let current = el;
+    while (current && current !== document.body) {
+      const parent = current.parentNode;
+      if (parent) {
+        Array.prototype.forEach.call(parent.children, function(child) {
+          if (child !== current && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+            toHide.push({ el: child, prev: child.style.cssText });
+            child.style.setProperty('display', 'none', 'important');
+          }
+        });
+      }
+      current = parent;
+    }
+    setTimeout(function() {
+      window.print();
+      setTimeout(function() {
+        toHide.forEach(function(item) {
+          item.el.style.cssText = item.prev;
+        });
+      }, 600);
+    }, 80);
+  }
+</script>
+
+</body>
+</html>
