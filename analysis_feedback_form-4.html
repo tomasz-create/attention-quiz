@@ -1,0 +1,537 @@
+<!--
+  FOUR ATTENTION STYLES — Personal Analysis Feedback Form
+  Embed: paste into WordPress HTML / Text block (NOT the Visual editor).
+  All CSS is scoped to #fas-fb so nothing leaks into your site.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ── All rules scoped to #fas-fb ── */
+#fas-fb {
+  --fp:  #1B3A5C;
+  --fa:  #C8933A;
+  --fs:  #6B9CB8;
+  --ft:  #2A3445;
+  --fm:  #8A97A6;
+  --fbg: #F4F2EE;
+  --fc:  #FFFFFF;
+  --fb:  #E2E7ED;
+  --fsh: 0 1px 12px rgba(27,58,92,0.07);
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ft);
+  background: var(--fbg);
+  box-sizing: border-box;
+}
+#fas-fb *, #fas-fb *::before, #fas-fb *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Header */
+#fas-fb .f-header {
+  background: var(--fp);
+  padding: 32px 24px 28px;
+  text-align: center;
+}
+#fas-fb .f-eyebrow {
+  font-weight: 300; font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px;
+}
+#fas-fb .f-header h1 {
+  font-size: clamp(19px, 3vw, 26px); font-weight: 300;
+  color: #fff; margin-bottom: 6px; font-family: 'Lato', Arial, sans-serif;
+}
+#fas-fb .f-header p {
+  color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 300;
+  max-width: 440px; margin: 0 auto;
+}
+
+/* Progress */
+#fas-fb .f-progress-wrap { background: var(--fp); padding: 0 24px 20px; }
+#fas-fb .f-prog-outer { max-width: 680px; margin: 0 auto; background: rgba(255,255,255,0.12); height: 3px; }
+#fas-fb .f-prog-inner { height: 3px; background: rgba(255,255,255,0.45); width: 0%; transition: width 0.4s ease; }
+#fas-fb .f-prog-label {
+  text-align: right; font-size: 11px; color: rgba(255,255,255,0.3);
+  margin-top: 5px; font-weight: 300; max-width: 680px; margin-left: auto; margin-right: auto;
+}
+
+/* Nav dots */
+#fas-fb .f-section-nav {
+  background: var(--fc); border-bottom: 1px solid var(--fb);
+  padding: 12px 24px; display: flex; gap: 7px; justify-content: center; flex-wrap: wrap;
+}
+#fas-fb .f-nav-dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--fb); background: transparent;
+  font-size: 11px; font-weight: 400; color: var(--fm); cursor: pointer;
+  transition: all 0.18s; display: flex; align-items: center; justify-content: center;
+  font-family: 'Lato', Arial, sans-serif;
+}
+#fas-fb .f-nav-dot.done   { background: rgba(27,58,92,0.1); border-color: rgba(27,58,92,0.2); color: var(--fp); }
+#fas-fb .f-nav-dot.active { background: var(--fp); border-color: var(--fp); color: #fff; }
+
+/* Screens */
+#fas-fb .f-screen { display: none; }
+#fas-fb .f-screen.active { display: block; animation: f-fadeUp 0.35s ease both; }
+@keyframes f-fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Container */
+#fas-fb .f-container { max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; }
+
+/* Cards */
+#fas-fb .f-card {
+  background: var(--fc); box-shadow: var(--fsh);
+  padding: 26px 26px 22px; margin-bottom: 18px;
+  border-top: 3px solid var(--fa);
+}
+#fas-fb .f-card.soft  { border-top-color: var(--fs); }
+#fas-fb .f-card.quiet { border-top-color: var(--fb); }
+
+#fas-fb .f-card-title { font-size: 15px; font-weight: 700; color: var(--fp); margin-bottom: 3px; }
+#fas-fb .f-card-sub   { font-size: 12px; color: var(--fm); margin-bottom: 14px; font-weight: 300; }
+#fas-fb .f-card-desc  { font-size: 13px; color: var(--fm); margin-bottom: 18px; line-height: 1.55; }
+
+/* Rating */
+#fas-fb .f-rating-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fm); margin-bottom: 8px; }
+#fas-fb .f-rating-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 4px; }
+#fas-fb .f-rating-row input[type="radio"] { display: none; }
+#fas-fb .f-rating-row label {
+  width: 37px; height: 37px; display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--fb); font-size: 13px; font-weight: 400;
+  color: var(--fm); cursor: pointer; transition: all 0.15s ease;
+}
+#fas-fb .f-rating-row label:hover { border-color: var(--fa); color: var(--fa); background: #FDF8F1; }
+#fas-fb .f-rating-row input[type="radio"]:checked + label { background: var(--fp); border-color: var(--fp); color: #fff; font-weight: 700; }
+#fas-fb .f-scale-hint { display: flex; justify-content: space-between; font-size: 11px; color: var(--fm); margin-top: 3px; font-weight: 300; }
+
+/* Textarea / comment */
+#fas-fb .f-comment-wrap { margin-top: 14px; }
+#fas-fb .f-comment-wrap label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fm); margin-bottom: 5px; }
+#fas-fb textarea {
+  width: 100%; border: 1.5px solid var(--fb); padding: 9px 12px;
+  font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: var(--ft);
+  background: #FAFBFC; resize: vertical; min-height: 62px; transition: border 0.2s;
+}
+#fas-fb textarea:focus { outline: none; border-color: var(--fs); background: #fff; }
+
+/* Sub-cards */
+#fas-fb .f-sub-sections { display: flex; flex-direction: column; gap: 12px; }
+#fas-fb .f-sub-card { background: #F8F9FB; border: 1.5px solid var(--fb); padding: 15px 16px; }
+#fas-fb .f-sub-card-title { font-weight: 700; font-size: 13px; color: var(--fp); margin-bottom: 11px; }
+
+/* Meta fields */
+#fas-fb .f-meta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+#fas-fb .f-field { display: flex; flex-direction: column; gap: 5px; }
+#fas-fb .f-field label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fm); }
+#fas-fb .f-field input, #fas-fb .f-field select {
+  border: 1.5px solid var(--fb); padding: 9px 12px;
+  font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: var(--ft);
+  background: #FAFBFC; transition: border 0.2s;
+}
+#fas-fb .f-field input:focus, #fas-fb .f-field select:focus { outline: none; border-color: var(--fs); background: #fff; }
+
+/* Buttons */
+#fas-fb .f-btn-row { display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-top: 22px; }
+#fas-fb .f-btn {
+  font-family: 'Lato', Arial, sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.8px; text-transform: uppercase; padding: 10px 22px;
+  cursor: pointer; border: none; transition: all 0.18s;
+}
+#fas-fb .f-btn-primary   { background: var(--fp); color: #fff; }
+#fas-fb .f-btn-primary:hover { background: #142d48; }
+#fas-fb .f-btn-secondary { background: transparent; color: var(--fm); border: 1.5px solid var(--fb); }
+#fas-fb .f-btn-secondary:hover { border-color: var(--fp); color: var(--fp); }
+
+/* Welcome card */
+#fas-fb .f-welcome { background: var(--fc); box-shadow: var(--fsh); padding: 34px 30px; }
+#fas-fb .f-welcome h2 { font-size: 20px; font-weight: 300; color: var(--fp); margin-bottom: 10px; font-family: 'Lato', Arial, sans-serif; }
+#fas-fb .f-welcome > p { color: var(--fm); font-size: 13px; font-weight: 300; margin-bottom: 24px; line-height: 1.6; }
+#fas-fb .f-dots { display: flex; gap: 8px; margin-bottom: 22px; }
+#fas-fb .f-dots span { width: 9px; height: 9px; border-radius: 50%; opacity: 0.6; display: inline-block; }
+
+/* Error */
+#fas-fb .f-error { font-size: 12px; color: #B83232; margin-top: 6px; display: none; }
+#fas-fb .f-card.has-error .f-error { display: block; }
+#fas-fb .f-card.has-error { outline: 1.5px solid #E8BEBE; }
+
+/* Results */
+#fas-fb .f-results-intro { text-align: center; padding: 8px 0 22px; }
+#fas-fb .f-results-intro h2 { font-size: 20px; font-weight: 300; color: var(--fp); margin-bottom: 6px; font-family: 'Lato', Arial, sans-serif; }
+#fas-fb .f-results-intro p  { font-size: 13px; color: var(--fm); font-weight: 300; }
+
+#fas-fb .f-meta-summary {
+  background: var(--fc); box-shadow: var(--fsh); padding: 18px 22px;
+  margin-bottom: 14px; display: flex; flex-wrap: wrap; gap: 18px 32px;
+}
+#fas-fb .f-meta-summary:empty { display: none; }
+#fas-fb .f-meta-field { display: flex; flex-direction: column; gap: 2px; }
+#fas-fb .f-meta-field-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fm); }
+#fas-fb .f-meta-field-value { font-size: 14px; font-weight: 400; color: var(--fp); }
+
+#fas-fb .f-overall {
+  text-align: center; padding: 22px 20px; background: var(--fc);
+  box-shadow: var(--fsh); margin-bottom: 14px;
+}
+#fas-fb .f-overall-num { font-size: 50px; font-weight: 300; color: var(--fp); line-height: 1; }
+#fas-fb .f-overall-lbl { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--fm); margin-top: 4px; }
+
+#fas-fb .f-scores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 8px; margin-bottom: 18px; }
+#fas-fb .f-score-tile { background: #F8F9FB; border: 1.5px solid var(--fb); padding: 13px 14px 11px; }
+#fas-fb .f-score-tile .tl { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--fm); margin-bottom: 5px; line-height: 1.3; }
+#fas-fb .f-score-tile .tv { font-size: 26px; font-weight: 300; color: var(--fp); line-height: 1; }
+#fas-fb .f-score-tile .tb { height: 3px; background: var(--fb); margin-top: 9px; }
+#fas-fb .f-score-tile .tf { height: 3px; background: var(--fa); }
+
+/* Save card */
+#fas-fb .f-save-card { background: var(--fc); box-shadow: var(--fsh); padding: 26px 26px 22px; margin-bottom: 14px; }
+#fas-fb .f-save-card h3 { font-size: 15px; font-weight: 700; color: var(--fp); margin-bottom: 4px; font-family: 'Lato', Arial, sans-serif; }
+#fas-fb .f-save-card > p { font-size: 13px; color: var(--fm); font-weight: 300; margin-bottom: 18px; line-height: 1.55; }
+#fas-fb .f-pdf-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 14px 24px; background: var(--fp); color: #fff;
+  border: none; font-family: 'Lato', Arial, sans-serif; font-size: 13px;
+  font-weight: 700; letter-spacing: 0.6px; cursor: pointer; transition: background 0.18s;
+}
+#fas-fb .f-pdf-btn:hover { background: #142d48; }
+
+#fas-fb .f-print-notes { display: none; }
+
+/* Responsive */
+@media (max-width: 480px) {
+  #fas-fb .f-meta-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  #fas-fb .f-container { padding: 18px 14px 56px; }
+  #fas-fb .f-card, #fas-fb .f-save-card { padding: 18px 16px; }
+  #fas-fb .f-rating-row label { width: 31px; height: 31px; font-size: 12px; }
+}
+
+/* ── Print / PDF ── */
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body > *:not(#fas-fb) { display: none !important; }
+  #fas-fb .f-header { padding: 20px 28px; }
+  #fas-fb .f-progress-wrap, #fas-fb .f-section-nav,
+  #fas-fb .f-screen:not(.active), #fas-fb .f-btn-row,
+  #fas-fb .f-pdf-btn, #fas-fb #screen-welcome, #fas-fb #screen-sections { display: none !important; }
+  #fas-fb #screen-results { display: block !important; }
+  #fas-fb .f-container { padding: 16px 24px 40px; max-width: 100%; }
+  #fas-fb .f-card, #fas-fb .f-save-card, #fas-fb .f-overall, #fas-fb .f-meta-summary { box-shadow: none; border: 1px solid #DDE3EA; page-break-inside: avoid; }
+  #fas-fb .f-scores-grid { grid-template-columns: repeat(4, 1fr); }
+  #fas-fb .f-print-notes { display: block !important; }
+}
+</style>
+
+<div id="fas-fb">
+
+  <!-- Header -->
+  <div class="f-header">
+    <div class="f-eyebrow">Four Attention Styles · Dr. Tomasz Kopec</div>
+    <h1>Personal Analysis — Feedback</h1>
+    <p>Rate each section of your profile for accuracy. Takes about 5 minutes.</p>
+  </div>
+
+  <!-- Progress -->
+  <div id="f-progressWrap" class="f-progress-wrap" style="display:none;">
+    <div class="f-prog-outer"><div class="f-prog-inner" id="f-progBar"></div></div>
+    <div class="f-prog-label" id="f-progLabel">0 of 15 sections rated</div>
+  </div>
+
+  <!-- Nav dots -->
+  <div id="f-sectionNav" class="f-section-nav" style="display:none;">
+    <button class="f-nav-dot active" id="f-nav0" onclick="fasGoTo(0)">1</button>
+    <button class="f-nav-dot" id="f-nav1" onclick="fasGoTo(1)">2</button>
+    <button class="f-nav-dot" id="f-nav2" onclick="fasGoTo(2)">3</button>
+    <button class="f-nav-dot" id="f-nav3" onclick="fasGoTo(3)">4</button>
+    <button class="f-nav-dot" id="f-nav4" onclick="fasGoTo(4)">5</button>
+    <button class="f-nav-dot" id="f-nav5" onclick="fasGoTo(5)">6</button>
+    <button class="f-nav-dot" id="f-nav6" onclick="fasGoTo(6)">7</button>
+    <button class="f-nav-dot" id="f-nav7" onclick="fasGoTo(7)">8</button>
+  </div>
+
+  <!-- Welcome -->
+  <div class="f-screen active" id="screen-welcome">
+    <div class="f-container">
+      <div class="f-welcome">
+        <div class="f-dots">
+          <span style="background:#2D5E8E;"></span>
+          <span style="background:#7A4A2E;"></span>
+          <span style="background:#3A6E4F;"></span>
+          <span style="background:#8E2D6A;"></span>
+        </div>
+        <h2>How did your analysis land?</h2>
+        <p style="margin-bottom:24px;">Work through each section of your personal profile and rate how accurately it described you. At the end you'll be able to save your feedback as a PDF.</p>
+        <div class="f-meta-row">
+          <div class="f-field"><label>Dominant style</label>
+            <select id="f-dominant">
+              <option value="">— Select —</option>
+              <option>Organiser (Narrow–Objective)</option>
+              <option>Performer (Narrow–Immersed)</option>
+              <option>Strategist (Diffused–Objective)</option>
+              <option>Connector (Diffused–Immersed)</option>
+            </select>
+          </div>
+          <div class="f-field"><label>Flexibility gap</label>
+            <select id="f-gap">
+              <option value="">— Select —</option>
+              <option>0–5 (Highly flexible)</option>
+              <option>6–10 (Good range)</option>
+              <option>11–16 (Moderate dominance)</option>
+              <option>17–28 (Strong dominance)</option>
+            </select>
+          </div>
+          <div class="f-field"><label>Scores (O / P / S / C)</label>
+            <input type="text" id="f-scores" placeholder="e.g. 24 / 18 / 15 / 8">
+          </div>
+          <div class="f-field"><label>Your name or ref (optional)</label>
+            <input type="text" id="f-name" placeholder="e.g. first name or initials">
+          </div>
+        </div>
+        <button class="f-btn f-btn-primary" onclick="fasStart()">Start →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections -->
+  <div class="f-screen" id="screen-sections">
+    <div class="f-container" id="f-sectionContainer"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="f-screen" id="screen-results">
+    <div class="f-container">
+      <div class="f-results-intro">
+        <h2>Feedback complete — thank you</h2>
+        <p>Here's a summary of your ratings. Save it as a PDF to keep or share.</p>
+      </div>
+      <div class="f-meta-summary" id="f-metaSummary"></div>
+      <div class="f-overall">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A97A6;margin-bottom:6px;">Overall accuracy</div>
+        <div class="f-overall-num" id="f-overallScore">—</div>
+        <div class="f-overall-lbl">out of 10</div>
+      </div>
+      <div class="f-card quiet">
+        <div class="f-card-title" style="margin-bottom:14px;">Section by section</div>
+        <div class="f-scores-grid" id="f-scoreGrid"></div>
+      </div>
+      <div class="f-save-card">
+        <h3>Save your feedback</h3>
+        <p>Save a clean PDF copy of your results — to keep for yourself or share with Tomasz.</p>
+        <button class="f-pdf-btn" onclick="window.print()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Save as PDF
+        </button>
+        <div class="f-print-notes" id="f-printNotes"></div>
+      </div>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="f-btn f-btn-secondary" onclick="fasReset()">Submit another response</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#fas-fb -->
+
+<script>
+(function() {
+  const SECTIONS = [
+    { id:'dominant',   title:'1. The Dominant Style',             sub:'How accurately did the analysis describe your dominant attention style?', desc:'This covers the core character of your highest-scoring style: its gifts, its costs, and how it shapes the way you move through the world.', subsections:null },
+    { id:'modifier',   title:'2. The Second Score as Modifier',   sub:'How well did the analysis describe the way your second style colours your dominant?', desc:'Your second-highest score modifies how your dominant style expresses itself.', subsections:null },
+    { id:'resource',   title:'3. The Third Score — Occasional Resource', sub:'How accurately did this feel like a resource you can access but don\'t live in?', desc:'Your third score is a room you can visit when needed, but it is not your home.', subsections:null },
+    { id:'gap',        title:'4. The Fourth Score — Genuine Gap', sub:'How accurately did the analysis describe your lowest score as a real blind spot?', desc:'Your lowest score points to the mode of attention that costs you most — the least natural to you.', subsections:null },
+    { id:'gravity',    title:'5. Centre of Gravity',              sub:'How well did the analysis capture the overall shape of your profile?', desc:'The centre of gravity is where your attention naturally returns across all contexts.', subsections:null },
+    { id:'life', title:'6. Life Situation Examples', sub:'Rate each specific life context described in your analysis.', desc:'Six moments where your profile was described showing up in real life.',
+      subsections:[
+        { key:'work',          label:'💼  At work under pressure' },
+        { key:'relationships', label:'❤️  In close relationships' },
+        { key:'decisions',     label:'⚖️  When making decisions' },
+        { key:'wrong',         label:'⚡  When something goes wrong' },
+        { key:'best',          label:'✨  When you are at your best' },
+        { key:'fail',          label:'🔻  When you are most likely to fail' },
+      ]
+    },
+    { id:'appearance', title:'7. How You Appear to Others', sub:'How accurately did this describe how others perceive you?', desc:'The impression your attention style creates — what others notice, value, and sometimes find difficult.', subsections:null },
+    { id:'action', title:'8. What You Can Do Now', sub:'Rate the accuracy and usefulness of each recommendation.', desc:'Practical guidance across three areas.',
+      subsections:[
+        { key:'performance', label:'🎯  Where you will perform best' },
+        { key:'teamflex',    label:'🤝  How to build flexibility as a team' },
+        { key:'practice',    label:'🔄  How to practise the style you are lacking' },
+      ]
+    }
+  ];
+
+  const LABELS = {
+    dominant:'Dominant style', modifier:'Second score', resource:'Third score', gap:'Fourth score',
+    gravity:'Centre of gravity', appearance:'How others see you',
+    life_work:'Work under pressure', life_relationships:'Relationships', life_decisions:'Making decisions',
+    life_wrong:'When things go wrong', life_best:'At your best', life_fail:'Most likely to fail',
+    action_performance:'Perform best', action_teamflex:'Team flexibility', action_practice:'Practise the gap',
+  };
+
+  const S = { meta:{}, ratings:{}, comments:{}, cur:0, done:new Array(SECTIONS.length).fill(false) };
+
+  function ratingHTML(key) {
+    let h = `<div class="f-rating-label">Accuracy</div><div class="f-rating-row" id="rr-${key}">`;
+    for (let v=1;v<=10;v++) h += `<input type="radio" name="r_${key}" id="r_${key}_${v}" value="${v}" onchange="fasRate('${key}',${v})"><label for="r_${key}_${v}">${v}</label>`;
+    return h + `</div><div class="f-scale-hint"><span>1 — completely off</span><span>10 — spot on</span></div>`;
+  }
+
+  window.fasStart = function() {
+    S.meta = { name:document.getElementById('f-name').value, dominant:document.getElementById('f-dominant').value, gap:document.getElementById('f-gap').value, scores:document.getElementById('f-scores').value, timestamp:new Date().toISOString() };
+    const c = document.getElementById('f-sectionContainer');
+    c.innerHTML = '';
+    SECTIONS.forEach(sec => {
+      const card = document.createElement('div');
+      card.className = 'f-card' + (sec.id==='gravity'?' soft':'');
+      card.id = `f-card-${sec.id}`;
+      if (sec.subsections) {
+        card.innerHTML = `<div class="f-card-title">${sec.title}</div><div class="f-card-sub">${sec.sub}</div><div class="f-card-desc">${sec.desc}</div>
+          <div class="f-sub-sections">${sec.subsections.map(sub=>`
+            <div class="f-sub-card"><div class="f-sub-card-title">${sub.label}</div>${ratingHTML(`${sec.id}_${sub.key}`)}
+            <div class="f-comment-wrap"><label>Note (optional)</label><textarea id="fc_${sec.id}_${sub.key}" rows="2" placeholder="What felt accurate or off…"></textarea></div></div>`).join('')}
+          </div><div class="f-error" id="f-err-${sec.id}">Please rate all sub-sections before continuing.</div>`;
+      } else {
+        card.innerHTML = `<div class="f-card-title">${sec.title}</div><div class="f-card-sub">${sec.sub}</div><div class="f-card-desc">${sec.desc}</div>
+          ${ratingHTML(sec.id)}
+          <div class="f-comment-wrap"><label>Notes (optional)</label><textarea id="fc_${sec.id}" rows="3" placeholder="Which parts felt accurate, which didn't?"></textarea></div>
+          <div class="f-error" id="f-err-${sec.id}">Please choose a rating before continuing.</div>`;
+      }
+      c.appendChild(card);
+    });
+    const btns = document.createElement('div');
+    btns.className='f-btn-row'; btns.id='f-btnRow';
+    btns.innerHTML=`<button class="f-btn f-btn-secondary" id="f-btnBack" onclick="fasNav(-1)">← Back</button>
+      <span style="font-size:12px;color:#8A97A6;font-weight:300;" id="f-counter"></span>
+      <button class="f-btn f-btn-primary" id="f-btnNext" onclick="fasNav(1)">Next →</button>`;
+    c.appendChild(btns);
+    document.getElementById('f-sectionNav').style.display='flex';
+    document.getElementById('f-progressWrap').style.display='block';
+    fasShowScreen('screen-sections');
+    fasShowCurrent();
+  };
+
+  window.fasRate = function(key,val) { S.ratings[key]=val; fasUpdateProgress(); };
+  window.fasGoTo = function(i) { S.cur=i; fasShowCurrent(); };
+
+  window.fasNav = function(dir) {
+    const sec = SECTIONS[S.cur];
+    if (dir===1) {
+      let ok=true;
+      if (sec.subsections) sec.subsections.forEach(sub=>{ if(!S.ratings[`${sec.id}_${sub.key}`]) ok=false; });
+      else if (!S.ratings[sec.id]) ok=false;
+      if (!ok) {
+        const card=document.getElementById(`f-card-${sec.id}`);
+        card.classList.add('has-error');
+        document.getElementById(`f-err-${sec.id}`).style.display='block';
+        setTimeout(()=>{ card.classList.remove('has-error'); document.getElementById(`f-err-${sec.id}`).style.display='none'; },3000);
+        return;
+      }
+      S.done[S.cur]=true;
+      if (S.cur===SECTIONS.length-1) { fasCollectComments(); fasShowResults(); return; }
+    }
+    S.cur=Math.max(0,Math.min(SECTIONS.length-1,S.cur+dir));
+    fasShowCurrent();
+  };
+
+  function fasShowCurrent() {
+    SECTIONS.forEach((s,i)=>{ document.getElementById(`f-card-${s.id}`).style.display=i===S.cur?'block':'none'; });
+    document.getElementById('f-btnRow').style.display='flex';
+    document.getElementById('f-counter').textContent=`${S.cur+1} of ${SECTIONS.length}`;
+    document.getElementById('f-btnBack').style.display=S.cur===0?'none':'';
+    document.getElementById('f-btnNext').textContent=S.cur===SECTIONS.length-1?'Finish ✓':'Next →';
+    fasUpdateNavDots(); fasUpdateProgress(); window.scrollTo(0,0);
+  }
+
+  function fasUpdateProgress() {
+    const keys=[]; SECTIONS.forEach(s=>s.subsections?s.subsections.forEach(sub=>keys.push(`${s.id}_${sub.key}`)):keys.push(s.id));
+    const done=keys.filter(k=>S.ratings[k]).length;
+    document.getElementById('f-progBar').style.width=Math.round(done/keys.length*100)+'%';
+    document.getElementById('f-progLabel').textContent=`${done} of ${keys.length} sections rated`;
+  }
+
+  function fasUpdateNavDots() {
+    SECTIONS.forEach((s,i)=>{
+      const d=document.getElementById(`f-nav${i}`);
+      d.classList.toggle('active',i===S.cur);
+      d.classList.toggle('done',S.done[i]&&i!==S.cur);
+    });
+  }
+
+  function fasCollectComments() {
+    SECTIONS.forEach(sec=>{
+      if(sec.subsections) sec.subsections.forEach(sub=>{ const el=document.getElementById(`fc_${sec.id}_${sub.key}`); if(el&&el.value.trim()) S.comments[`${sec.id}_${sub.key}`]=el.value.trim(); });
+      else { const el=document.getElementById(`fc_${sec.id}`); if(el&&el.value.trim()) S.comments[sec.id]=el.value.trim(); }
+    });
+  }
+
+  function fasShowResults() {
+    document.getElementById('f-sectionNav').style.display='none';
+    const vals=Object.values(S.ratings);
+    const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';
+    document.getElementById('f-overallScore').textContent=avg;
+
+    // Meta strip
+    const metaEl=document.getElementById('f-metaSummary');
+    const mf=[
+      { label:'Name', value:S.meta.name },
+      { label:'Dominant style', value:S.meta.dominant },
+      { label:'Scores (O / P / S / C)', value:S.meta.scores },
+      { label:'Flexibility gap', value:S.meta.gap },
+      { label:'Date', value:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) },
+    ];
+    metaEl.innerHTML=mf.filter(f=>f.value).map(f=>`<div class="f-meta-field"><div class="f-meta-field-label">${f.label}</div><div class="f-meta-field-value">${f.value}</div></div>`).join('');
+
+    // Score tiles
+    const grid=document.getElementById('f-scoreGrid'); grid.innerHTML='';
+    Object.entries(S.ratings).forEach(([k,v])=>{
+      const t=document.createElement('div'); t.className='f-score-tile';
+      t.innerHTML=`<div class="tl">${LABELS[k]||k}</div><div class="tv">${v}<span style="font-size:12px;color:#8A97A6;font-weight:300"> /10</span></div><div class="tb"><div class="tf" style="width:${v*10}%"></div></div>`;
+      grid.appendChild(t);
+    });
+
+    // Print notes
+    const notesEl=document.getElementById('f-printNotes');
+    const ck=Object.keys(S.comments);
+    if(ck.length){
+      let h=`<div style="margin-top:22px;border-top:1px solid #E2E7ED;padding-top:16px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8A97A6;margin-bottom:12px;">Notes</div>`;
+      ck.forEach(k=>{ h+=`<div style="margin-bottom:10px;"><strong style="font-size:11px;color:#1B3A5C;">${LABELS[k]||k}</strong><br><span style="font-size:12px;color:#2A3445;">${S.comments[k]}</span></div>`; });
+      notesEl.innerHTML=h+'</div>';
+    }
+
+    fasShowScreen('screen-results');
+  }
+
+  window.fasReset = function() {
+    Object.keys(S.ratings).forEach(k=>delete S.ratings[k]);
+    Object.keys(S.comments).forEach(k=>delete S.comments[k]);
+    S.meta={}; S.cur=0; S.done.fill(false);
+    document.getElementById('f-sectionNav').style.display='none';
+    document.getElementById('f-progressWrap').style.display='none';
+    fasShowScreen('screen-welcome');
+  };
+
+  function fasShowScreen(id) {
+    document.querySelectorAll('#fas-fb .f-screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+    fasReportHeight();
+  }
+
+  function fasReportHeight() {
+    const h = document.getElementById('fas-fb').scrollHeight;
+    window.parent.postMessage({ iframeHeight: h }, '*');
+  }
+
+  // Report on load and whenever content might change size
+  fasReportHeight();
+  window.addEventListener('load', fasReportHeight);
+  new MutationObserver(fasReportHeight).observe(
+    document.getElementById('fas-fb'),
+    { childList: true, subtree: true, attributes: true }
+  );
+})();
+</script>
