@@ -1,0 +1,578 @@
+<!--
+  FOUR ATTENTION STYLES -- Partnership Analysis Feedback Form
+  Embed: paste into WordPress HTML / Text block (NOT the Visual editor).
+  All CSS is scoped to #fas-pf so nothing leaks into your site.
+-->
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+/* All rules scoped to #fas-pf */
+#fas-pf {
+  --pp:  #1B3A5C;
+  --pa:  #C8933A;
+  --ps:  #6B9CB8;
+  --pt:  #2A3445;
+  --pm:  #8A97A6;
+  --pbg: #F4F2EE;
+  --pc:  #FFFFFF;
+  --pb:  #E2E7ED;
+  --psh: 0 1px 12px rgba(27,58,92,0.07);
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--pt);
+  background: var(--pbg);
+  box-sizing: border-box;
+}
+#fas-pf *, #fas-pf *::before, #fas-pf *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Header */
+#fas-pf .p-header { background: var(--pp); padding: 32px 24px 28px; text-align: center; }
+#fas-pf .p-eyebrow { font-weight: 300; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+#fas-pf .p-header h1 { font-size: clamp(19px, 3vw, 26px); font-weight: 300; color: #fff; margin-bottom: 6px; font-family: 'Lato', Arial, sans-serif; }
+#fas-pf .p-header p { color: rgba(255,255,255,0.45); font-size: 13px; font-weight: 300; max-width: 440px; margin: 0 auto; }
+
+/* Progress */
+#fas-pf .p-progress-wrap { background: var(--pp); padding: 0 24px 20px; }
+#fas-pf .p-prog-outer { max-width: 680px; margin: 0 auto; background: rgba(255,255,255,0.12); height: 3px; }
+#fas-pf .p-prog-inner { height: 3px; background: rgba(255,255,255,0.45); width: 0%; transition: width 0.4s ease; }
+#fas-pf .p-prog-label { text-align: right; font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 5px; font-weight: 300; max-width: 680px; margin-left: auto; margin-right: auto; }
+
+/* Nav dots */
+#fas-pf .p-section-nav { background: var(--pc); border-bottom: 1px solid var(--pb); padding: 12px 24px; display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; }
+#fas-pf .p-nav-dot { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--pb); background: transparent; font-size: 11px; font-weight: 400; color: var(--pm); cursor: pointer; transition: all 0.18s; display: flex; align-items: center; justify-content: center; font-family: 'Lato', Arial, sans-serif; }
+#fas-pf .p-nav-dot.done   { background: rgba(27,58,92,0.1); border-color: rgba(27,58,92,0.2); color: var(--pp); }
+#fas-pf .p-nav-dot.active { background: var(--pp); border-color: var(--pp); color: #fff; }
+
+/* Screens */
+#fas-pf .p-screen { display: none; }
+#fas-pf .p-screen.active { display: block; animation: p-fadeUp 0.35s ease both; }
+@keyframes p-fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Container */
+#fas-pf .p-container { max-width: 680px; margin: 0 auto; padding: 32px 24px 80px; }
+
+/* Cards */
+#fas-pf .p-card { background: var(--pc); box-shadow: var(--psh); padding: 26px 26px 22px; margin-bottom: 18px; border-top: 3px solid var(--pa); }
+#fas-pf .p-card.soft  { border-top-color: var(--ps); }
+#fas-pf .p-card.quiet { border-top-color: var(--pb); }
+#fas-pf .p-card-title { font-size: 15px; font-weight: 700; color: var(--pp); margin-bottom: 3px; }
+#fas-pf .p-card-sub   { font-size: 12px; color: var(--pm); margin-bottom: 14px; font-weight: 300; }
+#fas-pf .p-card-desc  { font-size: 13px; color: var(--pm); margin-bottom: 18px; line-height: 1.55; }
+
+/* Rating */
+#fas-pf .p-rating-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--pm); margin-bottom: 8px; }
+#fas-pf .p-rating-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 4px; }
+#fas-pf .p-rating-row input[type="radio"] { display: none; }
+#fas-pf .p-rating-row label { width: 37px; height: 37px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--pb); font-size: 13px; font-weight: 400; color: var(--pm); cursor: pointer; transition: all 0.15s ease; }
+#fas-pf .p-rating-row label:hover { border-color: var(--pa); color: var(--pa); background: #FDF8F1; }
+#fas-pf .p-rating-row input[type="radio"]:checked + label { background: var(--pp); border-color: var(--pp); color: #fff; font-weight: 700; }
+#fas-pf .p-scale-hint { display: flex; justify-content: space-between; font-size: 11px; color: var(--pm); margin-top: 3px; font-weight: 300; }
+
+/* Textarea */
+#fas-pf .p-comment-wrap { margin-top: 14px; }
+#fas-pf .p-comment-wrap label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--pm); margin-bottom: 5px; }
+#fas-pf textarea { width: 100%; border: 1.5px solid var(--pb); padding: 9px 12px; font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: var(--pt); background: #FAFBFC; resize: vertical; min-height: 62px; transition: border 0.2s; }
+#fas-pf textarea:focus { outline: none; border-color: var(--ps); background: #fff; }
+
+/* Sub-cards */
+#fas-pf .p-sub-sections { display: flex; flex-direction: column; gap: 12px; }
+#fas-pf .p-sub-card { background: #F8F9FB; border: 1.5px solid var(--pb); padding: 15px 16px; }
+#fas-pf .p-sub-card-title { font-weight: 700; font-size: 13px; color: var(--pp); margin-bottom: 11px; }
+
+/* Meta / partner fields */
+#fas-pf .p-meta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+#fas-pf .p-meta-divider { grid-column: 1 / -1; border: none; border-top: 1px solid var(--pb); margin: 4px 0; }
+#fas-pf .p-meta-section-label { grid-column: 1 / -1; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--pm); padding-top: 4px; }
+#fas-pf .p-field { display: flex; flex-direction: column; gap: 5px; }
+#fas-pf .p-field label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--pm); }
+#fas-pf .p-field input, #fas-pf .p-field select { border: 1.5px solid var(--pb); padding: 9px 12px; font-family: 'Lato', Arial, sans-serif; font-size: 13px; color: var(--pt); background: #FAFBFC; transition: border 0.2s; }
+#fas-pf .p-field input:focus, #fas-pf .p-field select:focus { outline: none; border-color: var(--ps); background: #fff; }
+
+/* Buttons */
+#fas-pf .p-btn-row { display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-top: 22px; }
+#fas-pf .p-btn { font-family: 'Lato', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 10px 22px; cursor: pointer; border: none; transition: all 0.18s; }
+#fas-pf .p-btn-primary   { background: var(--pp); color: #fff; }
+#fas-pf .p-btn-primary:hover { background: #142d48; }
+#fas-pf .p-btn-secondary { background: transparent; color: var(--pm); border: 1.5px solid var(--pb); }
+#fas-pf .p-btn-secondary:hover { border-color: var(--pp); color: var(--pp); }
+
+/* Welcome */
+#fas-pf .p-welcome { background: var(--pc); box-shadow: var(--psh); padding: 34px 30px; }
+#fas-pf .p-welcome h2 { font-size: 20px; font-weight: 300; color: var(--pp); margin-bottom: 10px; font-family: 'Lato', Arial, sans-serif; }
+#fas-pf .p-welcome > p { color: var(--pm); font-size: 13px; font-weight: 300; margin-bottom: 24px; line-height: 1.6; }
+#fas-pf .p-dots { display: flex; gap: 8px; margin-bottom: 22px; }
+#fas-pf .p-dots span { width: 9px; height: 9px; border-radius: 50%; opacity: 0.6; display: inline-block; }
+
+/* Partner tags */
+#fas-pf .p-partner-tags { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+#fas-pf .p-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 10px; background: rgba(27,58,92,0.08); color: var(--pp); }
+
+/* Error */
+#fas-pf .p-error { font-size: 12px; color: #B83232; margin-top: 6px; display: none; }
+#fas-pf .p-card.has-error .p-error { display: block; }
+#fas-pf .p-card.has-error { outline: 1.5px solid #E8BEBE; }
+
+/* Results */
+#fas-pf .p-results-intro { text-align: center; padding: 8px 0 22px; }
+#fas-pf .p-results-intro h2 { font-size: 20px; font-weight: 300; color: var(--pp); margin-bottom: 6px; font-family: 'Lato', Arial, sans-serif; }
+#fas-pf .p-results-intro p  { font-size: 13px; color: var(--pm); font-weight: 300; }
+
+#fas-pf .p-meta-summary { background: var(--pc); box-shadow: var(--psh); padding: 18px 22px; margin-bottom: 14px; display: flex; flex-wrap: wrap; gap: 18px 32px; }
+#fas-pf .p-meta-summary:empty { display: none; }
+#fas-pf .p-meta-field { display: flex; flex-direction: column; gap: 2px; }
+#fas-pf .p-meta-field-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--pm); }
+#fas-pf .p-meta-field-value { font-size: 14px; font-weight: 400; color: var(--pp); }
+
+#fas-pf .p-overall { text-align: center; padding: 22px 20px; background: var(--pc); box-shadow: var(--psh); margin-bottom: 14px; }
+#fas-pf .p-overall-num { font-size: 50px; font-weight: 300; color: var(--pp); line-height: 1; }
+#fas-pf .p-overall-lbl { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--pm); margin-top: 4px; }
+
+#fas-pf .p-scores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 8px; margin-bottom: 18px; }
+#fas-pf .p-score-tile { background: #F8F9FB; border: 1.5px solid var(--pb); padding: 13px 14px 11px; }
+#fas-pf .p-score-tile .tl { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--pm); margin-bottom: 5px; line-height: 1.3; }
+#fas-pf .p-score-tile .tv { font-size: 26px; font-weight: 300; color: var(--pp); line-height: 1; }
+#fas-pf .p-score-tile .tb { height: 3px; background: var(--pb); margin-top: 9px; }
+#fas-pf .p-score-tile .tf { height: 3px; background: var(--pa); }
+
+/* Save / PDF */
+#fas-pf .p-save-card { background: var(--pc); box-shadow: var(--psh); padding: 26px 26px 22px; margin-bottom: 14px; }
+#fas-pf .p-save-card h3 { font-size: 15px; font-weight: 700; color: var(--pp); margin-bottom: 4px; font-family: 'Lato', Arial, sans-serif; }
+#fas-pf .p-save-card > p { font-size: 13px; color: var(--pm); font-weight: 300; margin-bottom: 18px; line-height: 1.55; }
+#fas-pf .p-pdf-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px 24px; background: var(--pp); color: #fff; border: none; font-family: 'Lato', Arial, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.6px; cursor: pointer; transition: background 0.18s; }
+#fas-pf .p-pdf-btn:hover { background: #142d48; }
+#fas-pf .p-print-notes { display: none; }
+
+/* Responsive */
+@media (max-width: 480px) { #fas-pf .p-meta-row { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  #fas-pf .p-container { padding: 18px 14px 56px; }
+  #fas-pf .p-card, #fas-pf .p-save-card { padding: 18px 16px; }
+  #fas-pf .p-rating-row label { width: 31px; height: 31px; font-size: 12px; }
+}
+
+/* Print / PDF */
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body > *:not(#fas-pf) { display: none !important; }
+  #fas-pf .p-header { padding: 20px 28px; }
+  #fas-pf .p-progress-wrap, #fas-pf .p-section-nav,
+  #fas-pf .p-screen:not(.active), #fas-pf .p-btn-row,
+  #fas-pf .p-pdf-btn, #fas-pf #ps-welcome, #fas-pf #ps-sections { display: none !important; }
+  #fas-pf #ps-results { display: block !important; }
+  #fas-pf .p-container { padding: 16px 24px 40px; max-width: 100%; }
+  #fas-pf .p-card, #fas-pf .p-save-card, #fas-pf .p-overall, #fas-pf .p-meta-summary { box-shadow: none; border: 1px solid #DDE3EA; page-break-inside: avoid; }
+  #fas-pf .p-scores-grid { grid-template-columns: repeat(4, 1fr); }
+  #fas-pf .p-print-notes { display: block !important; }
+}
+</style>
+
+<div id="fas-pf">
+
+  <!-- Header -->
+  <div class="p-header">
+    <div class="p-eyebrow">Four Attention Styles · Dr. Tomasz Kopec</div>
+    <h1>Partnership Analysis -- Feedback</h1>
+    <p>Rate each section of your partnership profile for accuracy. Takes about 5 minutes.</p>
+  </div>
+
+  <!-- Progress -->
+  <div id="pp-progressWrap" class="p-progress-wrap" style="display:none;">
+    <div class="p-prog-outer"><div class="p-prog-inner" id="pp-progBar"></div></div>
+    <div class="p-prog-label" id="pp-progLabel">0 of 12 sections rated</div>
+  </div>
+
+  <!-- Nav dots -->
+  <div id="pp-sectionNav" class="p-section-nav" style="display:none;">
+    <button class="p-nav-dot active" id="pp-nav0" onclick="pfGoTo(0)">1</button>
+    <button class="p-nav-dot" id="pp-nav1" onclick="pfGoTo(1)">2</button>
+    <button class="p-nav-dot" id="pp-nav2" onclick="pfGoTo(2)">3</button>
+    <button class="p-nav-dot" id="pp-nav3" onclick="pfGoTo(3)">4</button>
+    <button class="p-nav-dot" id="pp-nav4" onclick="pfGoTo(4)">5</button>
+    <button class="p-nav-dot" id="pp-nav5" onclick="pfGoTo(5)">6</button>
+    <button class="p-nav-dot" id="pp-nav6" onclick="pfGoTo(6)">7</button>
+  </div>
+
+  <!-- Welcome -->
+  <div class="p-screen active" id="ps-welcome">
+    <div class="p-container">
+      <div class="p-welcome">
+        <div class="p-dots">
+          <span style="background:#2D5E8E;"></span>
+          <span style="background:#7A4A2E;"></span>
+          <span style="background:#3A6E4F;"></span>
+          <span style="background:#8E2D6A;"></span>
+        </div>
+        <h2>How did your partnership analysis land?</h2>
+        <p>Work through each section of your joint profile and rate how accurately it described your partnership. At the end you will be able to save your feedback as a PDF.</p>
+
+        <div class="p-meta-row">
+          <div class="p-meta-section-label">Person A</div>
+          <div class="p-field"><label>Name</label>
+            <input type="text" id="pf-nameA" placeholder="e.g. first name or initials">
+          </div>
+          <div class="p-field"><label>Dominant style</label>
+            <select id="pf-dominantA">
+              <option value="">-- Select --</option>
+              <option>Organiser (Narrow-Objective)</option>
+              <option>Performer (Narrow-Immersed)</option>
+              <option>Strategist (Diffused-Objective)</option>
+              <option>Connector (Diffused-Immersed)</option>
+            </select>
+          </div>
+          <div class="p-field"><label>Scores (O / P / S / C)</label>
+            <input type="text" id="pf-scoresA" placeholder="e.g. 24 / 18 / 15 / 8">
+          </div>
+          <div class="p-field"><label>Flexibility gap</label>
+            <select id="pf-gapA">
+              <option value="">-- Select --</option>
+              <option>0-5 (Highly flexible)</option>
+              <option>6-10 (Good range)</option>
+              <option>11-16 (Moderate dominance)</option>
+              <option>17-28 (Strong dominance)</option>
+            </select>
+          </div>
+
+          <hr class="p-meta-divider">
+          <div class="p-meta-section-label">Person B</div>
+          <div class="p-field"><label>Name</label>
+            <input type="text" id="pf-nameB" placeholder="e.g. first name or initials">
+          </div>
+          <div class="p-field"><label>Dominant style</label>
+            <select id="pf-dominantB">
+              <option value="">-- Select --</option>
+              <option>Organiser (Narrow-Objective)</option>
+              <option>Performer (Narrow-Immersed)</option>
+              <option>Strategist (Diffused-Objective)</option>
+              <option>Connector (Diffused-Immersed)</option>
+            </select>
+          </div>
+          <div class="p-field"><label>Scores (O / P / S / C)</label>
+            <input type="text" id="pf-scoresB" placeholder="e.g. 24 / 18 / 15 / 8">
+          </div>
+          <div class="p-field"><label>Flexibility gap</label>
+            <select id="pf-gapB">
+              <option value="">-- Select --</option>
+              <option>0-5 (Highly flexible)</option>
+              <option>6-10 (Good range)</option>
+              <option>11-16 (Moderate dominance)</option>
+              <option>17-28 (Strong dominance)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="p-btn p-btn-primary" onclick="pfStart()">Start --&gt;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections -->
+  <div class="p-screen" id="ps-sections">
+    <div class="p-container" id="pp-sectionContainer"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="p-screen" id="ps-results">
+    <div class="p-container">
+      <div class="p-results-intro">
+        <h2>Feedback complete -- thank you</h2>
+        <p>Here is a summary of your ratings. Save it as a PDF to keep or share.</p>
+      </div>
+      <div class="p-meta-summary" id="pp-metaSummary"></div>
+      <div class="p-overall">
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#8A97A6;margin-bottom:6px;">Overall accuracy</div>
+        <div class="p-overall-num" id="pp-overallScore">--</div>
+        <div class="p-overall-lbl">out of 10</div>
+      </div>
+      <div class="p-card quiet">
+        <div class="p-card-title" style="margin-bottom:14px;">Section by section</div>
+        <div class="p-scores-grid" id="pp-scoreGrid"></div>
+      </div>
+      <div class="p-save-card">
+        <h3>Save your feedback</h3>
+        <p>Save a clean PDF copy of your results to keep for yourself or share with Tomasz.</p>
+        <button class="p-pdf-btn" onclick="window.print()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Save as PDF
+        </button>
+        <div class="p-print-notes" id="pp-printNotes"></div>
+      </div>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="p-btn p-btn-secondary" onclick="pfReset()">Submit another response</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /#fas-pf -->
+
+<script>
+(function() {
+
+  const SECTIONS = [
+    {
+      id: 'profiles',
+      title: '1. Your Individual Profiles in Full',
+      sub: 'How accurately did the analysis describe each person\'s individual attention style?',
+      desc: 'This section covers both individual profiles as described in the analysis -- the dominant style, the modifiers, the gap, and the overall shape for each person.',
+      subsections: [
+        { key: 'profileA', label: 'Person A -- individual profile accuracy' },
+        { key: 'profileB', label: 'Person B -- individual profile accuracy' },
+      ]
+    },
+    {
+      id: 'interaction',
+      title: '2. How Your Two Profiles Interact',
+      sub: 'How accurately did the analysis describe the dynamic between the two styles?',
+      desc: 'This section looks at what happens when the two attention styles meet -- where they reinforce each other, where they create friction, and what the combination produces.',
+      subsections: null
+    },
+    {
+      id: 'best',
+      title: '3. When This Partnership Is at Its Best',
+      sub: 'How accurately did the analysis describe the conditions where this partnership thrives?',
+      desc: 'The moments, contexts, and conditions where the two styles working together produce something neither could produce alone.',
+      subsections: null
+    },
+    {
+      id: 'gap',
+      title: '4. Where the Gap Shows Up in Real Life',
+      sub: 'How accurately did the analysis identify where the attentional difference creates real difficulty?',
+      desc: 'The practical, day-to-day friction points that this particular pairing tends to produce -- and whether the analysis named them correctly.',
+      subsections: null
+    },
+    {
+      id: 'life',
+      title: '5. Life Situation Examples for the Partnership',
+      sub: 'Rate each specific situation described in your partnership analysis.',
+      desc: 'Six real-life contexts where the partnership dynamic was described showing up. Rate each one for accuracy.',
+      subsections: [
+        { key: 'work',      label: '💼  Under pressure at work' },
+        { key: 'conflict',  label: '⚡  During conflict or disagreement' },
+        { key: 'decisions', label: '⚖️  When making decisions together' },
+        { key: 'stress',    label: '🔴  When one or both are stressed' },
+        { key: 'best',      label: '✨  When the partnership is at its best' },
+        { key: 'breakdown', label: '🔻  When things break down between you' },
+      ]
+    },
+    {
+      id: 'gravity',
+      title: '6. The Centre of Gravity Explained in Depth',
+      sub: 'How accurately did the analysis describe the shared attentional centre of this partnership?',
+      desc: 'The centre of gravity for a partnership is the point the two profiles orbit around together -- what the relationship naturally gravitates toward, and what it tends to avoid.',
+      subsections: null
+    },
+    {
+      id: 'development',
+      title: '7. Practical Development Suggestions',
+      sub: 'Rate the accuracy and usefulness of each development area.',
+      desc: 'Concrete suggestions for how this partnership can develop over time. Rate how relevant and accurate each area felt.',
+      subsections: [
+        { key: 'leverage',  label: '🎯  How to use your combined strengths' },
+        { key: 'gaps',      label: '🤝  How to manage the attentional gaps between you' },
+        { key: 'practice',  label: '🔄  How to build flexibility as a pair' },
+      ]
+    }
+  ];
+
+  const LABELS = {
+    profiles_profileA: 'Person A -- profile', profiles_profileB: 'Person B -- profile',
+    interaction: 'How profiles interact',
+    best: 'Partnership at its best',
+    gap: 'Where the gap shows up',
+    life_work: 'Under pressure at work', life_conflict: 'During conflict', life_decisions: 'Making decisions together',
+    life_stress: 'When stressed', life_best: 'Partnership at its best', life_breakdown: 'When things break down',
+    gravity: 'Centre of gravity',
+    development_leverage: 'Combined strengths', development_gaps: 'Managing the gaps', development_practice: 'Building flexibility',
+  };
+
+  const S = { meta:{}, ratings:{}, comments:{}, cur:0, done:new Array(SECTIONS.length).fill(false) };
+
+  function ratingHTML(key) {
+    let h = `<div class="p-rating-label">Accuracy</div><div class="p-rating-row" id="prr-${key}">`;
+    for (let v=1;v<=10;v++) h += `<input type="radio" name="pr_${key}" id="pr_${key}_${v}" value="${v}" onchange="pfRate('${key}',${v})"><label for="pr_${key}_${v}">${v}</label>`;
+    return h + `</div><div class="p-scale-hint"><span>1 -- completely off</span><span>10 -- spot on</span></div>`;
+  }
+
+  window.pfStart = function() {
+    S.meta = {
+      nameA: document.getElementById('pf-nameA').value,
+      dominantA: document.getElementById('pf-dominantA').value,
+      scoresA: document.getElementById('pf-scoresA').value,
+      gapA: document.getElementById('pf-gapA').value,
+      nameB: document.getElementById('pf-nameB').value,
+      dominantB: document.getElementById('pf-dominantB').value,
+      scoresB: document.getElementById('pf-scoresB').value,
+      gapB: document.getElementById('pf-gapB').value,
+      timestamp: new Date().toISOString()
+    };
+
+    const c = document.getElementById('pp-sectionContainer');
+    c.innerHTML = '';
+    SECTIONS.forEach(sec => {
+      const card = document.createElement('div');
+      card.className = 'p-card' + (sec.id === 'gravity' ? ' soft' : '');
+      card.id = `pp-card-${sec.id}`;
+      if (sec.subsections) {
+        card.innerHTML = `<div class="p-card-title">${sec.title}</div><div class="p-card-sub">${sec.sub}</div><div class="p-card-desc">${sec.desc}</div>
+          <div class="p-sub-sections">${sec.subsections.map(sub => `
+            <div class="p-sub-card"><div class="p-sub-card-title">${sub.label}</div>${ratingHTML(`${sec.id}_${sub.key}`)}
+            <div class="p-comment-wrap"><label>Note (optional)</label><textarea id="pc_${sec.id}_${sub.key}" rows="2" placeholder="What felt accurate or off..."></textarea></div></div>`).join('')}
+          </div><div class="p-error" id="pp-err-${sec.id}">Please rate all sub-sections before continuing.</div>`;
+      } else {
+        card.innerHTML = `<div class="p-card-title">${sec.title}</div><div class="p-card-sub">${sec.sub}</div><div class="p-card-desc">${sec.desc}</div>
+          ${ratingHTML(sec.id)}
+          <div class="p-comment-wrap"><label>Notes (optional)</label><textarea id="pc_${sec.id}" rows="3" placeholder="Which parts felt accurate, which did not?"></textarea></div>
+          <div class="p-error" id="pp-err-${sec.id}">Please choose a rating before continuing.</div>`;
+      }
+      c.appendChild(card);
+    });
+
+    const btns = document.createElement('div');
+    btns.className = 'p-btn-row'; btns.id = 'pp-btnRow';
+    btns.innerHTML = `<button class="p-btn p-btn-secondary" id="pp-btnBack" onclick="pfNav(-1)">Back</button>
+      <span style="font-size:12px;color:#8A97A6;font-weight:300;" id="pp-counter"></span>
+      <button class="p-btn p-btn-primary" id="pp-btnNext" onclick="pfNav(1)">Next</button>`;
+    c.appendChild(btns);
+
+    document.getElementById('pp-sectionNav').style.display = 'flex';
+    document.getElementById('pp-progressWrap').style.display = 'block';
+    pfShowScreen('ps-sections');
+    pfShowCurrent();
+  };
+
+  window.pfRate = function(key, val) { S.ratings[key] = val; pfUpdateProgress(); };
+  window.pfGoTo = function(i) { S.cur = i; pfShowCurrent(); };
+
+  window.pfNav = function(dir) {
+    const sec = SECTIONS[S.cur];
+    if (dir === 1) {
+      let ok = true;
+      if (sec.subsections) sec.subsections.forEach(sub => { if (!S.ratings[`${sec.id}_${sub.key}`]) ok = false; });
+      else if (!S.ratings[sec.id]) ok = false;
+      if (!ok) {
+        const card = document.getElementById(`pp-card-${sec.id}`);
+        card.classList.add('has-error');
+        document.getElementById(`pp-err-${sec.id}`).style.display = 'block';
+        setTimeout(() => { card.classList.remove('has-error'); document.getElementById(`pp-err-${sec.id}`).style.display = 'none'; }, 3000);
+        return;
+      }
+      S.done[S.cur] = true;
+      if (S.cur === SECTIONS.length - 1) { pfCollectComments(); pfShowResults(); return; }
+    }
+    S.cur = Math.max(0, Math.min(SECTIONS.length - 1, S.cur + dir));
+    pfShowCurrent();
+  };
+
+  function pfShowCurrent() {
+    SECTIONS.forEach((s, i) => { document.getElementById(`pp-card-${s.id}`).style.display = i === S.cur ? 'block' : 'none'; });
+    document.getElementById('pp-btnRow').style.display = 'flex';
+    document.getElementById('pp-counter').textContent = `${S.cur + 1} of ${SECTIONS.length}`;
+    document.getElementById('pp-btnBack').style.display = S.cur === 0 ? 'none' : '';
+    document.getElementById('pp-btnNext').textContent = S.cur === SECTIONS.length - 1 ? 'Finish' : 'Next';
+    pfUpdateNavDots(); pfUpdateProgress(); window.scrollTo(0, 0);
+    pfReportHeight();
+  }
+
+  function pfUpdateProgress() {
+    const keys = [];
+    SECTIONS.forEach(s => s.subsections ? s.subsections.forEach(sub => keys.push(`${s.id}_${sub.key}`)) : keys.push(s.id));
+    const done = keys.filter(k => S.ratings[k]).length;
+    document.getElementById('pp-progBar').style.width = Math.round(done / keys.length * 100) + '%';
+    document.getElementById('pp-progLabel').textContent = `${done} of ${keys.length} sections rated`;
+  }
+
+  function pfUpdateNavDots() {
+    SECTIONS.forEach((s, i) => {
+      const d = document.getElementById(`pp-nav${i}`);
+      d.classList.toggle('active', i === S.cur);
+      d.classList.toggle('done', S.done[i] && i !== S.cur);
+    });
+  }
+
+  function pfCollectComments() {
+    SECTIONS.forEach(sec => {
+      if (sec.subsections) sec.subsections.forEach(sub => { const el = document.getElementById(`pc_${sec.id}_${sub.key}`); if (el && el.value.trim()) S.comments[`${sec.id}_${sub.key}`] = el.value.trim(); });
+      else { const el = document.getElementById(`pc_${sec.id}`); if (el && el.value.trim()) S.comments[sec.id] = el.value.trim(); }
+    });
+  }
+
+  function pfShowResults() {
+    document.getElementById('pp-sectionNav').style.display = 'none';
+    const vals = Object.values(S.ratings);
+    const avg = vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : '--';
+    document.getElementById('pp-overallScore').textContent = avg;
+
+    // Meta strip
+    const metaEl = document.getElementById('pp-metaSummary');
+    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const mf = [
+      { label: 'Date', value: date },
+      { label: 'Person A', value: S.meta.nameA },
+      { label: 'A -- Dominant style', value: S.meta.dominantA },
+      { label: 'A -- Scores (O/P/S/C)', value: S.meta.scoresA },
+      { label: 'A -- Flexibility gap', value: S.meta.gapA },
+      { label: 'Person B', value: S.meta.nameB },
+      { label: 'B -- Dominant style', value: S.meta.dominantB },
+      { label: 'B -- Scores (O/P/S/C)', value: S.meta.scoresB },
+      { label: 'B -- Flexibility gap', value: S.meta.gapB },
+    ];
+    metaEl.innerHTML = mf.filter(f => f.value).map(f =>
+      `<div class="p-meta-field"><div class="p-meta-field-label">${f.label}</div><div class="p-meta-field-value">${f.value}</div></div>`
+    ).join('');
+
+    // Score tiles
+    const grid = document.getElementById('pp-scoreGrid'); grid.innerHTML = '';
+    Object.entries(S.ratings).forEach(([k, v]) => {
+      const t = document.createElement('div'); t.className = 'p-score-tile';
+      t.innerHTML = `<div class="tl">${LABELS[k] || k}</div><div class="tv">${v}<span style="font-size:12px;color:#8A97A6;font-weight:300"> /10</span></div><div class="tb"><div class="tf" style="width:${v * 10}%"></div></div>`;
+      grid.appendChild(t);
+    });
+
+    // Print notes
+    const notesEl = document.getElementById('pp-printNotes');
+    const ck = Object.keys(S.comments);
+    if (ck.length) {
+      let h = `<div style="margin-top:22px;border-top:1px solid #E2E7ED;padding-top:16px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8A97A6;margin-bottom:12px;">Notes</div>`;
+      ck.forEach(k => { h += `<div style="margin-bottom:10px;"><strong style="font-size:11px;color:#1B3A5C;">${LABELS[k] || k}</strong><br><span style="font-size:12px;color:#2A3445;">${S.comments[k]}</span></div>`; });
+      notesEl.innerHTML = h + '</div>';
+    }
+
+    pfShowScreen('ps-results');
+  }
+
+  window.pfReset = function() {
+    Object.keys(S.ratings).forEach(k => delete S.ratings[k]);
+    Object.keys(S.comments).forEach(k => delete S.comments[k]);
+    S.meta = {}; S.cur = 0; S.done.fill(false);
+    document.getElementById('pp-sectionNav').style.display = 'none';
+    document.getElementById('pp-progressWrap').style.display = 'none';
+    pfShowScreen('ps-welcome');
+  };
+
+  function pfShowScreen(id) {
+    document.querySelectorAll('#fas-pf .p-screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+    pfReportHeight();
+  }
+
+  function pfReportHeight() {
+    const h = document.getElementById('fas-pf').scrollHeight;
+    window.parent.postMessage({ iframeHeight: h }, '*');
+  }
+
+  pfReportHeight();
+  window.addEventListener('load', pfReportHeight);
+  new MutationObserver(pfReportHeight).observe(
+    document.getElementById('fas-pf'),
+    { childList: true, subtree: true, attributes: true }
+  );
+
+})();
+</script>
