@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Analysis Feedback — Four Attention Styles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:  #1B3A5C;
+      --accent:   #C8933A;
+      --soft:     #6B9CB8;
+      --text:     #2A3445;
+      --muted:    #8A97A6;
+      --bg:       #F4F2EE;
+      --card:     #FFFFFF;
+      --border:   #E2E7ED;
+      --radius:   0px;
+      --shadow:   0 1px 12px rgba(27,58,92,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .header {
+      background: var(--primary);
+      padding: 32px 24px 28px;
+      text-align: center;
+    }
+    .header-eyebrow {
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: clamp(19px, 3vw, 26px);
+      font-weight: 300;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+    .header p {
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+      font-weight: 300;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .progress-wrap {
+      background: var(--primary);
+      padding: 0 24px 20px;
+    }
+    .progress-bar-outer {
+      max-width: 680px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.12);
+      border-radius: 0;
+      height: 3px;
+    }
+    .progress-bar-inner {
+      height: 3px;
+      background: rgba(255,255,255,0.45);
+      border-radius: 0;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .progress-label {
+      text-align: right;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 5px;
+      font-weight: 300;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-nav {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      gap: 7px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .nav-dot {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Lato', sans-serif;
+    }
+    .nav-dot.done  { background: rgba(27,58,92,0.1); border-color: rgba(27,58,92,0.2); color: var(--primary); }
+    .nav-dot.active { background: var(--primary); border-color: var(--primary); color: #FFF; }
+
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeUp 0.35s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 26px 22px;
+      margin-bottom: 18px;
+      border-top: 3px solid var(--accent);
+    }
+    .card.soft   { border-top-color: var(--soft); }
+    .card.quiet  { border-top-color: var(--border); }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 3px;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      font-weight: 300;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 18px;
+      line-height: 1.55;
+    }
+
+    .rating-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .rating-row {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .rating-row input[type="radio"] { display: none; }
+    .rating-row label {
+      width: 37px; height: 37px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--border);
+      border-radius: 0;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .rating-row label:hover { border-color: var(--accent); color: var(--accent); background: #FDF8F1; }
+    .rating-row input[type="radio"]:checked + label {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFF;
+      font-weight: 700;
+    }
+    .rating-scale-hint {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 300;
+    }
+
+    .comment-wrap { margin-top: 14px; }
+    .comment-wrap label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    textarea {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 0;
+      padding: 9px 12px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: #FAFBFC;
+      resize: vertical;
+      min-height: 62px;
+      transition: border 0.2s;
+    }
+    textarea:focus { outline: none; border-color: var(--soft); background: #FFF; }
+
+    .sub-sections { display: flex; flex-direction: column; gap: 12px; }
+    .sub-card {
+      background: #F8F9FB;
+      border: 1.5px solid var(--border);
+      border-radius: 0;
+      padding: 15px 16px;
+    }
+    .sub-card-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--primary);
+      margin-bottom: 11px;
+    }
+
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 480px) { .meta-row { grid-template-columns: 1fr; } }
+    .field-group { display: flex; flex-direction: column; gap: 5px; }
+    .field-group label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field-group input, .field-group select {
+      border: 1.5px solid var(--border);
+      border-radius: 0;
+      padding: 9px 12px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: #FAFBFC;
+      transition: border 0.2s;
+    }
+    .field-group input:focus, .field-group select:focus { outline: none; border-color: var(--soft); background: #FFF; }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 22px;
+    }
+    .btn {
+      font-family: 'Lato', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 0;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s;
+    }
+    .btn-primary   { background: var(--primary); color: #FFF; }
+    .btn-primary:hover { background: #142d48; }
+    .btn-secondary { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+    .welcome-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 34px 30px;
+    }
+    .welcome-card h2 { font-size: 20px; font-weight: 300; color: var(--primary); margin-bottom: 10px; }
+    .welcome-card > p {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 300;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .four-dots { display: flex; gap: 8px; margin-bottom: 22px; }
+    .four-dots span { width: 9px; height: 9px; border-radius: 50%; opacity: 0.6; }
+
+    .error-hint { font-size: 12px; color: #B83232; margin-top: 6px; display: none; }
+    .card.has-error .error-hint { display: block; }
+    .card.has-error { outline: 1.5px solid #E8BEBE; }
+
+    /* Results */
+    .results-intro { text-align: center; padding: 8px 0 22px; }
+    .results-intro h2 { font-size: 20px; font-weight: 300; color: var(--primary); margin-bottom: 6px; }
+    .results-intro p { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+    .overall-block {
+      text-align: center;
+      padding: 22px 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .overall-num { font-size: 50px; font-weight: 300; color: var(--primary); line-height: 1; }
+    .overall-lbl { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+    .scores-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .score-tile {
+      background: #F8F9FB;
+      border: 1.5px solid var(--border);
+      border-radius: 0;
+      padding: 13px 14px 11px;
+    }
+    .score-tile .t-label { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; line-height: 1.3; }
+    .score-tile .t-val { font-size: 26px; font-weight: 300; color: var(--primary); line-height: 1; }
+    .score-tile .t-bar { height: 3px; background: var(--border); border-radius: 0; margin-top: 9px; }
+    .score-tile .t-fill { height: 3px; border-radius: 0; background: var(--accent); }
+
+    /* Save / share */
+    .save-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px 26px 22px;
+      margin-bottom: 14px;
+    }
+    .save-card h3 { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .save-card > p { font-size: 13px; color: var(--muted); font-weight: 300; margin-bottom: 18px; line-height: 1.55; }
+
+    .meta-summary {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 22px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 32px;
+      align-items: flex-start;
+    }
+    .meta-summary:empty { display: none; }
+    .meta-field { display: flex; flex-direction: column; gap: 2px; }
+    .meta-field-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .meta-field-value {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--primary);
+    }
+
+    .pdf-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--primary);
+      color: #FFF;
+      border: none;
+      border-radius: 0;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .pdf-btn:hover { background: #142d48; }
+    .pdf-btn svg { flex-shrink: 0; opacity: 0.85; }
+
+    /* ── Print / PDF styles ── */
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: #FFF; font-size: 12px; }
+      .header { padding: 24px 32px 20px; background: var(--primary) !important; }
+      .header h1 { font-size: 20px; }
+      .progress-wrap, .section-nav, #screen-welcome, #screen-sections,
+      .btn-row, .save-card .pdf-btn, .no-print { display: none !important; }
+      #screen-results { display: block !important; }
+      .container { padding: 20px 28px 40px; max-width: 100%; }
+      .card, .save-card, .overall-block { box-shadow: none; border: 1px solid #DDE3EA; page-break-inside: avoid; }
+      .scores-grid { grid-template-columns: repeat(4, 1fr); }
+      .save-card { border-top: 3px solid var(--soft); }
+      .results-intro { padding: 4px 0 16px; }
+      .print-notes-section { display: block !important; }
+    }
+    .print-notes-section { display: none; }
+
+    @media (max-width: 600px) {
+      .container { padding: 18px 14px 56px; }
+      .card, .save-card { padding: 18px 16px; }
+      .rating-row label { width: 31px; height: 31px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Four Attention Styles · Dr. Tomasz Kopec</div>
+  <h1>Personal Analysis — Feedback</h1>
+  <p>Rate each section of your profile for accuracy. Takes about 5 minutes.</p>
+</div>
+
+<div id="progressWrap" class="progress-wrap" style="display:none;">
+  <div class="progress-bar-outer">
+    <div class="progress-bar-inner" id="progressBar"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">0 of 15 sections rated</div>
+</div>
+
+<div id="sectionNav" class="section-nav" style="display:none;">
+  <button class="nav-dot active" id="nav0" onclick="goToSection(0)">1</button>
+  <button class="nav-dot" id="nav1" onclick="goToSection(1)">2</button>
+  <button class="nav-dot" id="nav2" onclick="goToSection(2)">3</button>
+  <button class="nav-dot" id="nav3" onclick="goToSection(3)">4</button>
+  <button class="nav-dot" id="nav4" onclick="goToSection(4)">5</button>
+  <button class="nav-dot" id="nav5" onclick="goToSection(5)">6</button>
+  <button class="nav-dot" id="nav6" onclick="goToSection(6)">7</button>
+  <button class="nav-dot" id="nav7" onclick="goToSection(7)">8</button>
+</div>
+
+<!-- Welcome -->
+<div class="screen active" id="screen-welcome">
+  <div class="container">
+    <div class="welcome-card">
+      <div class="four-dots">
+        <span style="background:#2D5E8E;"></span>
+        <span style="background:#7A4A2E;"></span>
+        <span style="background:#3A6E4F;"></span>
+        <span style="background:#8E2D6A;"></span>
+      </div>
+      <h2>How did your analysis land?</h2>
+      <p>Work through each section of your personal profile and rate how accurately it described you. At the end you'll be able to save your feedback as a PDF.</p>
+
+      <div class="meta-row">
+        <div class="field-group">
+          <label>Dominant style</label>
+          <select id="meta_dominant">
+            <option value="">— Select —</option>
+            <option>Organiser (Narrow–Objective)</option>
+            <option>Performer (Narrow–Immersed)</option>
+            <option>Strategist (Diffused–Objective)</option>
+            <option>Connector (Diffused–Immersed)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Flexibility gap</label>
+          <select id="meta_gap">
+            <option value="">— Select —</option>
+            <option>0–5 (Highly flexible)</option>
+            <option>6–10 (Good range)</option>
+            <option>11–16 (Moderate dominance)</option>
+            <option>17–28 (Strong dominance)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Scores (O / P / S / C)</label>
+          <input type="text" id="meta_scores" placeholder="e.g. 24 / 18 / 15 / 8">
+        </div>
+        <div class="field-group">
+          <label>Your name or ref (optional)</label>
+          <input type="text" id="meta_id" placeholder="e.g. first name or initials">
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="startForm()">Start →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sections -->
+<div class="screen" id="screen-sections">
+  <div class="container" id="sectionContainer"></div>
+</div>
+
+<!-- Results -->
+<div class="screen" id="screen-results">
+  <div class="container">
+
+    <div class="results-intro">
+      <h2>Feedback complete — thank you</h2>
+      <p>Here's a summary of your ratings. Save it as a PDF to keep or share.</p>
+    </div>
+
+    <div class="meta-summary" id="metaSummary"></div>
+
+    <div class="overall-block">
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Overall accuracy</div>
+      <div class="overall-num" id="overallScore">—</div>
+      <div class="overall-lbl">out of 10</div>
+    </div>
+
+    <div class="card quiet">
+      <div class="card-title" style="margin-bottom:14px;">Section by section</div>
+      <div class="scores-grid" id="scoreGrid"></div>
+    </div>
+
+    <div class="save-card">
+      <h3>Save your feedback</h3>
+      <p>Save a clean PDF copy of your results — to keep for yourself or share with Tomasz.</p>
+      <button class="pdf-btn" onclick="savePDF()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Save as PDF
+      </button>
+
+      <!-- Notes section visible only in print -->
+      <div class="print-notes-section" id="printNotes"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:18px;">
+      <button class="btn btn-secondary" onclick="resetForm()">Submit another response</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SECTIONS = [
+  { id:'dominant', title:'1. The Dominant Style', sub:'How accurately did the analysis describe your dominant attention style?', desc:'This covers the core character of your highest-scoring style: its gifts, its costs, and how it shapes the way you move through the world.', subsections:null },
+  { id:'modifier', title:'2. The Second Score as Modifier', sub:'How well did the analysis describe the way your second style colours your dominant?', desc:'Your second-highest score modifies how your dominant style expresses itself. This section explores that blending.', subsections:null },
+  { id:'resource', title:'3. The Third Score — Occasional Resource', sub:'How accurately did this feel like a resource you can access but don\'t live in?', desc:'Your third score is a room you can visit when needed, but it is not your home.', subsections:null },
+  { id:'gap', title:'4. The Fourth Score — Genuine Gap', sub:'How accurately did the analysis describe your lowest score as a real blind spot?', desc:'Your lowest score often points to the mode of attention that costs you most — the least natural to you.', subsections:null },
+  { id:'gravity', title:'5. Centre of Gravity', sub:'How well did the analysis capture the overall shape of your profile?', desc:'The centre of gravity is where your attention naturally returns across all contexts. It comes from the whole shape, not just the highest score.', subsections:null },
+  {
+    id:'life', title:'6. Life Situation Examples', sub:'Rate each specific life context described in your analysis.', desc:'Six moments where your profile was described showing up in real life.',
+    subsections:[
+      { key:'work',          label:'💼  At work under pressure' },
+      { key:'relationships', label:'❤️  In close relationships' },
+      { key:'decisions',     label:'⚖️  When making decisions' },
+      { key:'wrong',         label:'⚡  When something goes wrong' },
+      { key:'best',          label:'✨  When you are at your best' },
+      { key:'fail',          label:'🔻  When you are most likely to fail' },
+    ]
+  },
+  { id:'appearance', title:'7. How You Appear to Others', sub:'How accurately did this describe how others perceive you?', desc:'The impression your attention style creates — what others notice, value, and sometimes find difficult.', subsections:null },
+  {
+    id:'action', title:'8. What You Can Do Now', sub:'Rate the accuracy and usefulness of each recommendation.', desc:'Practical guidance across three areas.',
+    subsections:[
+      { key:'performance', label:'🎯  Where you will perform best' },
+      { key:'teamflex',    label:'🤝  How to build flexibility as a team' },
+      { key:'practice',   label:'🔄  How to practise the style you are lacking' },
+    ]
+  }
+];
+
+const LABELS = {
+  dominant:'Dominant style', modifier:'Second score', resource:'Third score', gap:'Fourth score',
+  gravity:'Centre of gravity', appearance:'How others see you',
+  life_work:'Work under pressure', life_relationships:'Relationships', life_decisions:'Making decisions',
+  life_wrong:'When things go wrong', life_best:'At your best', life_fail:'Most likely to fail',
+  action_performance:'Perform best', action_teamflex:'Team flexibility', action_practice:'Practise the gap',
+};
+
+const STATE = { meta:{}, ratings:{}, comments:{}, currentSection:0, sectionDone:new Array(SECTIONS.length).fill(false) };
+
+function buildSections() {
+  const c = document.getElementById('sectionContainer');
+  c.innerHTML = '';
+  SECTIONS.forEach((sec) => {
+    const card = document.createElement('div');
+    card.className = sec.id === 'gravity' ? 'card soft' : 'card';
+    card.id = `card-${sec.id}`;
+    if (sec.subsections) {
+      card.innerHTML = `
+        <div class="card-title">${sec.title}</div>
+        <div class="card-sub">${sec.sub}</div>
+        <div class="card-desc">${sec.desc}</div>
+        <div class="sub-sections">
+          ${sec.subsections.map(sub => `
+            <div class="sub-card">
+              <div class="sub-card-title">${sub.label}</div>
+              ${ratingHTML(`${sec.id}_${sub.key}`)}
+              <div class="comment-wrap"><label>Note (optional)</label>
+              <textarea id="comment_${sec.id}_${sub.key}" rows="2" placeholder="What felt accurate or off…"></textarea></div>
+            </div>`).join('')}
+        </div>
+        <div class="error-hint" id="err-${sec.id}">Please rate all sub-sections before continuing.</div>`;
+    } else {
+      card.innerHTML = `
+        <div class="card-title">${sec.title}</div>
+        <div class="card-sub">${sec.sub}</div>
+        <div class="card-desc">${sec.desc}</div>
+        ${ratingHTML(sec.id)}
+        <div class="comment-wrap"><label>Notes (optional)</label>
+        <textarea id="comment_${sec.id}" rows="3" placeholder="Which parts felt accurate, which didn't?"></textarea></div>
+        <div class="error-hint" id="err-${sec.id}">Please choose a rating before continuing.</div>`;
+    }
+    c.appendChild(card);
+  });
+  const btns = document.createElement('div');
+  btns.className = 'btn-row'; btns.id = 'btnRow';
+  btns.innerHTML = `
+    <button class="btn btn-secondary" id="btnBack" onclick="navSection(-1)">← Back</button>
+    <span style="font-size:12px;color:var(--muted);font-weight:300;" id="sectionCounter"></span>
+    <button class="btn btn-primary" id="btnNext" onclick="navSection(1)">Next →</button>`;
+  c.appendChild(btns);
+}
+
+function ratingHTML(key) {
+  let h = `<div class="rating-label">Accuracy</div><div class="rating-row" id="rr-${key}">`;
+  for (let v=1;v<=10;v++) h += `<input type="radio" name="r_${key}" id="r_${key}_${v}" value="${v}" onchange="onRate('${key}',${v})"><label for="r_${key}_${v}">${v}</label>`;
+  return h + `</div><div class="rating-scale-hint"><span>1 — completely off</span><span>10 — spot on</span></div>`;
+}
+
+function onRate(key,val) { STATE.ratings[key]=val; updateProgress(); }
+
+function showOnlyCurrent() {
+  SECTIONS.forEach((s,i) => { document.getElementById(`card-${s.id}`).style.display = i===STATE.currentSection?'block':'none'; });
+  document.getElementById('btnRow').style.display='flex';
+  document.getElementById('sectionCounter').textContent=`${STATE.currentSection+1} of ${SECTIONS.length}`;
+  document.getElementById('btnBack').style.display=STATE.currentSection===0?'none':'';
+  document.getElementById('btnNext').textContent=STATE.currentSection===SECTIONS.length-1?'Finish ✓':'Next →';
+  updateNavDots(); updateProgress(); window.scrollTo(0,0);
+}
+
+function navSection(dir) {
+  const sec = SECTIONS[STATE.currentSection];
+  if (dir===1) {
+    let valid=true;
+    if (sec.subsections) sec.subsections.forEach(sub=>{if(!STATE.ratings[`${sec.id}_${sub.key}`])valid=false;});
+    else if(!STATE.ratings[sec.id]) valid=false;
+    if (!valid) {
+      const card=document.getElementById(`card-${sec.id}`);
+      card.classList.add('has-error');
+      document.getElementById(`err-${sec.id}`).style.display='block';
+      setTimeout(()=>{card.classList.remove('has-error');document.getElementById(`err-${sec.id}`).style.display='none';},3000);
+      return;
+    }
+    STATE.sectionDone[STATE.currentSection]=true;
+    if (STATE.currentSection===SECTIONS.length-1) { collectComments(); buildResults(); return; }
+  }
+  STATE.currentSection=Math.max(0,Math.min(SECTIONS.length-1,STATE.currentSection+dir));
+  showOnlyCurrent();
+}
+
+function goToSection(i) { STATE.currentSection=i; showOnlyCurrent(); }
+
+function updateProgress() {
+  const keys=[];
+  SECTIONS.forEach(s=>s.subsections?s.subsections.forEach(sub=>keys.push(`${s.id}_${sub.key}`)):keys.push(s.id));
+  const done=keys.filter(k=>STATE.ratings[k]).length;
+  document.getElementById('progressBar').style.width=Math.round(done/keys.length*100)+'%';
+  document.getElementById('progressLabel').textContent=`${done} of ${keys.length} sections rated`;
+}
+
+function updateNavDots() {
+  SECTIONS.forEach((s,i)=>{
+    const d=document.getElementById(`nav${i}`);
+    d.classList.toggle('active',i===STATE.currentSection);
+    d.classList.toggle('done',STATE.sectionDone[i]&&i!==STATE.currentSection);
+  });
+}
+
+function collectComments() {
+  SECTIONS.forEach(sec=>{
+    if(sec.subsections) sec.subsections.forEach(sub=>{const el=document.getElementById(`comment_${sec.id}_${sub.key}`);if(el&&el.value.trim())STATE.comments[`${sec.id}_${sub.key}`]=el.value.trim();});
+    else{const el=document.getElementById(`comment_${sec.id}`);if(el&&el.value.trim())STATE.comments[sec.id]=el.value.trim();}
+  });
+}
+
+function startForm() {
+  STATE.meta={dominant:document.getElementById('meta_dominant').value,gap:document.getElementById('meta_gap').value,scores:document.getElementById('meta_scores').value,name:document.getElementById('meta_id').value,timestamp:new Date().toISOString()};
+  buildSections();
+  showScreen('screen-sections');
+  document.getElementById('sectionNav').style.display='flex';
+  document.getElementById('progressWrap').style.display='block';
+  showOnlyCurrent();
+}
+
+function resetForm() {
+  Object.keys(STATE.ratings).forEach(k=>delete STATE.ratings[k]);
+  Object.keys(STATE.comments).forEach(k=>delete STATE.comments[k]);
+  STATE.meta={}; STATE.currentSection=0; STATE.sectionDone.fill(false);
+  document.getElementById('sectionNav').style.display='none';
+  document.getElementById('progressWrap').style.display='none';
+  showScreen('screen-welcome');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function buildResults() {
+  document.getElementById('sectionNav').style.display='none';
+  const vals=Object.values(STATE.ratings);
+  const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';
+  document.getElementById('overallScore').textContent=avg;
+
+  // Meta summary
+  const metaEl = document.getElementById('metaSummary');
+  const metaFields = [
+    { label: 'Name', value: STATE.meta.name },
+    { label: 'Dominant style', value: STATE.meta.dominant },
+    { label: 'Scores (O / P / S / C)', value: STATE.meta.scores },
+    { label: 'Flexibility gap', value: STATE.meta.gap },
+    { label: 'Date', value: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) },
+  ];
+  metaEl.innerHTML = metaFields
+    .filter(f => f.value)
+    .map(f => `<div class="meta-field"><div class="meta-field-label">${f.label}</div><div class="meta-field-value">${f.value}</div></div>`)
+    .join('');
+
+  const grid=document.getElementById('scoreGrid'); grid.innerHTML='';
+  Object.entries(STATE.ratings).forEach(([k,v])=>{
+    const tile=document.createElement('div'); tile.className='score-tile';
+    tile.innerHTML=`<div class="t-label">${LABELS[k]||k}</div><div class="t-val">${v}<span style="font-size:12px;color:var(--muted);font-weight:300"> /10</span></div><div class="t-bar"><div class="t-fill" style="width:${v*10}%"></div></div>`;
+    grid.appendChild(tile);
+  });
+
+  // Build notes block for PDF (only shown at print)
+  const notesEl = document.getElementById('printNotes');
+  let notesHTML = '';
+  const commentKeys = Object.keys(STATE.comments);
+  if (commentKeys.length) {
+    notesHTML += `<div style="margin-top:22px;border-top:1px solid #E2E7ED;padding-top:16px;">`;
+    notesHTML += `<div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8A97A6;margin-bottom:12px;">Notes</div>`;
+    commentKeys.forEach(k => {
+      notesHTML += `<div style="margin-bottom:10px;"><span style="font-size:11px;font-weight:700;color:#1B3A5C;">${LABELS[k]||k}</span><br><span style="font-size:12px;color:#2A3445;">${STATE.comments[k]}</span></div>`;
+    });
+    notesHTML += `</div>`;
+  }
+  notesEl.innerHTML = notesHTML;
+
+  showScreen('screen-results');
+}
+
+function savePDF() {
+  window.print();
+}
+</script>
+</body>
+</html>
