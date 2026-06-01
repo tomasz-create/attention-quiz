@@ -1,0 +1,1455 @@
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: #fff; }
+/* ── Scoped to #atq to prevent any bleed into host page ── */
+#atq, #atq * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#atq {
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 16px;
+  color: #2A2A2A;
+  background: #FFFFFF;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── CSS variables ── */
+#atq {
+  --gold:    #F5C162;
+  --blue:    #1E4897;
+  --brown:   #671B0A;
+  --red:     #BD2724;
+  --bg:      #FFFFFF;
+  --border:  #E2E8F0;
+  --muted:   #718096;
+  --text:    #2A2A2A;
+  --lightbg: #F7F9FC;
+}
+
+/* ── Progress bar ── */
+#atq .atq-progress-wrap {
+  background: #EEF2F7;
+  height: 4px;
+  width: 100%;
+  margin-bottom: 32px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+#atq .atq-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+#atq .atq-progress-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Scale legend ── */
+#atq .atq-scale-bar {
+  background: var(--blue);
+  color: #fff;
+  padding: 10px 18px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+#atq .atq-scale-bar span { opacity: 0.85; }
+#atq .atq-scale-bar strong { opacity: 1; color: var(--gold); }
+
+/* ── Question block ── */
+#atq .atq-q {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  transition: border-color 0.15s;
+}
+#atq .atq-q:hover { border-left-color: var(--gold); }
+#atq .atq-q.atq-answered { border-left-color: var(--blue); }
+
+#atq .atq-q-num {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+#atq .atq-q-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+/* ── Scale options ── */
+#atq .atq-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+#atq .atq-opt input[type="radio"] { display: none; }
+
+#atq .atq-opt label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.12s;
+  background: #FFFFFF;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  min-height: 58px;
+  line-height: 1.3;
+}
+#atq .atq-opt label .atq-n {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+#atq .atq-opt label:hover {
+  border-color: var(--gold);
+  background: #FFFBF0;
+}
+#atq .atq-opt input:checked + label {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+#atq .atq-opt input:checked + label .atq-n {
+  color: var(--gold);
+}
+
+/* ── Submit area ── */
+#atq .atq-submit-area {
+  padding: 28px 0 8px;
+  text-align: center;
+}
+#atq .atq-error {
+  background: #FFF0EE;
+  border: 1px solid #F4B8B0;
+  color: var(--red);
+  padding: 11px 18px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  display: none;
+}
+#atq .atq-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 16px 48px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+#atq .atq-btn:hover { background: var(--brown); transform: translateY(-1px); }
+
+/* ── Results section ── */
+#atq .atq-results {
+  display: none;
+  animation: atqFadeUp 0.5s ease both;
+  padding-top: 8px;
+}
+#atq .atq-results.atq-show { display: block; }
+
+@keyframes atqFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Results header */
+#atq .atq-result-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 32px 28px;
+  margin-bottom: 0;
+}
+#atq .atq-result-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+#atq .atq-result-name {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 300;
+  line-height: 1.0;
+  color: #fff;
+  margin-bottom: 6px;
+}
+#atq .atq-result-axis {
+  font-size: 16px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.08em;
+}
+
+/* Score cards */
+#atq .atq-scores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 0;
+}
+#atq .atq-score-card {
+  padding: 16px 10px;
+  text-align: center;
+  background: var(--lightbg);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+#atq .atq-score-card:last-child { border-right: none; }
+#atq .atq-score-card.atq-dom {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+#atq .atq-score-card-lbl {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-lbl { color: rgba(255,255,255,0.6); }
+#atq .atq-score-card-val {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-val { color: var(--gold); }
+#atq .atq-score-card-max {
+  font-size: 10px;
+  color: #AAB;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-max { color: rgba(255,255,255,0.35); }
+
+/* ── GRAPH ── */
+#atq .atq-graph-wrap {
+  background: var(--lightbg);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 20px;
+  text-align: center;
+}
+#atq .atq-graph-title {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+#atq canvas#atq-canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 560px;
+  width: 100%;
+  height: auto;
+}
+
+/* ── FLEX GAP ── */
+#atq .atq-flex-wrap {
+  border-left: 4px solid var(--gold);
+  background: #FFFBF0;
+  border-top: 1px solid #F5E0A0;
+  border-bottom: 1px solid #F5E0A0;
+  border-right: 1px solid #F5E0A0;
+  padding: 24px 26px;
+  margin-bottom: 0;
+}
+#atq .atq-flex-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 6px;
+}
+#atq .atq-flex-gap-num {
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+#atq .atq-flex-level {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#atq .atq-flex-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* ── Profile sections ── */
+#atq .atq-section-bar {
+  background: var(--gold);
+  padding: 9px 22px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+#atq .atq-section-body {
+  padding: 22px 22px 8px;
+  border-bottom: 1px solid var(--border);
+}
+#atq .atq-section-sublabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 7px;
+  margin-top: 16px;
+}
+#atq .atq-section-sublabel:first-child { margin-top: 0; }
+#atq .atq-section-text {
+  font-size: 15px;
+  line-height: 1.78;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+/* Growth edge */
+#atq .atq-growth {
+  background: #FFFBF0;
+  border-left: 4px solid var(--gold);
+  border: 1px solid #F5E0A0;
+  border-left: 4px solid var(--gold);
+  padding: 20px 22px;
+  margin: 16px 22px 0;
+}
+#atq .atq-growth-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 8px;
+}
+#atq .atq-growth-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* Complement */
+#atq .atq-complement {
+  background: #EEF4FB;
+  border: 1px solid #AABBD6;
+  border-left: 4px solid var(--blue);
+  padding: 20px 22px;
+  margin: 12px 22px 24px;
+}
+#atq .atq-complement-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+#atq .atq-complement-name {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#atq .atq-complement-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 580px) {
+  #atq .atq-scores { grid-template-columns: repeat(2, 1fr); }
+  #atq .atq-scale { gap: 4px; }
+  #atq .atq-opt label { padding: 8px 2px; min-height: 52px; font-size: 10px; }
+  #atq .atq-opt label .atq-n { font-size: 17px; }
+  #atq .atq-q { padding: 16px 14px; }
+  #atq .atq-result-header { padding: 24px 18px; }
+  #atq .atq-growth, #atq .atq-complement { margin-left: 0; margin-right: 0; }
+}
+
+/* ── Print / Save as PDF ── */
+@media print {
+  #atq .atq-progress-wrap,
+  #atq .atq-progress-label,
+  #atq .atq-scale-bar,
+  #atq #atq-questions,
+  #atq .atq-submit-area,
+  #atq .atq-pdf-btn-wrap { display: none !important; }
+
+  #atq .atq-results { display: block !important; }
+
+  #atq .atq-result-header { background: #1E4897 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-score-card.atq-dom { background: #1E4897 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-section-bar { background: #F5C162 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-flex-wrap { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-growth { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-complement { background: #EEF4FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  #atq .atq-graph-wrap { page-break-inside: avoid; }
+  #atq .atq-flex-wrap  { page-break-inside: avoid; }
+  #atq .atq-growth     { page-break-inside: avoid; }
+  #atq .atq-complement { page-break-inside: avoid; }
+}
+
+/* ── PDF button ── */
+#atq .atq-pdf-btn-wrap {
+  text-align: center;
+  padding: 32px 0 16px;
+  border-top: 1px solid #E2E8F0;
+  margin-top: 8px;
+}
+#atq .atq-pdf-btn {
+  background: #1E4897;
+  color: #fff;
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+#atq .atq-pdf-btn:hover { background: #671B0A; transform: translateY(-1px); }
+#atq .atq-pdf-note {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 10px;
+  font-weight: 300;
+}
+
+
+/* ── Print-only title header ── */
+#atq .atq-print-header {
+  display: none;
+}
+@media print {
+  #atq .atq-print-header {
+    display: block !important;
+    text-align: center;
+    padding: 0 0 24px 0;
+    margin-bottom: 24px;
+    border-bottom: 3px solid #F5C162;
+  }
+  #atq .atq-print-header-title {
+    font-size: 28px;
+    font-weight: 300;
+    color: #1E4897;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  #atq .atq-print-header-sub {
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 2px;
+    font-weight: 300;
+  }
+  #atq .atq-print-header-author {
+    font-size: 13px;
+    color: #F5C162;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+
+/* ── Attention indices box ── */
+#atq .atq-indices-wrap {
+  background: #EEF4FB;
+  border-left: 4px solid var(--blue);
+  border-top: 1px solid #AABBD6;
+  border-bottom: 1px solid #AABBD6;
+  border-right: 1px solid #AABBD6;
+  padding: 24px 26px;
+  margin-bottom: 0;
+}
+#atq .atq-indices-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+#atq .atq-indices-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+#atq .atq-index-block { }
+#atq .atq-index-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+#atq .atq-index-num {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+#atq .atq-index-bar-wrap {
+  height: 6px;
+  background: #D0DFF0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+#atq .atq-index-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+#atq .atq-index-desc {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.6;
+}
+#atq .atq-indices-sentence {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #3A3A3A;
+  font-weight: 300;
+  border-top: 1px solid #AABBD6;
+  padding-top: 14px;
+  margin-top: 4px;
+}
+@media (max-width: 480px) {
+  #atq .atq-indices-row { grid-template-columns: 1fr; }
+}
+
+
+/* ── Dimension explanation block ── */
+#atq .atq-dim-explain {
+  background: #FFFFFF;
+  border-top: 1px solid var(--border);
+  padding: 22px 26px 18px;
+}
+#atq .atq-dim-explain-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-body strong {
+  color: var(--text);
+  font-weight: 700;
+}
+#atq .atq-dim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+#atq .atq-dim-card {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--blue);
+  padding: 14px 16px;
+}
+#atq .atq-dim-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+#atq .atq-dim-card-body {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #555;
+  font-weight: 300;
+}
+@media (max-width: 480px) {
+  #atq .atq-dim-grid { grid-template-columns: 1fr; }
+}
+
+
+#atq .atq-terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: var(--light);
+  border: 1px solid var(--border);
+}
+#atq .atq-terms-row input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--blue);
+}
+#atq .atq-terms-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+  cursor: pointer;
+}
+#atq .atq-terms-label a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: rgba(30,72,151,0.3);
+}
+#atq .atq-terms-label a:hover { text-decoration-color: var(--blue); }
+#atq .atq-terms-full {
+  display: none;
+  background: var(--light);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 300;
+}
+#atq .atq-terms-full p { margin-bottom: 8px; }
+#atq .atq-terms-full p:last-child { margin-bottom: 0; }
+#atq .atq-terms-title {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="atq">
+
+  <!-- Progress -->
+  <div class="atq-progress-label" id="atq-prog-lbl">0 / 28 odpowiedzi</div>
+  <div class="atq-progress-wrap">
+    <div class="atq-progress-fill" id="atq-prog-fill"></div>
+  </div>
+
+
+
+  <!-- Questions rendered by JS -->
+  <div id="atq-questions"></div>
+
+  <!-- Submit -->
+  <div class="atq-submit-area">
+    <div class="atq-error" id="atq-error">Odpowiedz na wszystkie 28 pytań zanim zakończysz.</div>
+    <div class="atq-terms-row">
+      <input type="checkbox" id="atq-terms-check">
+      <label class="atq-terms-label" for="atq-terms-check">
+        Przeczytałem i akceptuję
+        <a href="https://www.openfocusattentiontraining.com/terms-and-conditions/" target="_blank">Warunki</a>.
+        Rozumiem, że ten kwestionariusz służy wyłącznie celom informacyjnym i nie stanowi diagnozy klinicznej ani psychologicznej.
+      </label>
+    </div>
+
+    <div class="atq-error" id="atq-terms-error" style="display:none">Zaznacz zgodę na Warunki korzystania przed wysłaniem.</div>
+    <button class="atq-btn" onclick="atqSubmit()">Zobacz moje wyniki</button>
+  </div>
+
+  <!-- ── RESULTS (hidden until submit) ── -->
+  <div class="atq-results" id="atq-results">
+
+    <!-- Print-only title (hidden on screen, visible in PDF) -->
+    <div class="atq-print-header">
+      <p class="atq-print-header-title">Jak kierujesz swoją uwagą?</p>
+      <p class="atq-print-header-sub">Kwestionariusz Czterech Stylów Uwagi</p>
+      <p class="atq-print-header-author">Dr. Tomasz Kopec &nbsp;·&nbsp; Flexible Attention Trainer &nbsp;·&nbsp; NHS GP</p>
+    </div>
+
+    <!-- Header: dominant style name -->
+    <div class="atq-result-header">
+      <p class="atq-result-tag">Twój dominujący styl uwagi</p>
+      <p class="atq-result-name" id="atq-r-name"></p>
+      <p class="atq-result-axis" id="atq-r-axis"></p>
+    </div>
+
+    <!-- Score cards -->
+    <div class="atq-scores" id="atq-r-scores"></div>
+
+    <!-- Graph -->
+    <div class="atq-graph-wrap">
+      <p class="atq-graph-title">Twój profil uwagi</p>
+      <canvas id="atq-canvas" width="560" height="560"></canvas>
+    </div>
+
+    <!-- Flexibility gap -->
+    <div class="atq-flex-wrap">
+      <p class="atq-flex-tag">Twój wynik wszechstronności</p>
+      <p class="atq-flex-gap-num" id="atq-r-gap"></p>
+      <p class="atq-flex-level"   id="atq-r-level"></p>
+      <p class="atq-flex-desc"    id="atq-r-flexdesc"></p>
+    </div>
+
+
+
+    <!-- Profile detail -->
+    <div class="atq-section-bar">Twój profil</div>
+    <div class="atq-section-body">
+      <p class="atq-section-sublabel">Jak działa Twoja uwaga</p>
+      <p class="atq-section-text" id="atq-r-mech"></p>
+      <p class="atq-section-sublabel">W najlepszym wydaniu</p>
+      <p class="atq-section-text" id="atq-r-best"></p>
+      <p class="atq-section-sublabel">Twoje charakterystyczne wyzwanie</p>
+      <p class="atq-section-text" id="atq-r-challenge"></p>
+      <p class="atq-section-sublabel">Co to oznacza dla Twojego życia</p>
+      <p class="atq-section-text" id="atq-r-life"></p>
+      <p class="atq-section-text" id="atq-r-flex-note" style="display:none;margin-top:16px;font-style:italic;color:#5A6A7E;border-left:3px solid #E2E8F0;padding-left:14px;"></p>
+      <p class="atq-section-sublabel">Twoje dwa wymiary uwagi</p>
+      <p class="atq-section-text" id="atq-r-dimensions"></p>
+    </div>
+
+    <!-- Struggles section -->
+    <div class="atq-section-bar">Dlaczego pewne rzeczy mogą być dla Ciebie trudniejsze, niż powinny</div>
+    <div class="atq-section-body">
+      <p class="atq-section-text" id="atq-r-struggles"></p>
+    </div>
+
+    <div class="atq-growth">
+      <p class="atq-growth-lbl">◈ Twój kierunek rozwoju</p>
+      <p class="atq-growth-text" id="atq-r-growth"></p>
+      <p class="atq-growth-lbl" style="margin-top:18px;">Co staje się możliwe</p>
+      <p class="atq-growth-text" id="atq-r-growth-possible"></p>
+    </div>
+
+    <div class="atq-complement">
+      <p class="atq-complement-lbl">⟷ Twój naturalny dopełniacz</p>
+      <p class="atq-complement-name" id="atq-r-comp-name"></p>
+      <p class="atq-complement-text" id="atq-r-comp-why"></p>
+    </div>
+
+
+    <!-- Save as PDF -->
+    <div class="atq-pdf-btn-wrap">
+      <button class="atq-pdf-btn" onclick="atqPrint()">Zapisz wyniki jako PDF</button>
+      <p class="atq-pdf-note">Otwiera okno drukowania. Wybierz "Zapisz jako PDF" jako miejsce docelowe.</p>
+
+    </div>
+
+  </div><!-- /results -->
+
+</div><!-- /atq -->
+
+<script>
+(function() {
+
+// ════════════════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════════════════
+
+const Q = [
+  ["Jesteś na kolacji, gdy przyjaciel wspomina, że przeżywa trudny okres. Zanim ktokolwiek zdąży coś powiedzieć, czujesz jego smutek, i zauważasz, że bardziej ci się chce rozmawiać z nim niż z innymi przy stole.", "C"],
+  ["Kiedy plan zmienia się w ostatniej chwili, twoim pierwszym odruchem jest ustalenie, co dokładnie trzeba przeorganizować, w jakiej kolejności i do kiedy.", "O"],
+  ["Kiedy pracujesz nad czymś, co naprawdę cię interesuje, czas znika i godziny mijają jak minuty. Jesteś zaskoczony, jak szybko upłynął czas.", "P"],
+  ["Na spotkaniu, kiedy właśnie padły ważne informacje, od razu zaczynasz widzieć, jak łączą się ze sobą poszczególne elementy i dokąd prawdopodobnie zmierza rozmowa.", "S"],
+  ["Rozumiesz, co się dzieje między ludźmi, zanim oni sami to zrozumieją. Nie dlatego, że to analizujesz, ale dlatego, że to wyczuwasz.", "C"],
+  ["Kiedy coś wokół ciebie jest nieuporządkowane lub nie na swoim miejscu, trudno ci to zignorować. Cały czas przyciąga to twoją uwagę, do momentu aż tego nie uporządkujesz.", "O"],
+  ["Kiedy jesteś w pełni pochłonięty czymś, świat zewnętrzny nie zanika stopniowo. Po prostu nagle przestaje istnieć dla ciebie. Nie ignorujesz go. On naprawdę znika z twojej świadomości.", "P"],
+  ["W skomplikowanych sytuacjach instynktownie oceniasz najpierw sytuację, zanim wkroczysz do akcji. Działanie bez pełnego zrozumienia wydaje ci się przedwczesne, nawet gdy inni już działają.", "S"],
+  ["Ludzie mówią ci rzeczy, których nie planowali nikomu mówić. Coś w tobie sprawia, że ludzie się przed tobą otwierają.", "C"],
+  ["Zauważasz błędy i nieścisłości, które dla innych są kompletnie niewidoczne.", "O"],
+  ["Kiedy robisz coś, w czym naprawdę jesteś dobry, w pewnym momencie przestajesz tym zarządzać, tylko stajesz się tym całkowicie pochłonięty i to jakby zaczyna dziać się samo. Działanie przepływa przez ciebie, a nie od ciebie.", "P"],
+  ["Potrafisz przewidzieć, jak dana sytuacja się rozwinie.", "S"],
+  ["Podjęcie ostatecznej decyzji, takiej, która zamyka inne opcje, zajmuje ci dłużej niż powinno. Czujesz mocno, że wybranie jednej możliwości oznacza rezygnację z pozostałych.", "C"],
+  ["Ciężko ci się ogarnąć, kiedy nie masz przed sobą żadnego zadania ani wyraźnego celu.", "O"],
+  ["Kiedy jesteś w środku czegoś, co cię angażuje, co jakiś czas zauważasz, że świat dookoła ciebie się zmienił (na przykład zmieniła się pora dnia), kiedy ty byłeś pochłonięty działaniem.", "P"],
+  ["Zdarza ci się, że w środku zwykłej rozmowy zauważasz jeden szczegół, który nagle łączy się z czymś, o czym myślałeś od wielu tygodni, i rozwiązanie jakiegoś problemu staje się dla ciebie od razu oczywiste i istotne.", "S"],
+  ["Kiedy wchodzisz do pomieszczenia, w którym są ludzie, między którymi coś istotnego się wydarzyło, czujesz to, zanim ktokolwiek powie słowo. Nie analizujesz tego. Po prostu to czujesz.", "C"],
+  ["Kiedy ktoś tłumaczy ci problem, od razu w myślach rozkładasz go na części, zanim ta osoba skończy mówić.", "O"],
+  ["Najlepsze chwile twojego życia to te, w których byłeś tak pochłonięty tym, co robiłeś, tak mocno, że ktoś musiał cię od tego odciągać. To są momenty, w których czujesz się najbardziej sobą.", "P"],
+  ["Kiedy zarządzasz kilkoma rzeczami naraz, masz poczucie, że ogarniasz je wszystkie jednocześnie, jak szachownicę. Potrafisz przewidzieć, jak jeden ruch w jednym obszarze wpłynie na cały układ.", "S"],
+  ["Czasem stawiasz potrzeby innych tak daleko przed swoimi własnymi, że gdy w końcu masz już czas dla siebie, zapomniałeś już, czego właściwie chciałeś.", "C"],
+  ["Kiedy coś jest lekko nie tak, błąd w pisowni, proces, który mógłby być bardziej wydajny, układ, który nie jest do końca właściwy, trudno ci to zostawić w spokoju. Zauważasz różnicę między tym, jak jest, a tym, jak być powinno, i ciężko ci o tym zapomnieć.", "O"],
+  ["Kiedy jesteś naprawdę czymś zainteresowany, angażujesz się w to całkowicie.", "P"],
+  ["Łączysz rzeczy, których inni jeszcze nie połączyli: pomysły z różnych rozmów, wzorce z różnych wydarzeń.", "S"],
+  ["Twoje pierwsze rozumienie sytuacji zwykle przychodzi jako uczucie, nie myśl. Czujesz, że coś jest nie tak lub właśnie tak, zanim jesteś w stanie to wyjaśnić.", "C"],
+  ["Kiedy podejmujesz się zadania, naturalnie myślisz o krokach, jakie należy wykonać, i czujesz się spokojniejszy, gdy jasno widzisz ich kolejność.", "O"],
+  ["Kiedy coś cię nie angażuje, nie tylko nudzisz się. Uważasz, że niemożliwe jest poświęcanie na to czasu. Twoja uwaga odpływa zupełnie gdzie indziej i musisz aktywnie ją przyciągać z powrotem.", "P"],
+  ["Rozumiesz jakiś problem szybciej, nawet zanim ktoś skończy go opisywać. Twoje rozumienie przychodzi chłodno, bez emocji, jakbyś obserwował całą sytuację z góry, a nie był w nią bezpośrednio zaangażowany.", "S"]
+];
+
+const PROFILES = {
+  O: {
+    name: "Analityk", axis: "Wąska, Rozdzielona",
+    mech: "Uwaga Analityka działa jak wąski strumień światła oświetlający wyraźnie tylko fragment rzeczywistości. Kiedy pada na coś, pochłania go całkowicie. Zawsze jedna rzecz naraz, aż będzie zbadana w pełni, zanim przejdzie do następnej. To daje Analitykom niemal zadziwiającą jasność w sytuacjach, w których można znaleźć sensowne rozwiązanie. Analityk widzi strukturę problemu, zanim jeszcze inni skończą się z nim zapoznawać. Strumień uwagi Analityka ma jednak krawędzie. To, co wypada poza jego zasięg, wypada całkowicie. Analityk może być tak głęboko zaangażowany w rozwiązywanie problemu, że może stracić z oczu ludzi, którzy się z nim borykają. Może sprawnie rozwiązać problem i zupełnie nie zauważyć, że osoba z problemem potrzebowała czegoś innego niż akurat takiego rozwiązania.",
+    best: "Analityk to osoba, której potrzebujesz, gdy coś jest zepsute i trzeba trochę się zastanowić, zanim będzie można naprawić. Jest niezawodny. Jeśli powie, że coś zrobi, to będzie to zrobione na czas, w opisanej formie, być może z krótkim podsumowaniem jak poszło. Dobrze planuje. Trafnie analizuje. Zauważa to, obok czego wszyscy przeszli obojętnie. W chaotycznych sytuacjach dobrze rozpoznaje, z jakim rodzajem problemu ma do czynienia, co jest niezwykle przydatne, bo większość ludzi w stresie często próbuje rozwiązać niewłaściwą rzecz.",
+    challenge: "Niejasność i brak jednoznaczności są dla Ciebie trudne. Gdy sytuacji nie da się uporządkować w logiczną strukturę, pojawia się wewnętrzne napięcie. Zwykle próbujesz zmniejszyć je poprzez zbieranie kolejnych informacji i analizowanie sytuacji tak długo, aż wszystko zacznie układać się w spójną całość. Najczęściej jest to właściwa reakcja. Czasami jednak prowadzi do odkładania działania, które mogłoby zostać podjęte już teraz. Odpoczynek również bywa dla Ciebie trudniejszy, niż przypuszczają inni. Kiedy Twoja uwaga nie jest zajęta konkretnym zadaniem, bardzo szybko znajduje kolejny problem wymagający rozwiązania. Dlatego nicnierobienie rzadko jest odczuwane jako prawdziwy odpoczynek. Bardziej przypomina działający system, który nie otrzymał jeszcze następnego zadania.",
+    life: "Jeżeli jest to Twój dominujący styl uwagi, znaczna część Twoich zachowań wynika z potrzeby rozumienia świata. Najbardziej sobą czujesz się wtedy, gdy sytuacje są jasne, zadania mają strukturę, a wysiłek prowadzi do konkretnych rezultatów. Nie kieruje Tobą potrzeba kontrolowania wszystkiego. Kieruje Tobą potrzeba zrozumienia.",
+    dimensions: "Twoja uwaga jest przede wszystkim Wąska i Rozdzielona. Wąska oznacza, że skupiasz się mocno na jednej rzeczy naraz, poświęcając jej pełną uwagę. Rozdzielona oznacza, że naturalnie dostrzegasz granice pomiędzy sobą a tym, co obserwujesz. Analizujesz rzeczy z dystansu, jasno i logicznie, zamiast całkowicie się w nich zanurzać. Daje Ci to precyzję, skuteczność i niezawodność. Kosztem bywa utrata szerszej perspektywy. Możesz być tak skupiony na szczególe, że umyka Ci większy obraz sytuacji, albo tak zaangażowany w rozwiązanie problemu, że przestajesz dostrzegać ludzi, których ten problem dotyczy.",
+    growth: "Twoim kierunkiem rozwoju jest Przyjaciel, styl uwagi, po który sięgasz najmniej naturalnie. Twoja uwaga jest precyzyjna i skuteczna, ale często dociera najpierw do problemu, a dopiero później do człowieka. Przyjaciel uczy, że czasami warto odwrócić tę kolejność. Najpierw spotkać człowieka. Dopiero później zajmować się problemem.",
+    compName: "Przyjaciel (Rozproszona, Połączona)",
+    compWhy: "Ty wnosisz precyzję, strukturę i zdolność porządkowania złożonych sytuacji. Przyjaciel wnosi ciepło, szeroką perspektywę oraz umiejętność wyczuwania tego, co dzieje się pomiędzy ludźmi. Razem obejmujecie pełny obraz sytuacji. Ty dostrzegasz problem. Przyjaciel dostrzega człowieka. Przyjaciel spowalnia Cię wtedy, gdy próbujesz zbyt szybko przejść do rozwiązania. Ty nadajesz kierunek i strukturę temu, co Przyjaciel intuicyjnie wyczuwa, ale nie zawsze zamienia w działanie."
+  },
+  P: {
+    name: "Pasjonat", axis: "Wąska, Połączona",
+    mech: "Pasjonat nie tylko skupia swoją uwagę. On się łączy z tym czego doświadcza. Całkowicie oddaje się temu co robi i na czas trwania aktywności znika oddzielna osoba. Kiedy jego uwaga zatrzymuje się na czymś, czas przestaje zachowywać się normalnie. Godziny mijają jak minuty. Świat zewnętrzny cichnie. Jego uwaga działa jak pojedynczy kanał. Nie potrafi naprawdę utrzymywać dwóch rzeczy jednocześnie. Kiedy jest czymś całkowicie wypełniona, nie ma już miejsca na nic więcej. Proszenie Pasjonata, aby angażował się tylko częściowo, przypomina proszenie muzyka, aby jednocześnie grał na dwóch instrumentach. Teoretycznie jest to możliwe, ale w praktyce tak to nie działa.",
+    best: "W najlepszym wydaniu Pasjonaci potrafią osiągać niezwykłą głębię. Kiedy ich zaangażowanie się pojawia, jest całkowite. Zapamiętują szczegóły wtedy, gdy inni zachowali już tylko ogólny obraz sytuacji. A rzeczy, które przyciągną uwagę Pasjonata, mają tendencję do pozostawania z nim na długo. Pasjonaci często odnajdują się w aktywnościach, które pozwalają im całkowicie zanurzyć się w tym, co robią. Niezależnie od aktywności doświadczenie jest podobne. Na pewien czas znika obserwator. Pozostaje tylko działanie.",
+    challenge: "Szersza perspektywa jest dla Ciebie autentycznie trudna. Potrafisz podążać za jednym wątkiem tak głęboko, że cały kontekst wokół niego całkowicie znika. Możesz rozwiązać konkretny problem, podczas gdy ogólna sytuacja zdążyła już pójść dalej bez Ciebie. Zwyczajne życie, codzienne obowiązki i te niepozorne okresy pomiędzy rzeczami, które naprawdę Cię interesują, mogą przypominać stan oczekiwania. Nie do końca życie. Raczej upływ czasu. Uwaga Pasjonata potrzebuje czegoś, czym może się zaangażować. A kiedy nic jej nie angażuje, nie pojawia się poczucie satysfakcji. Pojawia się czekanie.",
+    life: "Jeżeli jest to Twój dominujący styl uwagi, prawdopodobnie zauważyłeś, że Twoja relacja z wieloma rzeczami ma charakter wszystko albo nic. Jeżeli coś jest dla Ciebie ważne, angażujesz się całkowicie. Jeżeli nie jest, trudno Ci być naprawdę obecnym. Twoja najlepsza praca powstaje wtedy, gdy jesteś autentycznie zaangażowany. Różnica pomiędzy tym, co potrafisz osiągnąć w takich warunkach, a tym, co osiągasz w sytuacjach, które Cię nie inspirują, jest prawdopodobnie większa niż u większości ludzi wokół Ciebie.",
+    dimensions: "Twoja uwaga jest przede wszystkim Wąska i Połączona. Wąska oznacza, że skupia się mocno na jednej rzeczy, zagłębiając się w nią, zamiast rozpraszać się pomiędzy wiele kierunków. Połączona oznacza, że łączy się z tym, czego doświadcza. Nie obserwujesz tego, co robisz. Ty w tym uczestniczysz. To daje Ci niezwykłą głębię i całkowite zaangażowanie, gdy coś naprawdę przyciągnie Twoją uwagę. Kosztem jest to, że szerszy obraz sytuacji może całkowicie zniknąć z pola widzenia, a zwyczajne życie, te okresy pomiędzy rzeczami, które naprawdę Cię angażują, mogą przypominać czekanie.",
+    growth: "Twoim kierunkiem rozwoju jest Strateg, styl uwagi, po który sięgasz najmniej naturalnie. Ty idziesz w głąb. Strateg patrzy szeroko. Praktyka polega na tym, by od czasu do czasu oderwać wzrok od szczegółu, w którym jesteś zanurzony, i zobaczyć szerszy obraz sytuacji. Nie dlatego, że szczegół jest nieważny. Dlatego, że to szerszy obraz decyduje, czy ten szczegół w ogóle ma znaczenie.",
+    compName: "Strateg (Rozproszona, Rozdzielona)",
+    compWhy: "Ty wnosisz głębię, pasję i zdolność całkowitego zanurzenia się w tym, co robisz. Strateg wnosi szeroką perspektywę i zdolność dostrzegania kierunku, w którym wszystko zmierza. Kiedy jesteś głęboko wewnątrz jakiegoś zadania, Strateg potrafi zobaczyć, czy nadal prowadzi ono we właściwą stronę. Pomaga Ci nie rozwiązywać szczegółowego problemu wtedy, gdy ogólna sytuacja zdążyła już się zmienić. Ty z kolei chronisz Stratega przed nieustannym generowaniem pomysłów bez zagłębiania się wystarczająco daleko w którykolwiek z nich."
+  },
+  S: {
+    name: "Strateg", axis: "Rozproszona, Rozdzielona",
+    mech: "Uwaga Stratega rozprzestrzenia się szeroko. Tam, gdzie Analityk zawęża uwagę do jednego punktu, a Pasjonat zagłębia się w jedno doświadczenie, Strateg obejmuje wiele rzeczy jednocześnie. Zbiera informacje z różnych źródeł, dostrzega związki pomiędzy faktami, które na pierwszy rzut oka wydają się niepowiązane, i buduje obraz sytuacji z fragmentów, których inni często nawet nie zauważają. Jednocześnie zachowuje wobec tego, co obserwuje, pewien dystans. Nie dlatego, że jest chłodny lub obojętny. Po prostu patrzy na sytuację bardziej jak na system niż jak na osobiste doświadczenie. To właśnie pozwala mu dostrzegać wzorce. To również sprawia, że czasami wygląda tak, jakby analizował sytuację w chwili, gdy inni uważają, że powinien po prostu w niej uczestniczyć.",
+    best: "W najlepszym wydaniu Strategowie dostrzegają to, co nadchodzi, zanim stanie się oczywiste dla innych. Szybko rozumieją strukturę skomplikowanych sytuacji, często zanim osoby bezpośrednio zaangażowane zdążą je wyjaśnić. Potrafią połączyć informacje z kilku różnych rozmów, doświadczeń lub obserwacji w jeden spójny obraz. Zadają pytania, które odsłaniają prawdziwy problem ukryty pod tym, który wydaje się widoczny na pierwszy rzut oka. Ludziom łatwo rozmawia się ze Strategami. Ich uwaga jest po prostu szeroka, otwarta i receptywna. Tworzy przestrzeń, w której ludzie sami zaczynają mówić o rzeczach ważnych.",
+    challenge: "Kończenie rzeczy. Strategowie doskonale rozpoczynają nowe projekty. Bardzo szybko rozumieją, jak coś działa i dokąd prowadzi. Problem pojawia się wtedy, gdy trzeba przejść przez środkową część procesu. Kiedy już widzą zakończenie, sama droga do celu zaczyna przypominać administrację. Wielu Strategów ma za sobą długą listę świetnych, ale niedokończonych pomysłów. Własne emocje również bywają dla nich zaskakująco trudne do uchwycenia. Strateg często doskonale rozumie, co przeżywają inni ludzie, ale potrzebuje więcej czasu, aby zrozumieć samego siebie. Dlatego zdarza się, że dopiero po kilku dniach uświadamia sobie, co naprawdę czuł w danej sytuacji. Z zewnątrz to opóźnienie jest niewidoczne. Od środka jest bardzo wyraźne.",
+    life: "Jeżeli jest to Twój dominujący styl uwagi, prawdopodobnie bardzo dobrze radzisz sobie z rozpoczynaniem nowych rzeczy. Łatwo dostrzegasz potencjał. Generujesz pomysły. Szybko rozumiesz złożone sytuacje. Największym wyzwaniem jest dla Ciebie środkowa część procesu. Ten etap, który nie jest już nowy i ekscytujący, ale jeszcze nie przyniósł widocznych rezultatów. To właśnie tam ten styl uwagi wymaga od Ciebie najwięcej cierpliwości.",
+    dimensions: "Twoja uwaga jest przede wszystkim Rozproszona i Rozdzielona. Rozproszona oznacza, że obejmuje wiele źródeł informacji jednocześnie i naturalnie dostrzega związki pomiędzy nimi. Rozdzielona oznacza, że zachowujesz wobec tego, co obserwujesz, pewien dystans. Analizujesz sytuacje bardziej niż się w nich zanurzasz. Dzięki temu potrafisz dostrzegać wzorce, zależności i przyszłe konsekwencje działań. Kosztem bywa trudność w doprowadzaniu rzeczy do końca oraz skłonność do rozumienia własnych emocji bardziej poprzez analizę niż bezpośrednie ich przeżywanie.",
+    growth: "Twoim kierunkiem rozwoju jest Pasjonat, styl uwagi, po który sięgasz najmniej naturalnie. Szybko dostrzegasz całość i kierunek. Pasjonat uczy czegoś przeciwnego. Uczy, jak wejść całkowicie w jedną rzecz. Praktyka polega na tym, by wybrać jeden kierunek i podążać za nim także wtedy, gdy przestaje być ekscytujący. Przez etap, który jest już tylko pracą. Tylko głębią. Tylko wytrwałością.",
+    compName: "Pasjonat (Wąska, Połączona)",
+    compWhy: "Ty przynosisz mapę. Pasjonat przynosi silnik. Twoja zdolność dostrzegania wzorców sprawia, że rozumiesz, co należy zrobić i dlaczego. Zdolność Pasjonata do całkowitego zaangażowania sprawia, że kiedy już się zaangażuje, daje z siebie wszystko. Razem potraficie zarówno wyznaczać odważny kierunek, jak i skutecznie go realizować. Ty chronisz Pasjonata przed zgubieniem szerszego obrazu. On chroni Ciebie przed nieustannym projektowaniem lasu bez posadzenia choćby jednego drzewa."
+  },
+  C: {
+    name: "Przyjaciel", axis: "Rozproszona, Połączona",
+    mech: "Uwaga Przyjaciela jest szeroka i otwarta. Nie skupia się poprzez zawężanie. Zamiast tego otwiera się i obejmuje całą sytuację naraz. Pomieszczenie. Ludzi. Atmosferę pomiędzy ludźmi. To, co zostało powiedziane. I to, co pozostało niewypowiedziane. Ogólne wrażenie sytuacji pojawia się najpierw jako odczucie, a dopiero później jako myśl. I bardzo często okazuje się trafne. Przyjaciele często wiedzą rzeczy, których teoretycznie nie powinni jeszcze wiedzieć. Potrafią wejść do pomieszczenia i od razu wyczuć, czy panuje w nim swobodna atmosfera, czy napięcie, zanim padnie choć jedno słowo. Często rozumieją, co ktoś przeżywa, zanim ta osoba sama znajdzie odpowiednie słowa, by to wyrazić.",
+    best: "W najlepszym wydaniu Przyjaciele są najbardziej autentycznie obecnymi ludźmi w każdym pomieszczeniu. Nie sprawiają wrażenia obecnych. Oni naprawdę są obecni. Naprawdę słuchają. Naprawdę są z drugim człowiekiem. W świecie pełnym ludzi, którzy formalnie uczestniczą w rozmowie, ale myślami są gdzie indziej, jest to niezwykle rzadka cecha. Ludzie czują się przez Przyjaciół wysłuchani w sposób wykraczający poza zwykłe słuchanie. Czują się zrozumiani na poziomie, który pojawia się jeszcze przed słowami. Często mówią im rzeczy, których nie planowali powiedzieć nikomu. I często kończą rozmowę z poczuciem, że coś się zmieniło. Po prostu podczas rozmowy coś cicho przesunęło się na właściwe miejsce.",
+    challenge: "Granice. Nie te wielkie i dramatyczne. Te codzienne. Przyjaciele przejmują emocjonalny klimat swojego otoczenia bardziej, niż zwykle zdają sobie z tego sprawę. Napięta atmosfera wpływa na nich. Cierpienie drugiego człowieka nie jest czymś, co jedynie obserwują. Często je odczuwają. Dlatego potrzebują czasu w samotności. Potrzebują ciszy. Potrzebują miejsc wolnych od ludzkich emocji, oczekiwań i napięć. Podejmowanie zdecydowanych decyzji również bywa trudne. Przyjaciel często odczuwa wszystkie strony sytuacji jednocześnie. Widzi i rozumie tak wiele różnych perspektyw, że wybór jednej drogi może przypominać utratę wszystkich pozostałych.",
+    life: "Jeżeli jest to Twój dominujący styl uwagi, doświadczasz świata na częstotliwości, do której większość ludzi ma ograniczony dostęp. Najpierw czujesz. Dopiero później rozumiesz. Dzięki temu jesteś wyjątkowo spostrzegawczy i wyczulony na subtelne sygnały płynące od ludzi i otoczenia. Jednocześnie nie wszystko, co wyczuwasz, daje się łatwo wyjaśnić. Nie każde przeczucie przychodzi wraz z gotowym uzasadnieniem.",
+    dimensions: "Twoja uwaga jest przede wszystkim Rozproszona i Połączona. Rozproszona oznacza, że obejmuje całą sytuację jednocześnie, ludzi, atmosferę, relacje, kontekst oraz to, co kryje się pod powierzchnią wydarzeń. Połączona oznacza, że łączysz się z tym, czego doświadczasz. Nie obserwujesz emocjonalnej atmosfery z dystansu. Przyjmujesz ją do siebie. To daje Ci autentyczną obecność, wyjątkową intuicję społeczną i zdolność budowania głębokich relacji. Kosztem bywa trudność w stawianiu granic, podejmowaniu jednoznacznych decyzji oraz większa podatność na emocjonalny klimat otoczenia.",
+    growth: "Twoim kierunkiem rozwoju jest Analityk, styl uwagi, po który sięgasz najmniej naturalnie. Bardzo dobrze rozumiesz innych ludzi. Praktyka polega na tym, by włączyć do tego zrozumienia również siebie. Swoje potrzeby. Swoje priorytety. Swój kierunek. Swoje granice. Struktura nie jest przeciwieństwem tego, co czujesz. To właśnie ona pozwala nadać kierunek temu, co czujesz.",
+    compName: "Analityk (Wąska, Rozdzielona)",
+    compWhy: "Ty wnosisz ciepło, intuicję i zdolność rozumienia tego, czego ludzie naprawdę potrzebują. Analityk wnosi strukturę, jasność i zdolność zamieniania zrozumienia w działanie. To, co wyczuwasz, on potrafi zbudować. To, co on buduje, Ty potrafisz uczynić bardziej ludzkim. Analityk nadaje kierunek Twojej empatii. Ty nadajesz sens jego systemom."
+  }
+};
+
+const GROWTH = {
+  O: {
+    C: {
+      growth: "Twoim kierunkiem rozwoju jest Przyjaciel, styl uwagi, po który sięgasz najmniej naturalnie. Twoja uwaga jest precyzyjna i skuteczna, ale często dociera najpierw do problemu, a dopiero później do człowieka. Praktyka polega na tym, by częściej pytać: jak się z tym czujesz, zanim zapytasz: co trzeba zrobić. Być z czyimś doświadczeniem, zanim zaczniesz je naprawiać.",
+      compName: "Przyjaciel (Rozproszona, Połączona)",
+      compWhy: "Ty wnosisz precyzję, strukturę i zdolność porządkowania złożonych sytuacji. Przyjaciel wnosi ciepło, szeroką perspektywę oraz umiejętność wyczuwania tego, co dzieje się pomiędzy ludźmi. Razem obejmujecie pełny obraz sytuacji. Ty dostrzegasz problem. Przyjaciel dostrzega człowieka. Ty widzisz system. Przyjaciel widzi ludzi żyjących wewnątrz tego systemu."
+    },
+    P: {
+      growth: "Twoim kierunkiem rozwoju jest Pasjonat, styl uwagi, po który sięgasz najmniej naturalnie. Doskonale analizujesz i porządkujesz świat. Pasjonat uczy czegoś innego. Uczy, jak całkowicie wejść w doświadczenie, zamiast nieustannie je obserwować. Praktyka polega na tym, by od czasu do czasu odłożyć plan, analizę i ocenę. I po prostu być w tym, co się dzieje.",
+      compName: "Pasjonat (Wąska, Połączona)",
+      compWhy: "Ty wnosisz strukturę, niezawodność i zdolność zamieniania złożoności w jasność. Pasjonat wnosi głębię, pełne zaangażowanie i zdolność całkowitego wejścia w doświadczenie. Ty tworzysz mapę. On poznaje teren. Razem obejmujecie zarówno plan, jak i rzeczywistość."
+    },
+    S: {
+      growth: "Twoim kierunkiem rozwoju jest Strateg, styl uwagi, po który sięgasz najmniej naturalnie. Doskonale radzisz sobie z problemem, który znajduje się przed Tobą. Strateg uczy, by najpierw zrobić krok w tył i zadać pytanie: czy to na pewno jest właściwy problem? Praktyka polega na tym, by najpierw poszerzyć uwagę, a dopiero później ją zawężać.",
+      compName: "Strateg (Rozproszona, Rozdzielona)",
+      compWhy: "Ty wnosisz precyzję i skuteczność działania. Strateg wnosi szeroką perspektywę, zdolność dostrzegania wzorców i przewidywania tego, co może nadejść. Ty dbasz o to, by rzeczy były wykonane prawidłowo. Strateg pomaga upewnić się, że wykonujesz właściwe rzeczy."
+    }
+  },
+  P: {
+    S: {
+      growth: "Twoim kierunkiem rozwoju jest Strateg, styl uwagi, po który sięgasz najmniej naturalnie. Ty idziesz w głąb. Strateg patrzy szeroko. Praktyka polega na tym, by od czasu do czasu oderwać wzrok od szczegółu, w którym jesteś zanurzony, i zobaczyć szerszy obraz sytuacji. Nie dlatego, że szczegół jest nieważny. Dlatego, że to szerszy obraz decyduje, czy ten szczegół w ogóle ma znaczenie.",
+      compName: "Strateg (Rozproszona, Rozdzielona)",
+      compWhy: "Ty wnosisz głębię, pasję i zdolność całkowitego zanurzenia się w tym, co robisz. Strateg wnosi szeroką perspektywę i zdolność dostrzegania kierunku, w którym wszystko zmierza. Kiedy jesteś głęboko wewnątrz jakiegoś zadania, Strateg potrafi zobaczyć, czy nadal prowadzi ono we właściwą stronę."
+    },
+    C: {
+      growth: "Twoim kierunkiem rozwoju jest Przyjaciel, styl uwagi, po który sięgasz najmniej naturalnie. Potrafisz osiągać niezwykłą głębię zaangażowania. Jednocześnie, gdy jesteś pochłonięty szczegółami, możesz tracić z oczu ludzki wymiar sytuacji. Praktyka polega na tym, by od czasu do czasu wynurzyć się z tego, czym jesteś zajęty, i spojrzeć nie tylko na problem, ale również na ludzi wokół niego.",
+      compName: "Przyjaciel (Rozproszona, Połączona)",
+      compWhy: "Ty wnosisz niezwykłą głębię i pełne zaangażowanie. Przyjaciel wnosi zdolność wyczuwania ludzi, atmosfery i emocjonalnego wymiaru sytuacji. Ty wchodzisz całkowicie w to, czym się zajmujesz. Przyjaciel pomaga upewnić się, że nie zgubiłeś ludzi znajdujących się obok Ciebie."
+    },
+    O: {
+      growth: "Twoim kierunkiem rozwoju jest Analityk, styl uwagi, po który sięgasz najmniej naturalnie. Kiedy coś Cię angażuje, Twoje zaangażowanie jest całkowite. Jednak okresy pomiędzy tym, co naprawdę Cię interesuje, mogą wydawać się trudne do opanowania. Analityk uczy tworzenia struktury. Uczy działania również wtedy, gdy inspiracja jeszcze się nie pojawiła.",
+      compName: "Analityk (Wąska, Rozdzielona)",
+      compWhy: "Ty wnosisz głębię, intensywność i zdolność docierania dalej niż większość ludzi. Analityk wnosi strukturę i porządek. Pomaga zamienić Twoją głębię w coś, na czym można polegać nie tylko wtedy, gdy pojawi się inspiracja. Ty wnosisz energię. On tworzy dla niej ramy."
+    }
+  },
+  S: {
+    P: {
+      growth: "Twoim kierunkiem rozwoju jest Pasjonat, styl uwagi, po który sięgasz najmniej naturalnie. Szybko dostrzegasz całość i kierunek. Pasjonat uczy czegoś przeciwnego. Uczy, jak wejść całkowicie w jedną rzecz. Praktyka polega na tym, by wybrać jeden kierunek i podążać za nim także wtedy, gdy przestaje być ekscytujący. Przez etap, który jest już tylko pracą. Tylko głębią. Tylko wytrwałością.",
+      compName: "Pasjonat (Wąska, Połączona)",
+      compWhy: "Ty przynosisz mapę. Pasjonat przynosi silnik. Twoja zdolność dostrzegania wzorców sprawia, że rozumiesz, co należy zrobić i dlaczego. Zdolność Pasjonata do całkowitego zaangażowania sprawia, że kiedy już się zaangażuje, daje z siebie wszystko. Razem potraficie zarówno wyznaczać odważny kierunek, jak i skutecznie go realizować."
+    },
+    C: {
+      growth: "Twoim kierunkiem rozwoju jest Przyjaciel, styl uwagi, po który sięgasz najmniej naturalnie. Doskonale rozumiesz sytuacje innych ludzi. Najczęściej robisz to jednak poprzez analizę. Przyjaciel uczy, by zbliżyć się do tego, co obserwujesz, zamiast pozostawać jedynie jego uważnym obserwatorem. Nie tylko rozumieć. Także współodczuwać.",
+      compName: "Przyjaciel (Rozproszona, Połączona)",
+      compWhy: "Oboje dostrzegacie szeroki obraz sytuacji, ale z różnych miejsc. Ty go obserwujesz. Przyjaciel go odczuwa. Razem łączycie analityczne zrozumienie sytuacji z ludzkim ciepłem potrzebnym do odpowiedzi na nią. Ty rozumiesz, co się dzieje. Przyjaciel rozumie, co to oznacza dla ludzi, którzy tego doświadczają."
+    },
+    O: {
+      growth: "Twoim kierunkiem rozwoju jest Analityk, styl uwagi, po który sięgasz najmniej naturalnie. Doskonale widzisz, co powinno się wydarzyć. Analityk uczy, jak doprowadzić to do końca. Krok po kroku. Dzień po dniu. Praktyka polega na pozostawaniu przy czymś również wtedy, gdy zniknie nowość, ekscytacja i wizja końcowego efektu.",
+      compName: "Analityk (Wąska, Rozdzielona)",
+      compWhy: "Ty wnosisz wizję i zdolność dostrzegania całego obrazu sytuacji. Analityk wnosi wykonanie. Krok po kroku. Dzień po dniu. Ty widzisz, co powinno zostać zrobione. On doprowadza to do końca."
+    }
+  },
+  C: {
+    O: {
+      growth: "Twoim kierunkiem rozwoju jest Analityk, styl uwagi, po który sięgasz najmniej naturalnie. Bardzo dobrze rozumiesz innych ludzi. Praktyka polega na tym, by włączyć do tego zrozumienia również siebie. Swoje potrzeby. Swoje priorytety. Swój kierunek. Swoje granice. Struktura nie jest przeciwieństwem tego, co czujesz. To właśnie ona pozwala nadać kierunek temu, co czujesz.",
+      compName: "Analityk (Wąska, Rozdzielona)",
+      compWhy: "Ty wnosisz ciepło, intuicję i zdolność rozumienia tego, czego ludzie naprawdę potrzebują. Analityk wnosi strukturę, jasność i zdolność zamieniania zrozumienia w działanie. To, co wyczuwasz, on potrafi zbudować. To, co on buduje, Ty potrafisz uczynić bardziej ludzkim. Analityk nadaje kierunek Twojej empatii. Ty nadajesz sens jego systemom."
+    },
+    P: {
+      growth: "Twoim kierunkiem rozwoju jest Pasjonat, styl uwagi, po który sięgasz najmniej naturalnie. Jesteś otwarty na ludzi i świat wokół siebie. Pasjonat uczy, jak wybrać jedną rzecz i wejść w nią całkowicie. Jak zawęzić uwagę do głębi, zamiast obejmować wszystko jednocześnie.",
+      compName: "Pasjonat (Wąska, Połączona)",
+      compWhy: "Ty wnosisz szeroką świadomość ludzi i sytuacji. Pasjonat wnosi głębię i całkowite zaangażowanie wynikające ze skupienia się na jednej rzeczy. Twoja szerokość i jego głębia razem obejmują pełne spektrum możliwości uwagi."
+    },
+    S: {
+      growth: "Twoim kierunkiem rozwoju jest Strateg, styl uwagi, po który sięgasz najmniej naturalnie. Sytuacje odczuwasz szybko i bardzo głęboko. Strateg uczy, jak zrobić krok w tył. Jak dostrzec wzorzec, a nie tylko atmosferę. Jak zrozumieć strukturę tego, czego doświadczasz.",
+      compName: "Strateg (Rozproszona, Rozdzielona)",
+      compWhy: "Oboje pracujecie z szerokim obrazem sytuacji. Ty go odczuwasz. Strateg go analizuje. Razem łączycie ludzkie zrozumienie z analitycznym dystansem. Ty rozumiesz, czego doświadczają ludzie. Strateg rozumie, dlaczego to się dzieje i co można z tym zrobić."
+    }
+  }
+};
+
+const FLEX_LEVELS = [
+  { max: 5,  level: "Bardzo wysoka wszechstronność",    desc: "Potrafisz naturalnie przechodzić pomiędzy wszystkimi czterema stylami uwagi. Twoja uwaga dostosowuje się do tego, czego rzeczywiście wymaga dana sytuacja. To oznaka prawdziwej wszechstronności uwagi i szerokiego zakresu dostępnych sposobów funkcjonowania." },
+  { max: 10, level: "Dobra wszechstronność",          desc: "Masz wyraźne mocne strony, ale jednocześnie potrafisz korzystać z kilku różnych stylów uwagi. Niektóre sytuacje nadal stanowią dla Ciebie wyzwanie, jednak dysponujesz większą wszechstronnością niż większość ludzi." },
+  { max: 16, level: "Umiarkowana dominacja",  desc: "Jeden lub dwa style uwagi wyraźnie dominują. Pozostałe są dostępne, ale wymagają świadomego wysiłku. Twój dominujący styl dobrze Ci służy. Rozwój zaczyna się wtedy, gdy uczysz się świadomie korzystać także z pozostałych sposobów kierowania uwagą." },
+  { max: 28, level: "Silna dominacja",    desc: "Twój dominujący styl uwagi jest bardzo wyraźny. Jego mocne strony są realne i znaczące. Jednocześnie każdy styl uwagi ma swoje ograniczenia. Im silniej polegasz na jednym sposobie kierowania uwagą, tym łatwiej przeoczyć to, co znajduje się poza jego zasięgiem." }
+];
+
+const STRUGGLES = {
+  O: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Dlaczego pewne rzeczy mogą być dla Ciebie trudniejsze, niż powinny</p>' +
+     '<p style="margin-bottom:14px;"><strong>Tworzenie i utrzymywanie bliskich relacji.</strong> Jesteś niezawodny. Można na Tobie polegać. Szybko rozwiązujesz problemy i często wiesz, co należy zrobić. A mimo to ludzie czasami odchodzą z poczuciem, że nie zostali naprawdę zauważeni. To dlatego, że bardzo często nie potrzebują rozwiązania. Potrzebują poczuć, że ktoś jest z nimi w tym, czego doświadczają. Potrzebują obecności bardziej niż odpowiedzi.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Randkowanie i początki relacji.</strong> Początek relacji wymaga ciepła, swobodnej obecności i gotowości do pozostawania przez pewien czas w niepewności. Tymczasem Twoim naturalnym odruchem jest kompetencja. Gdy sytuacja staje się niejasna, próbujesz ją zrozumieć lub uporządkować. Ludzi jednak często przyciąga nie kompetencja, lecz coś bardziej miękkiego i trudniejszego do nazwania. Otwartość. Naturalność. Gotowość do bycia, a nie do rozwiązywania.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Bliskość i podatność na zranienie.</strong> Prawdziwa bliskość wymaga zgody na to, że nie da się przewidzieć, jak wszystko się skończy. To jeden z najmniej naturalnych stanów dla uwagi Analityka. Dlatego relacje mogą czasem stawać się dobrze zarządzane, ale nie do końca bliskie. Bezpieczne. Logiczne. Uporządkowane. A jednocześnie trochę bardziej odległe, niż byś chciał.</p>' +
+     '<p style="margin-bottom:0;"><strong>Odpoczynek i okresy przejściowe.</strong> Okresy pomiędzy zadaniami bywają zaskakująco trudne. Zmiana pracy. Powrót do zdrowia. Koniec ważnego projektu. Strata. Przerwa. Zamiast odpoczynku pojawia się poczucie braku gruntu pod nogami. Uwaga szuka problemu do rozwiązania i nie znajduje go. W efekcie pojawia się subtelny niepokój, który nie ma wyraźnej przyczyny.</p>',
+  P: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Dlaczego pewne rzeczy mogą być dla Ciebie trudniejsze, niż powinny</p>' +
+     '<p style="margin-bottom:14px;"><strong>Kierunek zawodowy.</strong> Potrafisz osiągać niezwykłe rezultaty w obszarach, które naprawdę Cię angażują. Jednocześnie możesz być zaskoczony ograniczeniami, których wcześniej nie dostrzegałeś. Bywa, że awanse, możliwości lub okazje trafiają do osób mniej utalentowanych, ale bardziej świadomie zarządzających swoją ścieżką zawodową. Ty jesteś pochłonięty pracą, a oni obserwują również kierunek, w którym zmierza ich kariera.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Powtarzające się sytuacje.</strong> Każde doświadczenie przeżywasz tak intensywnie od środka, że trudno dostrzec wzorzec łączący wiele podobnych sytuacji. Dlatego te same problemy mogą powtarzać się w różnych relacjach, projektach lub decyzjach. I za każdym razem wydają się zupełnie nowe. Ponieważ za każdym razem były przeżywane inaczej.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Puste przestrzenie.</strong> Pomiędzy rzeczami, które naprawdę Cię angażują, życie może wydawać się pozbawione kierunku. Nie spokojne. Nie ciche. Po prostu pozbawione sensu. Niepokój, który wtedy się pojawia, często wygląda jak niezadowolenie. W rzeczywistości jest to uwaga szukająca czegoś, w czym mogłaby się zanurzyć.</p>' +
+     '<p style="margin-bottom:0;"><strong>Stałość w relacjach.</strong> Kiedy jesteś zaangażowany, jesteś obecny całkowicie. Kiedy nie jesteś, nie ma Cię prawie wcale. Partnerzy i bliskie osoby często odbierają to jako trudną do nazwania niestałość. Nic się nie wydarzyło. A jednak człowiek, którego poznali, jakby na chwilę zniknął z pokoju.</p>',
+  S: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Dlaczego pewne rzeczy mogą być dla Ciebie trudniejsze, niż powinny</p>' +
+     '<p style="margin-bottom:14px;"><strong>Niedokańczanie rzeczy.</strong> Masz za sobą wiele świetnych pomysłów. Projektów. Relacji. Twórczych przedsięwzięć. Zmian zawodowych. Początki są inspirujące. Szybko dostrzegasz potencjał i kierunek. Kiedy jednak zakończenie staje się oczywiste, środkowa część procesu zaczyna przypominać administrację. Różnica pomiędzy tym, co potrafisz dostrzec, a tym, co faktycznie doprowadzasz do końca, może być źródłem cichego, przewlekłego poczucia winy.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Relacje tracące dynamikę.</strong> Poznawanie nowej osoby jest dla Stratega fascynujące. Nowy człowiek oznacza nowe wzorce, nowe możliwości i nowe zrozumienie. Kiedy relacja staje się codzienna i przewidywalna, uwaga zaczyna rozglądać się za kolejnym interesującym obszarem. Utrata nowości bywa mylona z brakiem dopasowania. W rezultacie dobre relacje mogą zostać porzucone zbyt wcześnie.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Emocjonalna obecność.</strong> Często rozumiesz, co ktoś czuje, zanim sam to poczujesz. Emocje docierają do Ciebie poprzez analizę i zrozumienie. Dopiero później stają się doświadczeniem. Partnerzy mogą czasem mieć poczucie, że są bardziej analizowani niż spotykani. Intencją jest bliskość. Droga do niej prowadzi jednak przez zrozumienie, a nie przez wspólne przeżywanie.</p>' +
+     '<p style="margin-bottom:0;"><strong>Pewność działania.</strong> Ludzie często postrzegają Cię jako osobę od pomysłów. Nie zawsze jednak wierzą, że doprowadzisz je do końca. Z czasem może to podważać nie tyle wiarę w swoje myślenie, ile wiarę, że Twoje pomysły kiedykolwiek staną się rzeczywistością.</p>',
+  C: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Dlaczego pewne rzeczy mogą być dla Ciebie trudniejsze, niż powinny</p>' +
+     '<p style="margin-bottom:14px;"><strong>Kariera i dbanie o własne interesy.</strong> Naturalnie dajesz dużo innym ludziom. Rozumiesz ich potrzeby. Dostrzegasz ich trudności. Pomagasz. Bywa jednak, że wyprzedzają Cię osoby mniej wrażliwe, ale bardziej zdecydowane. Wiesz, czego potrzebują inni. Znacznie trudniej odpowiedzieć Ci na pytanie, czego potrzebujesz Ty sam. Proszenie o to, czego chcesz, może wydawać się niemal egoistyczne.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Znajdowanie własnej motywacji.</strong> Jesteś tak dostrojony do potrzeb innych ludzi, że łatwo stracić kontakt z własnymi. Kiedy inni przestają wyznaczać kierunek, pojawia się cisza. Motywacja wymaga wiedzy o tym, czego sam chcesz. A właśnie ten obszar bywa dla Przyjaciela najmniej oczywisty.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Pewność siebie pod oceną.</strong> Czytasz reakcje ludzi z dużą dokładnością. Czasem wystarczy jedna sceptyczna osoba w pomieszczeniu, aby zachwiać Twoją pewnością siebie. Nie dlatego, że jesteś słaby. Dlatego, że odczuwasz jej wątpliwości, zanim zdecydujesz, czy sam w nie wierzysz.</p>' +
+     '<p style="margin-bottom:0;"><strong>Podejmowanie decyzji i zobowiązań.</strong> Odczuwasz ciężar każdej możliwości. I każdej osoby, której ta decyzja może dotyczyć. Dlatego zamknięcie jednej drogi często przypomina utratę wszystkich pozostałych. Decyzje zajmują więcej czasu, niż sytuacja na to pozwala. A czasami inni podejmują je za Ciebie. To z kolei może wzmacniać poczucie, że nie do końca wiesz, czego sam chcesz.</p>'
+};
+
+const GROWTH_POSSIBLE = {
+  O: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Co staje się możliwe gdy rozwijasz ten styl</p>' +
+     '<p style="margin-bottom:14px;"><strong>Poczucie kierunku.</strong> Życie przestaje przypominać serię wydarzeń, które po prostu Ci się przytrafiają. Zaczyna przypominać coś, czym świadomie kierujesz. Odkrywasz, że struktura nie jest przeciwieństwem wolności. To właśnie ona sprawia, że wolność staje się możliwa.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Doprowadzanie rzeczy do końca.</strong> Pomysły, które wcześniej ginęły gdzieś pomiędzy inspiracją a wykonaniem, zaczynają stawać się rzeczywistością. Cichy ciężar niedokończonych spraw stopniowo znika. Zobowiązania stają się czymś realnym.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Głębsze relacje.</strong> Kiedy jesteś obecny nie tylko emocjonalnie, ale również w codziennych działaniach, ludzie zaczynają doświadczać Cię inaczej. Niezawodność w zwykłych, codziennych sprawach jest czymś, co ludzie odczuwają i zapamiętują.</p>' +
+     '<p style="margin-bottom:0;"><strong>Inny rodzaj pewności siebie.</strong> Pewność siebie oparta wyłącznie na wizji, wiedzy lub uznaniu innych ludzi jest krucha. Pewność siebie zbudowana na doświadczeniu, że robisz to, co powiedziałeś, że zrobisz, jest spokojna. I pozostaje z Tobą na długo.</p>',
+  P: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Co staje się możliwe gdy rozwijasz ten styl</p>' +
+     '<p style="margin-bottom:14px;"><strong>Nowa relacja z głębią.</strong> Całkowite wejście w coś, zamiast jedynie zarządzania tym lub analizowania tego, otwiera zupełnie nową jakość doświadczenia. Praca się zmienia. Istnieje ogromna różnica pomiędzy robieniem czegoś dobrze a całkowitym zanurzeniem się w tym. I właśnie to staje się możliwe.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Dostrzeganie wzorców we własnym życiu.</strong> Kiedy potrafisz zrobić krok w tył i spojrzeć na swoje życie z większej perspektywy, zaczynasz dostrzegać kierunek, w którym zmierzasz. Zmienia to decyzje, które podejmujesz. Powtarzające się sytuacje przestają się powtarzać.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Prawdziwa obecność w relacjach.</strong> Nie tylko zwracasz uwagę na drugą osobę. Naprawdę z nią jesteś. Nie tylko angażujesz się. Pozwalasz, by jej doświadczenie miało na Ciebie wpływ. Bliscy ludzie odczuwają tę różnicę, zanim jeszcze potrafią ją nazwać.</p>' +
+     '<p style="margin-bottom:0;"><strong>Motywacja płynąca z wnętrza.</strong> Motywacja wynikająca z prawdziwego zaangażowania nie wyczerpuje się tak jak dyscyplina. Uczenie się podążania za tym, co naprawdę Cię angażuje, zmienia codzienne życie w sposób trudny do przecenienia.</p>',
+  S: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Co staje się możliwe gdy rozwijasz ten styl</p>' +
+     '<p style="margin-bottom:14px;"><strong>Perspektywa na własne życie.</strong> Zdolność do stanięcia lekko na zewnątrz sytuacji i zobaczenia jej, zamiast tylko bycia w niej. Dla Analityka oznacza to pytanie, czy to właściwy problem, zanim sprawnie go rozwiąże. Dla Pasjonata oznacza wynurzenie się ze szczegółu, by sprawdzić, czy kierunek nadal ma sens. Dla Przyjaciela oznacza zrozumienie struktury tego, co odczuwa.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Lepsze decyzje.</strong> Nie tylko o tym, co zrobić dalej, ale o tym, który kierunek jest naprawdę wart obrania. Różnica między reagowaniem na to, co jest bezpośrednio przed Tobą, a świadomym wyborem sposobu odpowiedzi.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Rzeczy, które rzeczywiście się kończą.</strong> Zdolność do pozostania przy czymś przez jego niepozorny środek, poza punkt, w którym przestaje przypominać początek, jest tym, co zamienia potencjał w coś realnego.</p>' +
+     '<p style="margin-bottom:0;"><strong>Jasność emocjonalna.</strong> Przetwarzanie uczuć poprzez analizę zamiast tylko przez doświadczenie oznacza, że docierają z opóźnieniem. Rozwijanie tej krawędzi zamyka tę lukę, dając Ci dostęp do własnego życia wewnętrznego w czasie rzeczywistym, a nie z perspektywy czasu.</p>',
+  C: '<p style="font-size:13px;font-weight:700;color:#718096;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:14px;">Co staje się możliwe gdy rozwijasz ten styl</p>' +
+     '<p style="margin-bottom:14px;"><strong>Odkrywanie, czego naprawdę chcesz.</strong> Kiedy zaczniesz kierować swoją naturalną uważność również na siebie, coś zaczyna się wyjaśniać. Nie od razu. Stopniowo. Zaczynasz rozpoznawać własny kierunek. Nie ten wynikający z oczekiwań innych ludzi. Swój własny.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Decyzje, które są wyborem, a nie stratą.</strong> Kiedy uczysz się robić krok w tył i nie brać na siebie całego ciężaru każdej sytuacji, podejmowanie decyzji staje się możliwe. Nie zawsze łatwe. Ale możliwe.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Zaufanie, nie tylko sympatia.</strong> Osoba technicznie doskonała, która sprawia, że inni czują się zauważeni, jest rzadkością. Rozwinięcie nawet umiarkowanej krawędzi Analityka przesuwa kogoś od bycia zdolnym do bycia naprawdę godnym zaufania.</p>' +
+     '<p style="margin-bottom:0;"><strong>Zamknięcie luki między obecnością a połączeniem.</strong> Dla ludzi, którzy czuli się samotni nawet otoczeni innymi, nawet lubiani i szanowani, tu często coś się zmienia. To właśnie ta krawędź zamyka lukę między byciem w pomieszczeniu a naprawdę byciem z ludźmi w nim.</p>'
+};
+
+const SCALE_LABELS = ["Nigdy","Rzadko","Czasami","Często","Bardzo często"];
+
+// ════════════════════════════════════════════════════════════
+// RENDER QUESTIONS
+// ════════════════════════════════════════════════════════════
+function renderQuestions() {
+  const wrap = document.getElementById('atq-questions');
+  Q.forEach(function(q, i) {
+    const block = document.createElement('div');
+    block.className = 'atq-q';
+    block.id = 'atq-q-' + i;
+
+    const scaleHTML = [0,1,2,3,4].map(function(v) {
+      return '<div class="atq-opt">' +
+        '<input type="radio" name="atq_q' + i + '" id="atq_q' + i + '_' + v + '" value="' + v + '">' +
+        '<label for="atq_q' + i + '_' + v + '">' +
+          '<span class="atq-n">' + v + '</span>' +
+          SCALE_LABELS[v] +
+        '</label>' +
+      '</div>';
+    }).join('');
+
+    block.innerHTML =
+      '<span class="atq-q-num">Pytanie ' + (i+1) + ' z 28</span>' +
+      '<p class="atq-q-text">' + q[0] + '</p>' +
+      '<div class="atq-scale">' + scaleHTML + '</div>';
+
+    wrap.appendChild(block);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// PROGRESS
+// ════════════════════════════════════════════════════════════
+document.addEventListener('change', function(e) {
+  if (!e.target || e.target.type !== 'radio' || e.target.name.indexOf('atq_q') !== 0) return;
+  var block = e.target.closest('.atq-q');
+  if (block) block.classList.add('atq-answered');
+  var answered = document.querySelectorAll('#atq .atq-q.atq-answered').length;
+  document.getElementById('atq-prog-fill').style.width = (answered / 28 * 100) + '%';
+  document.getElementById('atq-prog-lbl').textContent = answered + ' / 28 odpowiedzi';
+});
+
+// ════════════════════════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════════════════════════
+function atqSubmit() {
+  // Terms check
+  var termsCheck = document.getElementById('atq-terms-check');
+  var termsErr   = document.getElementById('atq-terms-error');
+  if (!termsCheck.checked) {
+    termsErr.style.display = 'block';
+    termsCheck.closest('.atq-terms-row').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  termsErr.style.display = 'none';
+
+  // Validate
+  var missing = [];
+  Q.forEach(function(_, i) {
+    if (!document.querySelector('input[name="atq_q' + i + '"]:checked')) missing.push(i);
+  });
+  if (missing.length) {
+    document.getElementById('atq-error').style.display = 'block';
+    var el = document.getElementById('atq-q-' + missing[0]);
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.borderLeftColor = '#BD2724';
+    setTimeout(function() { el.style.borderLeftColor = ''; }, 2000);
+    return;
+  }
+  document.getElementById('atq-error').style.display = 'none';
+
+  // Score
+  var scores = { O: 0, P: 0, S: 0, C: 0 };
+  Q.forEach(function(q, i) {
+    var v = parseInt(document.querySelector('input[name="atq_q' + i + '"]:checked').value);
+    scores[q[1]] += v;
+  });
+
+  // Dominant and lowest
+  var sortedKeys = Object.keys(scores).sort(function(a,b){ return scores[b]-scores[a]; });
+  var dominant = sortedKeys[0];
+  var lowest   = sortedKeys[sortedKeys.length - 1];
+  var vals = Object.values(scores);
+  var gap = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+  var flex = FLEX_LEVELS.find(function(f){ return gap <= f.max; });
+  var prof = PROFILES[dominant];
+  var growthData = GROWTH[dominant][lowest];
+
+  // Fill results
+  document.getElementById('atq-r-name').textContent = prof.name;
+  document.getElementById('atq-r-axis').textContent = prof.axis;
+  document.getElementById('atq-r-gap').textContent = 'Twój wynik wszechstronności: ' + gap;
+  document.getElementById('atq-r-level').textContent = flex.level;
+  document.getElementById('atq-r-flexdesc').textContent = flex.desc;
+
+  document.getElementById('atq-r-mech').textContent = prof.mech;
+  document.getElementById('atq-r-best').textContent = prof.best;
+  document.getElementById('atq-r-challenge').textContent = prof.challenge;
+  document.getElementById('atq-r-life').textContent = prof.life;
+
+  // Flexibility modulation paragraph
+  var domName = prof.name;
+  var domArticle = '';
+  var flexNote = '';
+  if (gap <= 8) {
+    flexNote = 'Twoje wyniki są wyjątkowo wyrównane. Warto zwrócić na to uwagę. Większość osób, które wypełniają ten kwestionariusz, ma jeden styl uwagi wyraźnie dominujący, sposób kierowania uwagą, który pojawia się częściej niż pozostałe. Twój profil wygląda inaczej. Różnica pomiędzy najwyższym a najniższym wynikiem jest niewielka, co sugeruje, że Twoja uwaga jest już stosunkowo wszechstronna. Prawdopodobnie przechodzisz pomiędzy różnymi stylami uwagi łatwiej niż większość ludzi. Zamiast automatycznie korzystać z jednego sposobu funkcjonowania, częściej dostosowujesz uwagę do wymagań konkretnej sytuacji. ' + domName + ' uzyskał najwyższy wynik, dlatego jest stylem, po który najczęściej sięgasz, szczególnie w sytuacjach wymagających lub niepewnych. Jednocześnie prawdopodobnie odnajdujesz siebie w więcej niż jednym z opisów przedstawionych wcześniej. I najprawdopodobniej jest to trafne odczucie. Nie jesteś przede wszystkim ' + domName.toLowerCase() + ', który od czasu do czasu korzysta z pozostałych stylów. Jesteś osobą o szerokim zakresie dostępnych sposobów kierowania uwagą, u której ' + domName.toLowerCase() + ' ma jedynie niewielką przewagę nad pozostałymi. To zmienia znaczenie rozwoju. W Twoim przypadku nie chodzi przede wszystkim o uczenie się zupełnie nowych sposobów działania. Chodzi raczej o pogłębianie wszechstronności, którą już posiadasz, oraz o coraz bardziej świadome wybieranie stylu uwagi najlepiej dopasowanego do danej sytuacji.';
+  } else if (gap <= 15) {
+    flexNote = 'Twój dominujący styl uwagi jest wyraźny i warto zwrócić na niego uwagę. Jednocześnie wyniki pokazują coś jeszcze. Nie jesteś zamknięty w jednym sposobie kierowania uwagą. Opis przedstawiony wcześniej pokazuje styl, do którego Twoja uwaga wraca najczęściej. To Twój naturalny punkt odniesienia. Styl, który pojawia się najbardziej spontanicznie, szczególnie pod presją lub wtedy, gdy nie zastanawiasz się świadomie nad sposobem działania. Pozostałe style są jednak bliżej, niż mogłoby się wydawać. ' + domName + ' prowadzi, ale w odpowiednich warunkach potrafisz stosunkowo łatwo korzystać również z innych sposobów kierowania uwagą. To realna mocna strona. Warto dostrzec ją obok cech charakterystycznych dla Twojego dominującego stylu.';
+  }
+  var flexEl = document.getElementById('atq-r-flex-note');
+  if (flexEl) {
+    if (flexNote) { flexEl.textContent = flexNote; flexEl.style.display = 'block'; }
+    else { flexEl.style.display = 'none'; }
+  }
+  document.getElementById('atq-r-dimensions').textContent = prof.dimensions;
+  document.getElementById('atq-r-growth').textContent = growthData.growth;
+  document.getElementById('atq-r-growth-possible').innerHTML = GROWTH_POSSIBLE[lowest];
+  document.getElementById('atq-r-struggles').innerHTML = STRUGGLES[dominant];
+  document.getElementById('atq-r-comp-name').textContent = growthData.compName;
+  document.getElementById('atq-r-comp-why').textContent = growthData.compWhy;
+
+  // Score cards
+  var scoresDiv = document.getElementById('atq-r-scores');
+  scoresDiv.innerHTML = '';
+  var ORDER = [
+    {k:'O', label:'Analityk'},
+    {k:'P', label:'Pasjonat'},
+    {k:'S', label:'Strateg'},
+    {k:'C', label:'Przyjaciel'}
+  ];
+  ORDER.forEach(function(s) {
+    var card = document.createElement('div');
+    card.className = 'atq-score-card' + (s.k === dominant ? ' atq-dom' : '');
+    card.innerHTML =
+      '<div class="atq-score-card-lbl">' + s.label + '</div>' +
+      '<div class="atq-score-card-val">' + scores[s.k] + '</div>' +
+      '<div class="atq-score-card-max">/ 28</div>';
+    scoresDiv.appendChild(card);
+  });
+
+  // Show results
+  var resultsEl = document.getElementById('atq-results');
+  resultsEl.classList.add('atq-show');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Draw graph after paint
+  requestAnimationFrame(function() {
+    setTimeout(function() { drawGraph(scores, dominant); }, 80);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// GRAPH
+// ════════════════════════════════════════════════════════════
+function drawGraph(scores, dominant) {
+  var canvas = document.getElementById('atq-canvas');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var cx = W / 2, cy = H / 2;
+  var MAX_R = W * 0.36; // leave room for corner labels
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Diagonal axes: NW=Organiser, NE=Performer, SW=Strategist, SE=Connector
+  // Each axis is at 45°, so unit vector component = 1/√2 ≈ 0.7071
+  var D = 0.7071;
+  var AXES = {
+    O: { dx: -D, dy: -D, lx: cx - MAX_R - 8,  ly: cy - MAX_R - 8,  ta: 'right',  bl: 'bottom' },
+    P: { dx:  D, dy: -D, lx: cx + MAX_R + 8,  ly: cy - MAX_R - 8,  ta: 'left',   bl: 'bottom' },
+    S: { dx: -D, dy:  D, lx: cx - MAX_R - 8,  ly: cy + MAX_R + 8,  ta: 'right',  bl: 'top'    },
+    C: { dx:  D, dy:  D, lx: cx + MAX_R + 8,  ly: cy + MAX_R + 8,  ta: 'left',   bl: 'top'    }
+  };
+  var ORDER = ['O','P','C','S']; // clockwise: NW→NE→SE→SW = proper diamond
+
+  // Quadrant background fills (four triangles, one per quadrant)
+  var quadFills = [
+    { pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx-MAX_R,cy]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx+MAX_R,cy]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx-MAX_R,cy]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx+MAX_R,cy]], c:'#EEF4FB' }
+  ];
+  quadFills.forEach(function(q) {
+    ctx.beginPath();
+    ctx.moveTo(q.pts[0][0], q.pts[0][1]);
+    q.pts.slice(1).forEach(function(p){ ctx.lineTo(p[0],p[1]); });
+    ctx.closePath();
+    ctx.fillStyle = q.c;
+    ctx.fill();
+  });
+
+  // Score rings, diamond shapes at 7, 14, 21, 28
+  // A diamond at radius r: top(cx,cy-r), right(cx+r,cy), bottom(cx,cy+r), left(cx-r,cy)
+  [7,14,21,28].forEach(function(s, ri) {
+    var r = (s/28) * MAX_R;
+    ctx.beginPath();
+    ctx.moveTo(cx,    cy - r);
+    ctx.lineTo(cx + r, cy    );
+    ctx.lineTo(cx,    cy + r);
+    ctx.lineTo(cx - r, cy    );
+    ctx.closePath();
+    ctx.strokeStyle = ri === 3 ? '#1E489755' : '#C5D5E8AA';
+    ctx.lineWidth   = ri === 3 ? 1.5 : 0.8;
+    ctx.setLineDash(ri === 3 ? [] : [4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Ring label at right tip
+    if (ri < 3) {
+      ctx.font = '10px Lato, Arial, sans-serif';
+      ctx.fillStyle = '#AAB';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(s), cx + r + 4, cy);
+    }
+  });
+
+  // Centre glow
+  var grd = ctx.createRadialGradient(cx,cy,0,cx,cy,52);
+  grd.addColorStop(0,   'rgba(245,193,98,0.4)');
+  grd.addColorStop(0.5, 'rgba(245,193,98,0.15)');
+  grd.addColorStop(1,   'rgba(245,193,98,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 52, 0, Math.PI*2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  // Diagonal axes
+  ctx.setLineDash([4, 3]);
+  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#1E489744';
+  ORDER.forEach(function(k) {
+    var a = AXES[k];
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + a.dx * MAX_R, cy + a.dy * MAX_R);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Tick dots along each diagonal axis at 7, 14, 21, 28
+  [7,14,21,28].forEach(function(s) {
+    var r = (s/28) * MAX_R;
+    ORDER.forEach(function(k) {
+      var a = AXES[k];
+      var px = cx + a.dx * r;
+      var py = cy + a.dy * r;
+      ctx.beginPath();
+      ctx.arc(px, py, s === 28 ? 3.5 : 2.5, 0, Math.PI*2);
+      ctx.fillStyle = s === 28 ? '#1E489799' : '#1E489744';
+      ctx.fill();
+    });
+  });
+
+  // ── Personal diamond shape ──
+  // Points lie along the four diagonal axes at each score's radius
+  var pts = ORDER.map(function(k) {
+    var a = AXES[k];
+    var r = (scores[k] / 28) * MAX_R;
+    return [ cx + a.dx * r, cy + a.dy * r ];
+  });
+
+  // Fill
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  pts.slice(1).forEach(function(p){ ctx.lineTo(p[0], p[1]); });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(245,193,98,0.2)';
+  ctx.fill();
+
+  // Stroke
+  ctx.strokeStyle = '#F5C162';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Score dots + numbers at each corner
+  pts.forEach(function(p, i) {
+    var k = ORDER[i];
+    var a = AXES[k];
+    // Outer dot
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 7, 0, Math.PI*2);
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#F5C162';
+    ctx.fill();
+    // Inner white
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 3.5, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    // Score number slightly beyond the dot along the axis
+    var offset = 18;
+    var nx = p[0] + a.dx * offset;
+    var ny = p[1] + a.dy * offset;
+    ctx.font = 'bold 12px Lato, Arial, sans-serif';
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#A07020';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(scores[k]), nx, ny);
+  });
+
+  // Style name labels at axis ends
+  ORDER.forEach(function(k) {
+    var a = AXES[k];
+    ctx.font = (k === dominant ? 'bold' : '400') + ' 13px Lato, Arial, sans-serif';
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#3A3A3A';
+    ctx.textAlign = a.ta;
+    ctx.textBaseline = a.bl;
+    ctx.fillText(PROFILES[k].name.replace('The ', ''), a.lx, a.ly);
+  });
+
+  // Centre label
+  ctx.font = 'italic 10px Lato, Arial, sans-serif';
+  ctx.fillStyle = '#A07020';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('wszechstronna uwaga', cx, cy);
+
+  // ── Dimension axis labels ──────────────────────────────────────
+  // These sit along the four edges of the outer diamond
+  // Top edge (between NW and NE corners) = NARROW
+  // Bottom edge (between SW and SE corners) = DIFFUSED
+  // Left edge (between NW and SW corners) = OBJECTIVE
+  // Right edge (between NE and SE corners) = IMMERSED
+
+  ctx.font = '700 11px Lato, Arial, sans-serif';
+  ctx.letterSpacing = '0.08em';
+
+  // NARROW — top, centred between NW and NE corners
+  ctx.fillStyle = '#888888';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('WĄSKA', cx, cy - MAX_R - 4);
+
+  // DIFFUSED — bottom, centred between SW and SE corners
+  ctx.textBaseline = 'top';
+  ctx.fillText('ROZPROSZONA', cx, cy + MAX_R + 6);
+
+  // OBJECTIVE — left, midpoint of left edge
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('ROZDZIELONA', cx - MAX_R - 6, cy);
+
+  // IMMERSED — right, midpoint of right edge
+  ctx.textAlign = 'left';
+  ctx.fillText('POŁĄCZONA', cx + MAX_R + 6, cy);
+
+  // ── Centre of gravity dot ──────────────────────────────────────
+  // Horizontal: Immersion (P+C) vs Objectivity (O+S)
+  // Vertical:   Diffusion (S+C) vs Narrowing (O+P)
+  var total = scores.O + scores.P + scores.S + scores.C;
+  var netImmersion = ((scores.P + scores.C) - (scores.O + scores.S)) / total;
+  var netDiffusion = ((scores.S + scores.C) - (scores.O + scores.P)) / total;
+
+  // Cross arm length (from centre to edge labels) — slightly shorter than MAX_R
+  var crossR = MAX_R * 0.82;
+
+  // Draw faint dimension cross
+  ctx.setLineDash([5, 4]);
+  ctx.strokeStyle = 'rgba(150,150,150,0.45)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx - crossR, cy); ctx.lineTo(cx + crossR, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy - crossR); ctx.lineTo(cx, cy + crossR); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Dot position — net values range roughly -1 to +1, scale by crossR*0.7
+  var dotScale = crossR * 0.72;
+  var dotX = cx + netImmersion * dotScale;
+  var dotY = cy + netDiffusion * dotScale;
+
+  // Dashed line from centre to dot
+  ctx.setLineDash([4, 3]);
+  ctx.strokeStyle = 'rgba(189,39,36,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(dotX, dotY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Soft glow
+  var grdDot = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 18);
+  grdDot.addColorStop(0,   'rgba(189,39,36,0.3)');
+  grdDot.addColorStop(0.5, 'rgba(189,39,36,0.12)');
+  grdDot.addColorStop(1,   'rgba(189,39,36,0)');
+  ctx.beginPath(); ctx.arc(dotX, dotY, 18, 0, Math.PI*2);
+  ctx.fillStyle = grdDot; ctx.fill();
+
+  // Outer dot
+  ctx.beginPath(); ctx.arc(dotX, dotY, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#BD2724'; ctx.fill();
+  // Inner white
+  ctx.beginPath(); ctx.arc(dotX, dotY, 3.5, 0, Math.PI*2);
+  ctx.fillStyle = '#fff'; ctx.fill();
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+renderQuestions();
+
+// Expose submit globally so onclick works
+window.atqSubmit = atqSubmit;
+
+  // Auto-resize: tell parent iframe to match our height
+  function notifyHeight() {
+    var el = document.getElementById('atq');
+    if (el) {
+      window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+    }
+  }
+  // Notify on load and every 500ms (catches results appearing)
+  notifyHeight();
+  setInterval(notifyHeight, 500);
+
+  window.atqPrint = function() {
+    var el = document.getElementById('atq');
+    var toHide = [];
+    var current = el;
+    while (current && current !== document.body) {
+      var parent = current.parentNode;
+      if (parent) {
+        Array.prototype.forEach.call(parent.children, function(child) {
+          if (child !== current && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+            toHide.push({ el: child, prev: child.style.cssText });
+            child.style.setProperty('display', 'none', 'important');
+          }
+        });
+      }
+      current = parent;
+    }
+    setTimeout(function() {
+      window.print();
+      setTimeout(function() {
+        toHide.forEach(function(item) {
+          item.el.style.cssText = item.prev;
+        });
+      }, 600);
+    }, 80);
+  };
+
+})();
+</script>
