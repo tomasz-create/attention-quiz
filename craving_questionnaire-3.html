@@ -1,0 +1,1504 @@
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; background: #fff; }
+/* ── Scoped to #atq to prevent any bleed into host page ── */
+#atq, #atq * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#atq {
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 16px;
+  color: #2A2A2A;
+  background: #FFFFFF;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── CSS variables ── */
+#atq {
+  --gold:    #F5C162;
+  --blue:    #1E4897;
+  --brown:   #671B0A;
+  --red:     #BD2724;
+  --bg:      #FFFFFF;
+  --border:  #E2E8F0;
+  --muted:   #718096;
+  --text:    #2A2A2A;
+  --lightbg: #F7F9FC;
+}
+
+/* ── Progress bar ── */
+#atq .atq-progress-wrap {
+  background: #EEF2F7;
+  height: 4px;
+  width: 100%;
+  margin-bottom: 32px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+#atq .atq-progress-fill {
+  height: 100%;
+  background: var(--gold);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+#atq .atq-progress-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: right;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ── Scale legend ── */
+#atq .atq-scale-bar {
+  background: var(--blue);
+  color: #fff;
+  padding: 10px 18px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+#atq .atq-scale-bar span { opacity: 0.85; }
+#atq .atq-scale-bar strong { opacity: 1; color: var(--gold); }
+
+/* ── Question block ── */
+#atq .atq-q {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  transition: border-color 0.15s;
+}
+#atq .atq-q:hover { border-left-color: var(--gold); }
+#atq .atq-q.atq-answered { border-left-color: var(--blue); }
+
+#atq .atq-q-num {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+#atq .atq-q-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+
+/* ── Scale options ── */
+#atq .atq-scale {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+#atq .atq-opt input[type="radio"] { display: none; }
+
+#atq .atq-opt label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.12s;
+  background: #FFFFFF;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  min-height: 58px;
+  line-height: 1.3;
+}
+#atq .atq-opt label .atq-n {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+#atq .atq-opt label:hover {
+  border-color: var(--gold);
+  background: #FFFBF0;
+}
+#atq .atq-opt input:checked + label {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+#atq .atq-opt input:checked + label .atq-n {
+  color: var(--gold);
+}
+
+/* ── Submit area ── */
+#atq .atq-submit-area {
+  padding: 28px 0 8px;
+  text-align: center;
+}
+#atq .atq-error {
+  background: #FFF0EE;
+  border: 1px solid #F4B8B0;
+  color: var(--red);
+  padding: 11px 18px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  display: none;
+}
+#atq .atq-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 16px 48px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+#atq .atq-btn:hover { background: var(--brown); transform: translateY(-1px); }
+
+/* ── Results section ── */
+#atq .atq-results {
+  display: none;
+  animation: atqFadeUp 0.5s ease both;
+  padding-top: 8px;
+}
+#atq .atq-results.atq-show { display: block; }
+
+@keyframes atqFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Results header */
+#atq .atq-result-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 32px 28px;
+  margin-bottom: 0;
+}
+#atq .atq-result-tag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+#atq .atq-result-name {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 300;
+  line-height: 1.0;
+  color: #fff;
+  margin-bottom: 6px;
+}
+#atq .atq-result-axis {
+  font-size: 16px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.08em;
+}
+
+/* Score cards */
+#atq .atq-scores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 0;
+}
+#atq .atq-score-card {
+  padding: 16px 10px;
+  text-align: center;
+  background: var(--lightbg);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+#atq .atq-score-card:last-child { border-right: none; }
+#atq .atq-score-card.atq-dom {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+#atq .atq-score-card-lbl {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-lbl { color: rgba(255,255,255,0.6); }
+#atq .atq-score-card-val {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-val { color: var(--gold); }
+#atq .atq-score-card-max {
+  font-size: 10px;
+  color: #AAB;
+}
+#atq .atq-score-card.atq-dom .atq-score-card-max { color: rgba(255,255,255,0.35); }
+
+/* ── GRAPH ── */
+#atq .atq-graph-wrap {
+  background: var(--lightbg);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 20px;
+  text-align: center;
+}
+#atq .atq-graph-title {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+#atq canvas#atq-canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 560px;
+  width: 100%;
+  height: auto;
+}
+
+/* ── FLEX GAP ── */
+#atq .atq-flex-wrap {
+  border-left: 4px solid var(--gold);
+  background: #FFFBF0;
+  border-top: 1px solid #F5E0A0;
+  border-bottom: 1px solid #F5E0A0;
+  border-right: 1px solid #F5E0A0;
+  padding: 24px 26px;
+  margin-bottom: 0;
+}
+#atq .atq-flex-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 6px;
+}
+#atq .atq-flex-gap-num {
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+#atq .atq-flex-level {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#atq .atq-flex-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* ── Profile sections ── */
+#atq .atq-section-bar {
+  background: var(--gold);
+  padding: 9px 22px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+}
+#atq .atq-section-body {
+  padding: 22px 22px 8px;
+  border-bottom: 1px solid var(--border);
+}
+#atq .atq-section-sublabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 7px;
+  margin-top: 16px;
+}
+#atq .atq-section-sublabel:first-child { margin-top: 0; }
+#atq .atq-section-text {
+  font-size: 15px;
+  line-height: 1.78;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 14px;
+}
+
+/* Growth edge */
+#atq .atq-growth {
+  background: #FFFBF0;
+  border-left: 4px solid var(--gold);
+  border: 1px solid #F5E0A0;
+  border-left: 4px solid var(--gold);
+  padding: 20px 22px;
+  margin: 16px 22px 0;
+}
+#atq .atq-growth-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #A07020;
+  margin-bottom: 8px;
+}
+#atq .atq-growth-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* Complement */
+#atq .atq-complement {
+  background: #EEF4FB;
+  border: 1px solid #AABBD6;
+  border-left: 4px solid var(--blue);
+  padding: 20px 22px;
+  margin: 12px 22px 24px;
+}
+#atq .atq-complement-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+#atq .atq-complement-name {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+#atq .atq-complement-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555;
+  font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 580px) {
+  #atq .atq-scores { grid-template-columns: repeat(2, 1fr); }
+  #atq .atq-scale { gap: 4px; }
+  #atq .atq-opt label { padding: 8px 2px; min-height: 52px; font-size: 10px; }
+  #atq .atq-opt label .atq-n { font-size: 17px; }
+  #atq .atq-q { padding: 16px 14px; }
+  #atq .atq-result-header { padding: 24px 18px; }
+  #atq .atq-growth, #atq .atq-complement { margin-left: 0; margin-right: 0; }
+}
+
+/* ── Print / Save as PDF ── */
+@media print {
+  #atq .atq-progress-wrap,
+  #atq .atq-progress-label,
+  #atq .atq-scale-bar,
+  #atq #atq-questions,
+  #atq .atq-submit-area,
+  #atq .atq-pdf-btn-wrap { display: none !important; }
+
+  #atq .atq-results { display: block !important; }
+
+  #atq .atq-result-header { background: #1E4897 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-score-card.atq-dom { background: #1E4897 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-section-bar { background: #F5C162 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-flex-wrap { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-growth { background: #FFFBF0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #atq .atq-complement { background: #EEF4FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  #atq .atq-graph-wrap { page-break-inside: avoid; }
+  #atq .atq-flex-wrap  { page-break-inside: avoid; }
+  #atq .atq-growth     { page-break-inside: avoid; }
+  #atq .atq-complement { page-break-inside: avoid; }
+}
+
+/* ── PDF button ── */
+#atq .atq-pdf-btn-wrap {
+  text-align: center;
+  padding: 32px 0 16px;
+  border-top: 1px solid #E2E8F0;
+  margin-top: 8px;
+}
+#atq .atq-pdf-btn {
+  background: #1E4897;
+  color: #fff;
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Lato', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+#atq .atq-pdf-btn:hover { background: #671B0A; transform: translateY(-1px); }
+#atq .atq-pdf-note {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 10px;
+  font-weight: 300;
+}
+
+
+/* ── Print-only title header ── */
+#atq .atq-print-header {
+  display: none;
+}
+@media print {
+  #atq .atq-print-header {
+    display: block !important;
+    text-align: center;
+    padding: 0 0 24px 0;
+    margin-bottom: 24px;
+    border-bottom: 3px solid #F5C162;
+  }
+  #atq .atq-print-header-title {
+    font-size: 28px;
+    font-weight: 300;
+    color: #1E4897;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  #atq .atq-print-header-sub {
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 2px;
+    font-weight: 300;
+  }
+  #atq .atq-print-header-author {
+    font-size: 13px;
+    color: #F5C162;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+
+/* ── Attention indices box ── */
+#atq .atq-indices-wrap {
+  background: #EEF4FB;
+  border-left: 4px solid var(--blue);
+  border-top: 1px solid #AABBD6;
+  border-bottom: 1px solid #AABBD6;
+  border-right: 1px solid #AABBD6;
+  padding: 24px 26px;
+  margin-bottom: 0;
+}
+#atq .atq-indices-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+#atq .atq-indices-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+#atq .atq-index-block { }
+#atq .atq-index-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+#atq .atq-index-num {
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+#atq .atq-index-bar-wrap {
+  height: 6px;
+  background: #D0DFF0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+#atq .atq-index-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+#atq .atq-index-desc {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.6;
+}
+#atq .atq-indices-sentence {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #3A3A3A;
+  font-weight: 300;
+  border-top: 1px solid #AABBD6;
+  padding-top: 14px;
+  margin-top: 4px;
+}
+@media (max-width: 480px) {
+  #atq .atq-indices-row { grid-template-columns: 1fr; }
+}
+
+
+/* ── Dimension explanation block ── */
+#atq .atq-dim-explain {
+  background: #FFFFFF;
+  border-top: 1px solid var(--border);
+  padding: 22px 26px 18px;
+}
+#atq .atq-dim-explain-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #3A3A3A;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+#atq .atq-dim-explain-body strong {
+  color: var(--text);
+  font-weight: 700;
+}
+#atq .atq-dim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+#atq .atq-dim-card {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--blue);
+  padding: 14px 16px;
+}
+#atq .atq-dim-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+#atq .atq-dim-card-body {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #555;
+  font-weight: 300;
+}
+@media (max-width: 480px) {
+  #atq .atq-dim-grid { grid-template-columns: 1fr; }
+}
+
+
+#atq .atq-terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: var(--light);
+  border: 1px solid var(--border);
+}
+#atq .atq-terms-row input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--blue);
+}
+#atq .atq-terms-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+  cursor: pointer;
+}
+#atq .atq-terms-label a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-color: rgba(30,72,151,0.3);
+}
+#atq .atq-terms-label a:hover { text-decoration-color: var(--blue); }
+#atq .atq-terms-full {
+  display: none;
+  background: var(--light);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.75;
+  font-weight: 300;
+}
+#atq .atq-terms-full p { margin-bottom: 8px; }
+#atq .atq-terms-full p:last-child { margin-bottom: 0; }
+#atq .atq-terms-title {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="atq">
+
+  <!-- Progress -->
+  <div class="atq-progress-label" id="atq-prog-lbl">0 / 28 answered</div>
+  <div class="atq-progress-wrap">
+    <div class="atq-progress-fill" id="atq-prog-fill"></div>
+  </div>
+
+
+
+  <!-- Questions rendered by JS -->
+  <div id="atq-questions"></div>
+
+  <!-- Submit -->
+  <div class="atq-submit-area">
+    <div class="atq-error" id="atq-error">Please answer all 28 questions before submitting.</div>
+    <div class="atq-terms-row">
+      <input type="checkbox" id="atq-terms-check">
+      <label class="atq-terms-label" for="atq-terms-check">
+        I have read and agree to the
+        <a href="https://www.openfocusattentiontraining.com/terms-and-conditions/" target="_blank">Terms and Conditions</a>.
+        I understand this assessment is for informational purposes only and does not constitute a clinical or psychological diagnosis.
+      </label>
+    </div>
+
+    <div class="atq-error" id="atq-terms-error" style="display:none">Please tick the Terms and Conditions box before submitting.</div>
+    <button class="atq-btn" onclick="atqSubmit()">See my results</button>
+  </div>
+
+  <!-- ── RESULTS (hidden until submit) ── -->
+  <div class="atq-results" id="atq-results">
+
+    <!-- Print-only title (hidden on screen, visible in PDF) -->
+    <div class="atq-print-header">
+      <p class="atq-print-header-title">How Do You Pay Attention?</p>
+      <p class="atq-print-header-sub">Four Attention Styles Assessment</p>
+      <p class="atq-print-header-author">Dr. Tomasz Kopec &nbsp;·&nbsp; Flexible Attention Trainer &nbsp;·&nbsp; NHS GP</p>
+    </div>
+
+    <!-- Header: dominant style name -->
+    <div class="atq-result-header">
+      <p class="atq-result-tag">Your dominant attention style</p>
+      <p class="atq-result-name" id="atq-r-name"></p>
+      <p class="atq-result-axis" id="atq-r-axis"></p>
+    </div>
+
+    <!-- Score cards -->
+    <div class="atq-scores" id="atq-r-scores"></div>
+
+    <!-- Graph -->
+    <div class="atq-graph-wrap">
+      <p class="atq-graph-title">Your attention profile</p>
+      <canvas id="atq-canvas" width="560" height="560"></canvas>
+    </div>
+
+    <!-- Profile detail -->
+    <div class="atq-section-bar">Your attention style and food</div>
+    <div class="atq-section-body">
+      <p class="atq-section-sublabel">How your attention style shapes your relationship with food</p>
+      <p class="atq-section-text" id="atq-r-mech"></p>
+      <p class="atq-section-sublabel">When this works in your favour</p>
+      <p class="atq-section-text" id="atq-r-best"></p>
+      <p class="atq-section-sublabel">Your characteristic challenge with food</p>
+      <p class="atq-section-text" id="atq-r-challenge"></p>
+      <p class="atq-section-sublabel">What this means for how you eat</p>
+      <p class="atq-section-text" id="atq-r-life"></p>
+      <p class="atq-section-text" id="atq-r-flex-note" style="display:none;margin-top:16px;font-style:italic;color:#5A6A7E;border-left:3px solid #E2E8F0;padding-left:14px;"></p>
+      <p class="atq-section-sublabel">Your two attention dimensions</p>
+      <p class="atq-section-text" id="atq-r-dimensions"></p>
+    </div>
+
+    <!-- Struggles section -->
+    <div class="atq-section-bar">Why certain things keep not working</div>
+    <div class="atq-section-body">
+      <div id="atq-r-struggles"></div>
+    </div>
+
+    <div class="atq-growth">
+      <p class="atq-growth-lbl">◈ Your growth edge</p>
+      <p class="atq-growth-text" id="atq-r-growth"></p>
+      <p class="atq-growth-lbl" style="margin-top:18px;">What you could develop</p>
+      <p class="atq-growth-text" id="atq-r-growth-possible"></p>
+    </div>
+
+    <!-- Save as PDF -->
+    <div class="atq-pdf-btn-wrap">
+      <button class="atq-pdf-btn" onclick="atqPrint()">Save results as PDF</button>
+      <p class="atq-pdf-note">Opens your browser's print dialogue. Choose "Save as PDF" as the destination.</p>
+    </div>
+
+  </div><!-- /results -->
+
+  <!-- Personal info screen (hidden until questionnaire submitted) -->
+  <div id="atq-personal" style="display:none;">
+    <div class="atq-result-header">
+      <p class="atq-result-tag">One more step</p>
+      <p class="atq-result-name" style="font-size:clamp(22px,3.5vw,34px);">A little about you</p>
+      <p style="font-size:14px;color:rgba(255,255,255,0.75);font-weight:300;margin-top:8px;line-height:1.6;">Your results are ready. Before we show them, please share a few details so that Tomasz can prepare a personalised plan for you.</p>
+    </div>
+    <div style="padding:28px 22px;border:1px solid #E2E8F0;border-top:none;">
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">Your first name <span style="color:#BD2724">*</span></label>
+        <input type="text" id="pi-name" placeholder="e.g. Sarah" style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;">
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">Email address <span style="color:#BD2724">*</span></label>
+        <input type="email" id="pi-email" placeholder="your@email.com" style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;">
+        <p style="font-size:12px;color:#718096;margin-top:5px;font-weight:300;">Your personalised plan will be sent to this address.</p>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">Age range</label>
+        <select id="pi-age" style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;background:#fff;">
+          <option value="">-- Select --</option>
+          <option>Under 25</option><option>25 to 34</option><option>35 to 44</option>
+          <option>45 to 54</option><option>55 to 64</option><option>65 or over</option>
+        </select>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">How long have you been struggling with cravings or weight?</label>
+        <select id="pi-duration" style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;background:#fff;">
+          <option value="">-- Select --</option>
+          <option>Less than 6 months</option><option>6 months to 2 years</option>
+          <option>2 to 5 years</option><option>More than 5 years</option><option>Most of my life</option>
+        </select>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">What would you most like to change? (one sentence is enough)</label>
+        <textarea id="pi-goal" placeholder="e.g. I want to stop eating compulsively in the evenings..." style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;min-height:80px;resize:vertical;"></textarea>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">What have you tried before? (optional)</label>
+        <textarea id="pi-tried" placeholder="e.g. calorie counting, keto, intermittent fasting..." style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;min-height:80px;resize:vertical;"></textarea>
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">Country</label>
+        <input type="text" id="pi-country" placeholder="e.g. United Kingdom" style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;">
+      </div>
+      <div style="margin-bottom:20px;">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#1E4897;margin-bottom:7px;">Anything else useful for me to know? (optional)</label>
+        <p style="font-size:12px;color:#718096;margin-bottom:8px;font-weight:300;">Is there anything about your current situation, health, stress, or circumstances that you think would be useful when I put your framework together?</p>
+        <textarea id="pi-context" placeholder="e.g. I'm going through a stressful period at work, I have a thyroid condition, I'm currently on medication..." style="width:100%;border:1.5px solid #E2E8F0;padding:11px 14px;font-family:'Lato',Arial,sans-serif;font-size:14px;color:#2A2A2A;font-weight:300;min-height:100px;resize:vertical;"></textarea>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;font-size:13px;color:#718096;font-weight:300;">
+        <input type="checkbox" id="pi-terms" style="margin-top:3px;flex-shrink:0;width:16px;height:16px;cursor:pointer;accent-color:#1E4897;">
+        <label for="pi-terms">I have read and agree to the <a href="https://www.openfocusattentiontraining.com/terms-and-conditions/" target="_blank" style="color:#1E4897;">Terms and Conditions</a>. I understand this assessment is for informational purposes only and does not constitute a clinical or psychological diagnosis.</label>
+      </div>
+      <div id="pi-err" style="display:none;background:#FFF0EE;border:1px solid #F4B8B0;color:#BD2724;padding:11px 18px;font-size:13px;margin-bottom:18px;">Please enter your name, email address, and accept the Terms and Conditions.</div>
+      <button class="atq-btn" onclick="atqSubmitPersonal()">Show my results</button>
+      <p id="pi-sending" style="display:none;font-size:13px;color:#718096;margin-top:12px;font-weight:300;">Sending your details...</p>
+    </div>
+  </div>
+
+</div><!-- /atq -->
+
+<script>
+(function() {
+
+// ════════════════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════════════════
+
+const Q = [
+  ["You're at a dinner party when a friend mentions they're going through a difficult time. Before anyone has said much, you've already sensed the weight they're carrying, and found yourself drawn toward them, rather than toward the conversation everyone else is having.", "C"],
+  ["When a plan changes at the last minute, your instinct is to figure out exactly what needs to be reorganised, in what order, and by when.", "O"],
+  ["When you're working on something that genuinely interests you, the time disappears and hours feel like minutes. You are surprised how quickly the time goes.", "P"],
+  ["In a meeting, when important information has just been shared, you immediately start seeing how the different pieces connect, and where the conversation is probably heading.", "S"],
+  ["You often understand what is happening between people before they understand it themselves. Not because you are analysing it. Because you feel it as a whole, before it becomes words.", "C"],
+  ["When something around you is disorganised or out of sequence, you find it hard to ignore. It sits in the background pulling at your attention until it is resolved.", "O"],
+  ["When you are fully inside something, the outside world does not fade gradually. It simply stops existing. You are not ignoring it. It has genuinely disappeared.", "P"],
+  ["In complicated situations, you instinctively step back before stepping in. Acting before you have the full picture feels premature, even when others are already moving.", "S"],
+  ["People tell you things they hadn't planned to tell anyone. Something about talking to you makes things come out.", "C"],
+  ["You notice errors and inconsistencies that other people walk past.", "O"],
+  ["When you are doing something you are genuinely good at, there is a point where you stop managing it and start being inside it. It flows through you rather than from you.", "P"],
+  ["You see how a situation is going to unfold before it gets there.", "S"],
+  ["Making a firm decision, one that closes off other options, takes you longer than it probably should. Choosing one option means letting the others go.", "C"],
+  ["When you have no task in front of you and no clear purpose, you find it genuinely difficult to settle.", "O"],
+  ["When you are in the middle of something that engages you, you lose track of the people around you. You surface later and realise the room moved on while you were inside it.", "P"],
+  ["In the middle of an ordinary conversation, a single detail someone mentions suddenly connects to something you have been thinking about for weeks. Others do not notice it. For you it is immediately obvious and relevant.", "S"],
+  ["When you walk into a room where something has happened, you feel it before anyone says a word. You are not analysing it. You simply already know.", "C"],
+  ["When someone explains a problem to you, you're already mentally breaking it into components before they've finished talking.", "O"],
+  ["The best moments in your life have something in common: you were so absorbed in what you were doing that someone had to pull you away from it. Those are the moments that feel most like you.", "P"],
+  ["When you are managing several things at once, you have a sense of all of them simultaneously, like a chessboard. You can feel how a move in one area will affect the others before it happens.", "S"],
+  ["You sometimes put other people's needs so far in front of your own that by the time you get to yourself, you've forgotten what you actually wanted.", "C"],
+  ["When something is slightly wrong, a spelling mistake, a process that could be more efficient, an arrangement that is not quite right, you find it difficult to leave it alone. The gap between how it is and how it should be registers and stays registered.", "O"],
+  ["When you're genuinely interested in something, you don't just engage with it, you go all the way in.", "P"],
+  ["You connect things others haven't linked, ideas from different conversations, patterns from different situations.", "S"],
+  ["Your first understanding of a situation usually arrives as a feeling rather than a thought. You sense that something is wrong, or right, before being able to explain it.", "C"],
+  ["When you take on a task, you naturally think through the steps involved and feel more settled once you can see the order of things clearly.", "O"],
+  ["When something doesn't engage you, you don't just find it boring, you find it almost impossible to stay present. Your attention goes somewhere else entirely, and you have to actively drag it back.", "P"],
+  ["You understand situations faster than people finish describing them. But the understanding arrives coolly, as if you are watching from above rather than standing inside it.", "S"]
+];
+
+const PROFILES = {
+  O: {
+    name: "The Organiser", axis: "Narrow, Objective",
+    mech: "You approach eating the way you approach everything else, as a system to be understood and managed. You have probably tried calorie counting, meal planning, structured eating windows, food diaries, and detailed tracking apps. When you commit to a plan, you commit properly. The spreadsheet is complete, the meals are prepped, the rules are clear. The problem is not the plan. The problem is what happens when life disrupts it. A meal eaten at the wrong time, a social situation that breaks the structure, a week that goes off-track, and the whole thing collapses. Not because you lack discipline, but because your attention treats the broken plan as a failed system. And a failed system feels impossible to patch. It is easier to start over than to continue imperfectly.",
+    best: "When you decide to change something about your eating, you actually change it. You create the structure, you follow it, and for a period things work exactly as planned. In a world where most people struggle to sustain any change at all, this is genuinely rare. The problem is never starting. It is staying when the structure gets disrupted.",
+    challenge: "The plan is not the problem. The moment the plan breaks is the problem. One meal off-schedule, one week that goes sideways, one social situation that does not fit the structure, and the whole approach collapses. There is a subtler issue underneath this. Rules and targets keep your attention narrowly focused on food, calories, and compliance. And narrow attention amplifies the very signals you are trying to manage. The craving gets louder the harder you stare at it.",
+    life: "You eat by the rules you have set, not by what your body is telling you. Hunger is interpreted through the plan rather than felt directly. This means you can be genuinely hungry and override it because it is not the right time, or genuinely full and continue because the plate is not empty. The body's signals are there. The attention is elsewhere.",
+    dimensions: "Your attention is Narrow and Objective. Narrow means it focuses on one thing completely, which is why a plan works so well when it is intact and collapses so completely when it is not. Objective means it observes from a slight distance rather than merging with experience, which is why you can follow a meal plan without ever actually tasting the meal. For cravings specifically, the narrow dimension is the costly one. A craving held in narrow attention grows. The more precisely you focus on it, the more real and urgent it becomes.",
+    growth: "Your growth edge is the Connector. Right now you manage eating from the outside, through rules, targets, and plans. The Connector edge is what would allow you to manage it from the inside, through felt awareness rather than imposed structure.",
+    compName: "", compWhy: ""
+  },
+  P: {
+    name: "The Performer", axis: "Narrow, Immersed",
+    mech: "Your eating follows the same pattern as everything else in your life: all or nothing. When something genuinely engages you, food disappears entirely. You forget to eat for hours. When nothing engages you, the opposite happens. Eating fills the gap. Not because you are hungry, but because your attention needs somewhere to go. This is the craving pattern that costs you most. It is not triggered by hunger. It is triggered by the absence of engagement. The flat stretches between interesting things produce a specific kind of restlessness, and food becomes the fastest way to answer it. The craving arrives suddenly and with full force because your attention, once it locks onto something, locks completely.",
+    best: "When something genuinely engages you, food loses its pull entirely. Deep in a project, hours pass and you simply did not think about eating. That state, absorption so complete that cravings cannot find a foothold, is already available to you. The work is learning to access it deliberately rather than waiting for it to arrive.",
+    challenge: "The cravings that cost you most are not hunger. They are boredom, restlessness, the specific flatness of time that is not engaged by anything meaningful. Your attention needs somewhere to go, and food is always available. The all-or-nothing pattern that makes you extraordinary when engaged makes you vulnerable in the gaps. And the gaps are where most eating happens.",
+    life: "You have two eating modes and not much in between. When absorbed in something, eating barely registers. When disengaged, it fills the space completely. This means your intake is shaped less by hunger and more by what your attention is doing at any given moment. Consistent, moderate, unremarkable eating is structurally difficult for you because your attention does not naturally operate in that register.",
+    dimensions: "Your attention is Narrow and Immersed. Narrow means it goes deep into one thing at a time. Immersed means it merges completely with whatever it enters. When the absorption is directed at something engaging, food disappears. When it is directed at a craving, the craving becomes enormous. The same mechanism that makes you extraordinary at what you love makes the pull of food in low-engagement moments very hard to interrupt from the inside.",
+    growth: "Your growth edge is the Strategist. You go all the way into things. The Strategist edge is what allows you to occasionally surface and check whether the direction still makes sense. For food, this is the difference between being swept along by the current of whatever is happening and being able to choose a different response.",
+    compName: "", compWhy: ""
+  },
+  S: {
+    name: "The Strategist", axis: "Diffused, Objective",
+    mech: "You probably understand your eating patterns better than most people understand theirs. You know about blood sugar and insulin response. You have read about intermittent fasting and the research behind it. You can explain exactly why you reach for food at certain times and what is driving it. The analysis is excellent. The eating continues anyway. This is the Strategist's particular frustration with food: the gap between understanding and doing. You can see the whole shape of the problem clearly and still find yourself standing at the kitchen counter at 10pm eating something you had not planned to eat. Understanding does not close the loop. The body is not listening to the analysis.",
+    best: "You can see your own patterns with unusual clarity when you choose to look. You know which situations trigger eating, which emotional states precede cravings, roughly what the cycle looks like. That self-knowledge is a genuine asset. Most people cannot see their own patterns at all. You can. The gap is between seeing and acting, not between ignorance and understanding.",
+    challenge: "You have understood the problem accurately for some time. Understanding it has not solved it. The analysis is not the obstacle. The obstacle is that insight alone does not change behaviour at the level where eating actually happens, which is below thought, in the body, in the automatic response to a familiar signal. Any approach to eating requires a sustained, unremarkable middle phase before it produces results. That phase rarely holds your interest long enough.",
+    life: "You eat slightly outside the experience. You are thinking about what you are eating while you are eating it, evaluating it, noting it, comparing it to the plan. The meal itself, its taste, its texture, the gradual arrival of fullness, receives less attention than the analysis of it. This creates a specific problem: you finish eating before the experience has had time to register, which means satisfaction arrives late and appetite lingers longer than it should.",
+    dimensions: "Your attention is Diffused and Objective. Diffused means it spreads across multiple things simultaneously, which is why you see patterns others miss. Objective means it holds what it observes at a useful distance, analytically rather than from inside the experience. For eating, the objective dimension is the one that costs you most. You process hunger and fullness as information rather than sensation. The craving never gets properly met or properly released. It just continues quietly in the background until it is loud enough to override everything else.",
+    growth: "Your growth edge is the Performer. You process eating analytically. The Performer edge is what allows you to actually be inside the experience of eating rather than above it.",
+    compName: "", compWhy: ""
+  },
+  C: {
+    name: "The Connector", axis: "Diffused, Immersed",
+    mech: "For you, eating has never been primarily about food. It is about atmosphere, comfort, connection, and emotional texture. You eat differently depending on who you are with and what is in the air. In a relaxed, warm atmosphere, you eat well and naturally. In a tense or emotionally charged one, food becomes a way of managing the discomfort. Cravings, for you, are rarely about hunger. They are about feeling. Something shifts in the emotional field and something sweet or filling becomes appealing in a way that has nothing to do with your stomach. You find it very hard to say no when someone offers food with warmth. Refusing feels like rejecting the gesture, which is not something your attention style does easily.",
+    best: "In the right atmosphere, your eating is naturally intuitive. When you are genuinely relaxed, in a warm environment with people you trust, you eat well without effort or thought. Your body knows what it needs in those conditions. The challenge is that those conditions are not always available, and your eating changes dramatically when they are not.",
+    challenge: "The signals driving your eating are almost never straightforward hunger. They are emotional, relational, and atmospheric. Someone else's tension in the room. A conversation that left an uncomfortable residue. A quietness that feels like something missing rather than actual rest. Approaches that target hunger directly miss the point for you entirely. And approaches that require you to override the emotional field ask you to do something that goes against the grain of how your attention works.",
+    life: "Your eating is a social and emotional act before it is a physical one. Who you are with, what the atmosphere is, what emotional state you arrived in, all of these shape what and how much you eat more than hunger does. This is not a weakness. It is just how your attention is organised. The problem is that it makes eating in difficult emotional conditions very hard to regulate, because the signal driving it is not one that willpower can reach.",
+    dimensions: "Your attention is Diffused and Immersed. Diffused means it takes in the whole field at once, the room, the people, the atmosphere, the emotional texture of what is happening. Immersed means it merges with what it receives rather than observing from outside. For eating, this combination means your experience of a meal is inseparable from the experience of everything around it. A tense atmosphere makes food taste different. A warm conversation makes eating feel nourishing beyond the food itself. Changing what you eat without changing the conditions in which you eat will always feel harder than it should.",
+    growth: "Your growth edge is the Organiser. Your eating is shaped by atmosphere, emotion, and the people around you. The Organiser edge is what gives you a structure that holds independent of the emotional field, a floor that does not shift when the room does.",
+    compName: "", compWhy: ""
+  }
+};
+
+const GROWTH = {
+  O: {
+    C: { growth: "Your growth edge for food is the Connector style. Right now you manage eating from the outside, through rules, targets, and plans. The Connector edge is what would allow you to manage it from the inside, through felt awareness rather than imposed structure.", compName: "", compWhy: "" },
+    P: { growth: "Your growth edge for food is the Performer style. Your relationship with the plan is so strong that when it breaks, you break with it. The Performer edge is what allows someone to stay inside an experience even when it is not going perfectly, because for the Performer the experience itself is the point, not the external standard it is being measured against.", compName: "", compWhy: "" },
+    S: { growth: "Your growth edge for food is the Strategist style. You are very good at following a plan. The Strategist edge would help you choose the right plan, which is a different skill. Right now your attention narrows quickly to execution. The Strategist widens first and asks whether the direction makes sense before committing fully.", compName: "", compWhy: "" }
+  },
+  P: {
+    O: { growth: "Your growth edge for food is the Organiser style. The gap between your best and worst eating is probably wider than almost anyone you know. The Organiser edge is what builds a floor. Not a ceiling, not a rigid plan, just a minimum structure that holds you through the unengaging stretches, the empty hours, the flat periods when cravings reliably appear.", compName: "", compWhy: "" },
+    S: { growth: "Your growth edge for food is the Strategist style. You go all the way into things. The Strategist edge is what allows you to occasionally surface and check whether the direction still makes sense. For food, this is the difference between being swept along by the current of whatever is happening and being able to choose a different response.", compName: "", compWhy: "" },
+    C: { growth: "Your growth edge for food is the Connector style. When you are absorbed in something, people around you disappear. When nothing absorbs you, the emotional field rushes in and eating fills the space. The Connector edge is what allows you to be present to the full experience of a moment without needing either total absorption or total withdrawal.", compName: "", compWhy: "" }
+  },
+  S: {
+    O: { growth: "Your growth edge for food is the Organiser style. You understand the problem completely. The Organiser edge is what closes the gap between understanding and doing.", compName: "", compWhy: "" },
+    P: { growth: "Your growth edge for food is the Performer style. You process eating analytically. The Performer edge is what allows you to actually be inside the experience of eating rather than above it.", compName: "", compWhy: "" },
+    C: { growth: "Your growth edge for food is the Connector style. You are an excellent reader of your own eating patterns from a distance. The Connector edge is what allows you to feel what is actually driving them.", compName: "", compWhy: "" }
+  },
+  C: {
+    O: { growth: "Your growth edge for food is the Organiser style. Your eating is shaped by atmosphere, emotion, and the people around you. The Organiser edge is what gives you a structure that holds independent of the emotional field, a floor that does not shift when the room does.", compName: "", compWhy: "" },
+    P: { growth: "Your growth edge for food is the Performer style. You eat relationally and emotionally. The Performer edge is what allows you to go deeply into your own experience, including your own hunger, rather than always being in the field of everyone else's.", compName: "", compWhy: "" },
+    S: { growth: "Your growth edge for food is the Strategist style. You feel everything that is driving your eating. The Strategist edge is what allows you to see it from far enough back to make a different choice.", compName: "", compWhy: "" }
+  }
+};
+
+const FLEX_LEVELS = [
+  { max: 5,  level: "Highly flexible",    desc: "You move naturally between all four styles. Your attention adapts to what each situation actually needs. This is the hallmark of genuine attentional range." },
+  { max: 10, level: "Good range",          desc: "You have clear strengths and genuine access to multiple styles. Some situations still stretch you, but you have more range than most." },
+  { max: 16, level: "Moderate dominance",  desc: "One or two styles lead clearly. Others are available but require deliberate effort. Your dominant style serves you well; the edges are where the growth lives." },
+  { max: 28, level: "Strong dominance",    desc: "Your dominant style is very pronounced. Your strengths in it are real and significant, and so are your blind spots. Awareness is the first step." }
+];
+
+const STRUGGLES = {
+  O: '<p style="margin-bottom:14px;"><strong>The plan breaking down.</strong> You can follow a plan with exceptional discipline. But when life disrupts the structure, one meal off schedule, one week that goes sideways, the whole approach often collapses. Not because you lack commitment, but because your attention treats imperfect execution as system failure.</p>' +
+     '<p style="margin-bottom:14px;"><strong>The craving getting louder the more you focus on it.</strong> Rules and targets keep your attention narrowly focused on food. And narrow attention amplifies the very signals you are trying to manage. The more precisely you focus on a craving, the more real and urgent it becomes.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Starting again rather than continuing imperfectly.</strong> When the structure breaks it feels easier to restart from scratch than to continue in a messy, imperfect way. This restarts the cycle repeatedly without ever reaching the phase where change becomes lasting.</p>' +
+     '<p style="margin-bottom:0;"><strong>Missing the body\'s signals entirely.</strong> Hunger is interpreted through the plan rather than felt directly. You can be genuinely hungry and override it because it is not the right time. The body\'s signals are there. The attention is elsewhere.</p>',
+  P: '<p style="margin-bottom:14px;"><strong>Eating in the gaps.</strong> When nothing engages you, food fills the space. Not because you are hungry, but because your attention needs somewhere to go. The craving arrives suddenly and with full force because your attention, once it locks onto something, locks completely.</p>' +
+     '<p style="margin-bottom:14px;"><strong>The all-or-nothing cycle.</strong> You go all the way into a new approach, it works brilliantly while it is engaging, and then the novelty wears off and you move on. The boring middle of any eating change, the consistent, unremarkable daily choices, does not hold your attention long enough.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Inconsistency that is hard to explain.</strong> Your eating is dramatically different depending on what else is happening. In flow, you forget to eat. Bored, you cannot stop. This inconsistency is not about willpower. It is about what your attention is doing.</p>' +
+     '<p style="margin-bottom:0;"><strong>The pattern staying invisible.</strong> Each craving episode is felt so completely from the inside that the pattern across episodes stays invisible. The same trigger produces the same result, genuinely surprising each time, because each time felt entirely different.</p>',
+  S: '<p style="margin-bottom:14px;"><strong>Understanding without changing.</strong> You can explain exactly why you reach for food at certain times. You understand the mechanism. The eating continues anyway. Insight alone does not change behaviour at the level where eating actually happens, which is below thought, in the body.</p>' +
+     '<p style="margin-bottom:14px;"><strong>The unremarkable middle.</strong> A new dietary approach is genuinely interesting to design and begin. Week three of it is administration. Something more interesting usually appears around that time, and the approach gets abandoned before it has had a chance to actually work.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Eating outside the experience.</strong> You think about what you are eating while you are eating it. The meal itself, its taste, the gradual arrival of fullness, receives less attention than the analysis of it. Satisfaction arrives late and appetite lingers longer than it should.</p>' +
+     '<p style="margin-bottom:0;"><strong>The craving continuing in the background.</strong> You process hunger and fullness as information rather than sensation. The craving never gets properly met or properly released. It continues quietly until it is loud enough to override everything else.</p>',
+  C: '<p style="margin-bottom:14px;"><strong>Cravings that are not about hunger.</strong> Your cravings are almost never triggered by physical hunger. They are triggered by emotional states, by atmosphere, by what is in the air in the room. Approaches that target hunger directly miss the source of the problem entirely.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Social eating that expands beyond intention.</strong> You find it very hard to say no when someone offers food with warmth. Refusing feels like rejecting the gesture. Eating alone, by contrast, can feel purposeless. The relational dimension of food is where most of your difficult eating lives.</p>' +
+     '<p style="margin-bottom:14px;"><strong>Other people\'s emotional state becoming your craving.</strong> You absorb the emotional state of your environment. Tension, discomfort, unease in the room, these become your craving even when you arrived feeling fine. You are managing the atmosphere through food without always knowing that is what you are doing.</p>' +
+     '<p style="margin-bottom:0;"><strong>Willpower missing the target.</strong> The signal driving your eating is not hunger. It is emotional and relational. Willpower is aimed at the wrong thing. It is like trying to fix a leak by mopping the floor.</p>'
+};
+
+const GROWTH_POSSIBLE = {
+  O: '<p style="margin-bottom:14px;"><strong>You would start to notice hunger as a bodily sensation before it becomes a problem to solve.</strong> The craving, instead of registering as a system failure, would arrive as something you can actually feel and sit with. When you sit with it rather than reacting to it, it quiets. Not because you forced it, but because your attention stopped feeding it.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop the ability to eat imperfectly and continue.</strong> A disrupted meal plan would become a minor deviation rather than a system failure. The whole approach would not collapse every time life gets in the way.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop the habit of stepping back to see whether the approach is actually working.</strong> Instead of restarting from scratch when the plan breaks, you would be able to adjust the course. You would also become better at identifying which situations reliably produce cravings and designing around them rather than simply trying harder inside them.</p>' +
+     '<p style="margin-bottom:0;"><strong>You would find it easier to eat in a relaxed, unhurried way.</strong> Meals would begin to carry information you have been missing, the gradual arrival of fullness, the natural settling of appetite, the felt sense of satisfaction that no external rule can replicate.</p>',
+  P: '<p style="margin-bottom:14px;"><strong>You would develop a floor.</strong> Not a rigid structure but a minimum of consistent small habits that hold you through the low-engagement stretches where most of your difficult eating happens. The craving that arrives in the gap between interesting things would meet a pause, a glass of water, a brief delay, rather than an open door.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop the ability to see the craving coming before it reaches full intensity.</strong> The pattern of when and why it appears would become visible from the outside rather than only felt from the inside when it is already overwhelming. Earlier recognition means earlier choice.</p>' +
+     '<p style="margin-bottom:14px;"><strong>A wider, softer quality of attention would make the low-engagement hours liveable without food filling them.</strong> Hunger and fullness as bodily sensations would also become more distinct signals rather than things that either command you completely or get overridden entirely.</p>' +
+     '<p style="margin-bottom:0;"><strong>You would develop the ability to sustain an approach through its unremarkable middle.</strong> The phase that currently ends most of your attempts would become manageable. Small consistent practices, applied past the point of interest, would produce more change than ten excellent plans that each lasted a week.</p>',
+  S: '<p style="margin-bottom:14px;"><strong>You would move from thinking about eating to actually being inside it.</strong> Fullness would arrive as a felt experience rather than a conclusion you reach afterwards. Cravings, experienced as sensation rather than analysed as problems, would respond to widened attention in a way that intellectual understanding never quite reaches.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop the ability to stay with one approach long enough to find out whether it actually works.</strong> The Habit Delayer, two to three weeks before a new pattern feels natural, would stop being the point at which you redesign everything.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop sensitivity to what is emotionally driving your eating.</strong> The craving would reveal its actual source, not hunger, but a specific emotional state, earlier in the cycle, when something can still be done about it other than eating.</p>' +
+     '<p style="margin-bottom:0;"><strong>You would develop the ability to be genuinely present during meals.</strong> The quality of presence during eating is where the real shift happens. Satisfaction would begin to register before you have already finished.</p>',
+  C: '<p style="margin-bottom:14px;"><strong>You would develop responses to food situations that come from a pre-decided structure rather than from whatever feels right in the moment.</strong> Not a diet, just a few personal boundaries that hold independent of the emotional atmosphere. You would also develop the ability to distinguish between hunger and the emotional field pulling you toward food.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop the ability to notice what you actually want to eat, separate from what the atmosphere of the meal is suggesting.</strong> Your own bodily signals, what you actually want, what your stomach is actually asking for, would become more distinct from the relational and emotional field.</p>' +
+     '<p style="margin-bottom:14px;"><strong>You would develop the ability to see your emotional eating patterns from far enough back to recognise them before they complete.</strong> The situation that reliably produces a craving would become familiar rather than surprising. That recognition alone changes what is possible in the moment.</p>' +
+     '<p style="margin-bottom:0;"><strong>You would find eating alone less difficult and social eating less automatic.</strong> The relational dimension of food would remain meaningful without being the only thing that gives eating meaning.</p>'
+};
+
+const SCALE_LABELS = ["Never","Rarely","Sometimes","Often","Frequently"];
+
+// ════════════════════════════════════════════════════════════
+// RENDER QUESTIONS
+// ════════════════════════════════════════════════════════════
+function renderQuestions() {
+  const wrap = document.getElementById('atq-questions');
+  Q.forEach(function(q, i) {
+    const block = document.createElement('div');
+    block.className = 'atq-q';
+    block.id = 'atq-q-' + i;
+
+    const scaleHTML = [0,1,2,3,4].map(function(v) {
+      return '<div class="atq-opt">' +
+        '<input type="radio" name="atq_q' + i + '" id="atq_q' + i + '_' + v + '" value="' + v + '">' +
+        '<label for="atq_q' + i + '_' + v + '">' +
+          '<span class="atq-n">' + v + '</span>' +
+          SCALE_LABELS[v] +
+        '</label>' +
+      '</div>';
+    }).join('');
+
+    block.innerHTML =
+      '<span class="atq-q-num">Question ' + (i+1) + ' of 28</span>' +
+      '<p class="atq-q-text">' + q[0] + '</p>' +
+      '<div class="atq-scale">' + scaleHTML + '</div>';
+
+    wrap.appendChild(block);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// PROGRESS
+// ════════════════════════════════════════════════════════════
+document.addEventListener('change', function(e) {
+  if (!e.target || e.target.type !== 'radio' || e.target.name.indexOf('atq_q') !== 0) return;
+  var block = e.target.closest('.atq-q');
+  if (block) block.classList.add('atq-answered');
+  var answered = document.querySelectorAll('#atq .atq-q.atq-answered').length;
+  document.getElementById('atq-prog-fill').style.width = (answered / 28 * 100) + '%';
+  document.getElementById('atq-prog-lbl').textContent = answered + ' / 28 answered';
+});
+
+// ════════════════════════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════════════════════════
+function atqSubmit() {
+  // Terms check
+  var termsCheck = document.getElementById('atq-terms-check');
+  var termsErr   = document.getElementById('atq-terms-error');
+  if (!termsCheck.checked) {
+    termsErr.style.display = 'block';
+    termsCheck.closest('.atq-terms-row').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  termsErr.style.display = 'none';
+
+  // Validate
+  var missing = [];
+  Q.forEach(function(_, i) {
+    if (!document.querySelector('input[name="atq_q' + i + '"]:checked')) missing.push(i);
+  });
+  if (missing.length) {
+    document.getElementById('atq-error').style.display = 'block';
+    var el = document.getElementById('atq-q-' + missing[0]);
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.borderLeftColor = '#BD2724';
+    setTimeout(function() { el.style.borderLeftColor = ''; }, 2000);
+    return;
+  }
+  document.getElementById('atq-error').style.display = 'none';
+
+  // Score
+  var scores = { O: 0, P: 0, S: 0, C: 0 };
+  Q.forEach(function(q, i) {
+    var v = parseInt(document.querySelector('input[name="atq_q' + i + '"]:checked').value);
+    scores[q[1]] += v;
+  });
+
+  // Dominant and lowest
+  var sortedKeys = Object.keys(scores).sort(function(a,b){ return scores[b]-scores[a]; });
+  var dominant = sortedKeys[0];
+  var lowest   = sortedKeys[sortedKeys.length - 1];
+  var vals = Object.values(scores);
+  var gap = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+
+  // Store for use after personal screen
+  window._atqScores = scores;
+  window._atqDominant = dominant;
+  window._atqLowest = lowest;
+  window._atqGap = gap;
+
+  // Show personal screen instead of results
+  document.getElementById('atq-questions').style.display = 'none';
+  document.getElementById('atq-personal').style.display = 'block';
+  document.getElementById('atq-personal').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+window.atqSubmitPersonal = function() {
+  var name  = document.getElementById('pi-name').value.trim();
+  var email = document.getElementById('pi-email').value.trim();
+  var terms = document.getElementById('pi-terms').checked;
+  var errEl = document.getElementById('pi-err');
+  if (!name || !email || !terms) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+
+  var scores   = window._atqScores;
+  var dominant = window._atqDominant;
+  var lowest   = window._atqLowest;
+  var gap      = window._atqGap;
+  var styleNames = {O:'Organiser',P:'Performer',S:'Strategist',C:'Connector'};
+
+  document.getElementById('pi-sending').style.display = 'block';
+
+  var msgBody = 'CRAVINGS AND ATTENTION STYLE ASSESSMENT\n\n' +
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n' +
+    'Age: ' + (document.getElementById('pi-age').value || 'Not provided') + '\n' +
+    'Duration of struggle: ' + (document.getElementById('pi-duration').value || 'Not provided') + '\n\n' +
+    'SCORES\n' +
+    'Organiser: ' + scores.O + '\n' +
+    'Performer: ' + scores.P + '\n' +
+    'Strategist: ' + scores.S + '\n' +
+    'Connector: ' + scores.C + '\n\n' +
+    'Dominant style: ' + styleNames[dominant] + '\n' +
+    'Growth edge: ' + styleNames[lowest] + '\n' +
+    'Flexibility gap: ' + gap + '\n\n' +
+    'Country: ' + (document.getElementById('pi-country').value.trim() || 'Not provided') + '\n\n' +
+    'MAIN GOAL\n' + (document.getElementById('pi-goal').value.trim() || 'Not provided') + '\n\n' +
+    'PREVIOUS ATTEMPTS\n' + (document.getElementById('pi-tried').value.trim() || 'Not provided') + '\n\n' +
+    'ADDITIONAL CONTEXT\n' + (document.getElementById('pi-context').value.trim() || 'Not provided');
+
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({
+      access_key: 'a113a40a-e4e5-43e1-a001-7a67dc3a5395',
+      subject: 'Cravings Assessment: ' + name + ' (' + styleNames[dominant] + ', gap ' + gap + ')',
+      from_name: name,
+      email: email,
+      message: msgBody
+    })
+  }).then(function(r){return r.json();}).then(function(){
+    document.getElementById('pi-sending').style.display = 'none';
+    showResults();
+  }).catch(function(){
+    document.getElementById('pi-sending').style.display = 'none';
+    showResults();
+  });
+};
+
+function showResults() {
+  var scores   = window._atqScores;
+  var dominant = window._atqDominant;
+  var lowest   = window._atqLowest;
+  var gap      = window._atqGap;
+  var flex = FLEX_LEVELS.find(function(f){ return gap <= f.max; });
+  var prof = PROFILES[dominant];
+  var growthData = GROWTH[dominant][lowest];
+
+  // Fill results
+  document.getElementById('atq-r-name').textContent = prof.name;
+  document.getElementById('atq-r-axis').textContent = prof.axis;
+
+  document.getElementById('atq-r-mech').textContent = prof.mech;
+  document.getElementById('atq-r-best').textContent = prof.best;
+  document.getElementById('atq-r-challenge').textContent = prof.challenge;
+  document.getElementById('atq-r-life').textContent = prof.life;
+
+  // Flexibility modulation paragraph
+  var domName = prof.name;
+  var domArticle = (domName === 'The Organiser') ? 'an ' : 'a ';
+  var flexNote = '';
+  if (gap <= 8) {
+    flexNote = 'Your scores are unusually close together. Most people who take this assessment have one style that clearly leads. Your profile looks different. ' + domName + ' is your highest score, so it is the style your attention reaches for most often, particularly when things are uncertain or demanding. But you probably recognise yourself in more than one of the descriptions above.';
+  } else if (gap <= 15) {
+    flexNote = domName + ' leads clearly, but the other styles are closer than they might appear. In the right conditions, you can access them with relative ease. This is a genuine strength alongside your dominant pattern.';
+  }
+  var flexEl = document.getElementById('atq-r-flex-note');
+  if (flexEl) {
+    if (flexNote) { flexEl.textContent = flexNote; flexEl.style.display = 'block'; }
+    else { flexEl.style.display = 'none'; }
+  }
+  document.getElementById('atq-r-dimensions').textContent = prof.dimensions;
+  document.getElementById('atq-r-growth').textContent = growthData.growth;
+  document.getElementById('atq-r-growth-possible').innerHTML = GROWTH_POSSIBLE[lowest];
+  document.getElementById('atq-r-struggles').innerHTML = STRUGGLES[dominant];
+
+  // Score cards
+  var scoresDiv = document.getElementById('atq-r-scores');
+  scoresDiv.innerHTML = '';
+  var ORDER = [
+    {k:'O', label:'Organiser'},
+    {k:'P', label:'Performer'},
+    {k:'S', label:'Strategist'},
+    {k:'C', label:'Connector'}
+  ];
+  ORDER.forEach(function(s) {
+    var card = document.createElement('div');
+    card.className = 'atq-score-card' + (s.k === dominant ? ' atq-dom' : '');
+    card.innerHTML =
+      '<div class="atq-score-card-lbl">' + s.label + '</div>' +
+      '<div class="atq-score-card-val">' + scores[s.k] + '</div>' +
+      '<div class="atq-score-card-max">/ 28</div>';
+    scoresDiv.appendChild(card);
+  });
+
+  // Hide personal screen, show results
+  document.getElementById('atq-personal').style.display = 'none';
+  var resultsEl = document.getElementById('atq-results');
+  resultsEl.classList.add('atq-show');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Draw graph after paint
+  requestAnimationFrame(function() {
+    setTimeout(function() { drawGraph(scores, dominant); }, 80);
+  });
+}
+
+// ════════════════════════════════════════════════════════════
+// GRAPH
+// ════════════════════════════════════════════════════════════
+function drawGraph(scores, dominant) {
+  var canvas = document.getElementById('atq-canvas');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var cx = W / 2, cy = H / 2;
+  var MAX_R = W * 0.36; // leave room for corner labels
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Diagonal axes: NW=Organiser, NE=Performer, SW=Strategist, SE=Connector
+  // Each axis is at 45°, so unit vector component = 1/√2 ≈ 0.7071
+  var D = 0.7071;
+  var AXES = {
+    O: { dx: -D, dy: -D, lx: cx - MAX_R - 8,  ly: cy - MAX_R - 8,  ta: 'right',  bl: 'bottom' },
+    P: { dx:  D, dy: -D, lx: cx + MAX_R + 8,  ly: cy - MAX_R - 8,  ta: 'left',   bl: 'bottom' },
+    S: { dx: -D, dy:  D, lx: cx - MAX_R - 8,  ly: cy + MAX_R + 8,  ta: 'right',  bl: 'top'    },
+    C: { dx:  D, dy:  D, lx: cx + MAX_R + 8,  ly: cy + MAX_R + 8,  ta: 'left',   bl: 'top'    }
+  };
+  var ORDER = ['O','P','C','S']; // clockwise: NW→NE→SE→SW = proper diamond
+
+  // Quadrant background fills (four triangles, one per quadrant)
+  var quadFills = [
+    { pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx-MAX_R,cy-MAX_R],[cx-MAX_R,cy]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx,cy-MAX_R]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx+MAX_R,cy-MAX_R],[cx+MAX_R,cy]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx-MAX_R,cy+MAX_R],[cx-MAX_R,cy]], c:'#E8F0FA' },
+    { pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx,cy+MAX_R]], c:'#EEF4FB' },
+    { pts:[[cx,cy],[cx+MAX_R,cy+MAX_R],[cx+MAX_R,cy]], c:'#EEF4FB' }
+  ];
+  quadFills.forEach(function(q) {
+    ctx.beginPath();
+    ctx.moveTo(q.pts[0][0], q.pts[0][1]);
+    q.pts.slice(1).forEach(function(p){ ctx.lineTo(p[0],p[1]); });
+    ctx.closePath();
+    ctx.fillStyle = q.c;
+    ctx.fill();
+  });
+
+  // Score rings, diamond shapes at 7, 14, 21, 28
+  // A diamond at radius r: top(cx,cy-r), right(cx+r,cy), bottom(cx,cy+r), left(cx-r,cy)
+  [7,14,21,28].forEach(function(s, ri) {
+    var r = (s/28) * MAX_R;
+    ctx.beginPath();
+    ctx.moveTo(cx,    cy - r);
+    ctx.lineTo(cx + r, cy    );
+    ctx.lineTo(cx,    cy + r);
+    ctx.lineTo(cx - r, cy    );
+    ctx.closePath();
+    ctx.strokeStyle = ri === 3 ? '#1E489755' : '#C5D5E8AA';
+    ctx.lineWidth   = ri === 3 ? 1.5 : 0.8;
+    ctx.setLineDash(ri === 3 ? [] : [4, 3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Ring label at right tip
+    if (ri < 3) {
+      ctx.font = '10px Lato, Arial, sans-serif';
+      ctx.fillStyle = '#AAB';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(s), cx + r + 4, cy);
+    }
+  });
+
+  // Centre glow
+  var grd = ctx.createRadialGradient(cx,cy,0,cx,cy,52);
+  grd.addColorStop(0,   'rgba(245,193,98,0.4)');
+  grd.addColorStop(0.5, 'rgba(245,193,98,0.15)');
+  grd.addColorStop(1,   'rgba(245,193,98,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 52, 0, Math.PI*2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  // Diagonal axes
+  ctx.setLineDash([4, 3]);
+  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#1E489744';
+  ORDER.forEach(function(k) {
+    var a = AXES[k];
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + a.dx * MAX_R, cy + a.dy * MAX_R);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Tick dots along each diagonal axis at 7, 14, 21, 28
+  [7,14,21,28].forEach(function(s) {
+    var r = (s/28) * MAX_R;
+    ORDER.forEach(function(k) {
+      var a = AXES[k];
+      var px = cx + a.dx * r;
+      var py = cy + a.dy * r;
+      ctx.beginPath();
+      ctx.arc(px, py, s === 28 ? 3.5 : 2.5, 0, Math.PI*2);
+      ctx.fillStyle = s === 28 ? '#1E489799' : '#1E489744';
+      ctx.fill();
+    });
+  });
+
+  // ── Personal diamond shape ──
+  // Points lie along the four diagonal axes at each score's radius
+  var pts = ORDER.map(function(k) {
+    var a = AXES[k];
+    var r = (scores[k] / 28) * MAX_R;
+    return [ cx + a.dx * r, cy + a.dy * r ];
+  });
+
+  // Fill
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  pts.slice(1).forEach(function(p){ ctx.lineTo(p[0], p[1]); });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(245,193,98,0.2)';
+  ctx.fill();
+
+  // Stroke
+  ctx.strokeStyle = '#F5C162';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Score dots + numbers at each corner
+  pts.forEach(function(p, i) {
+    var k = ORDER[i];
+    var a = AXES[k];
+    // Outer dot
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 7, 0, Math.PI*2);
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#F5C162';
+    ctx.fill();
+    // Inner white
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 3.5, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    // Score number slightly beyond the dot along the axis
+    var offset = 18;
+    var nx = p[0] + a.dx * offset;
+    var ny = p[1] + a.dy * offset;
+    ctx.font = 'bold 12px Lato, Arial, sans-serif';
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#A07020';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(scores[k]), nx, ny);
+  });
+
+  // Style name labels at axis ends
+  ORDER.forEach(function(k) {
+    var a = AXES[k];
+    ctx.font = (k === dominant ? 'bold' : '400') + ' 13px Lato, Arial, sans-serif';
+    ctx.fillStyle = k === dominant ? '#1E4897' : '#3A3A3A';
+    ctx.textAlign = a.ta;
+    ctx.textBaseline = a.bl;
+    ctx.fillText(PROFILES[k].name.replace('The ', ''), a.lx, a.ly);
+  });
+
+  // Centre label
+  ctx.font = 'italic 10px Lato, Arial, sans-serif';
+  ctx.fillStyle = '#A07020';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('flexible attention', cx, cy);
+
+  // ── Dimension axis labels ──────────────────────────────────────
+  // These sit along the four edges of the outer diamond
+  // Top edge (between NW and NE corners) = NARROW
+  // Bottom edge (between SW and SE corners) = DIFFUSED
+  // Left edge (between NW and SW corners) = OBJECTIVE
+  // Right edge (between NE and SE corners) = IMMERSED
+
+  ctx.font = '700 11px Lato, Arial, sans-serif';
+  ctx.letterSpacing = '0.08em';
+
+  // NARROW — top, centred between NW and NE corners
+  ctx.fillStyle = '#888888';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('NARROW', cx, cy - MAX_R - 4);
+
+  // DIFFUSED — bottom, centred between SW and SE corners
+  ctx.textBaseline = 'top';
+  ctx.fillText('DIFFUSED', cx, cy + MAX_R + 6);
+
+  // OBJECTIVE — left, midpoint of left edge
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('OBJECTIVE', cx - MAX_R - 6, cy);
+
+  // IMMERSED — right, midpoint of right edge
+  ctx.textAlign = 'left';
+  ctx.fillText('IMMERSED', cx + MAX_R + 6, cy);
+
+  // ── Centre of gravity dot ──────────────────────────────────────
+  // Horizontal: Immersion (P+C) vs Objectivity (O+S)
+  // Vertical:   Diffusion (S+C) vs Narrowing (O+P)
+  var total = scores.O + scores.P + scores.S + scores.C;
+  var netImmersion = ((scores.P + scores.C) - (scores.O + scores.S)) / total;
+  var netDiffusion = ((scores.S + scores.C) - (scores.O + scores.P)) / total;
+
+  // Cross arm length (from centre to edge labels) — slightly shorter than MAX_R
+  var crossR = MAX_R * 0.82;
+
+  // Draw faint dimension cross
+  ctx.setLineDash([5, 4]);
+  ctx.strokeStyle = 'rgba(150,150,150,0.45)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx - crossR, cy); ctx.lineTo(cx + crossR, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy - crossR); ctx.lineTo(cx, cy + crossR); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Dot position — net values range roughly -1 to +1, scale by crossR*0.7
+  var dotScale = crossR * 0.72;
+  var dotX = cx + netImmersion * dotScale;
+  var dotY = cy + netDiffusion * dotScale;
+
+  // Dashed line from centre to dot
+  ctx.setLineDash([4, 3]);
+  ctx.strokeStyle = 'rgba(189,39,36,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(dotX, dotY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Soft glow
+  var grdDot = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 18);
+  grdDot.addColorStop(0,   'rgba(189,39,36,0.3)');
+  grdDot.addColorStop(0.5, 'rgba(189,39,36,0.12)');
+  grdDot.addColorStop(1,   'rgba(189,39,36,0)');
+  ctx.beginPath(); ctx.arc(dotX, dotY, 18, 0, Math.PI*2);
+  ctx.fillStyle = grdDot; ctx.fill();
+
+  // Outer dot
+  ctx.beginPath(); ctx.arc(dotX, dotY, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#BD2724'; ctx.fill();
+  // Inner white
+  ctx.beginPath(); ctx.arc(dotX, dotY, 3.5, 0, Math.PI*2);
+  ctx.fillStyle = '#fff'; ctx.fill();
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+renderQuestions();
+
+// Expose submit globally so onclick works
+window.atqSubmit = atqSubmit;
+
+  // Auto-resize: tell parent iframe to match our height
+  function notifyHeight() {
+    var el = document.getElementById('atq');
+    if (el) {
+      window.parent.postMessage({ iframeHeight: el.scrollHeight }, '*');
+    }
+  }
+  // Notify on load and every 500ms (catches results appearing)
+  notifyHeight();
+  setInterval(notifyHeight, 500);
+
+  window.atqPrint = function() {
+    var el = document.getElementById('atq');
+    var toHide = [];
+    var current = el;
+    while (current && current !== document.body) {
+      var parent = current.parentNode;
+      if (parent) {
+        Array.prototype.forEach.call(parent.children, function(child) {
+          if (child !== current && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+            toHide.push({ el: child, prev: child.style.cssText });
+            child.style.setProperty('display', 'none', 'important');
+          }
+        });
+      }
+      current = parent;
+    }
+    setTimeout(function() {
+      window.print();
+      setTimeout(function() {
+        toHide.forEach(function(item) {
+          item.el.style.cssText = item.prev;
+        });
+      }, 600);
+    }, 80);
+  };
+
+})();
+</script>
